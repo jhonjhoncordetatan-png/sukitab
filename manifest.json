@@ -1,7 +1,7 @@
 {
   "name": "SukiTab \u2014 Canteen POS & Utang Ledger",
   "short_name": "SukiTab",
-  "description": "Fast, mobile-ready Canteen POS, Customer Utang Ledger & Audit Tracker.",
+  "description": "Offline-first Canteen POS, Customer Utang Ledger, Bank Reconciliation & Liquid UI.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

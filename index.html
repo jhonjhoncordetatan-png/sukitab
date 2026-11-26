@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light" data-font="sans" data-font-size="medium" data-icons="emoji" data-ui-style="solid">
+<html lang="en" data-theme="light" data-font="sans" data-font-size="medium" data-icons="emoji" data-ui-style="solid" data-animations="on">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -506,8 +506,9 @@
       overflow: hidden;
     }
 
-    /* Uniform Navigation Rail */
+    /* Uniform Navigation Rail + Liquid Micro-Animations (v13) */
     .nav-rail {
+      position: relative;
       background: var(--bg-rail);
       color: #F8FAFC;
       display: flex;
@@ -518,8 +519,26 @@
       gap: 0.5rem;
       z-index: 40;
     }
+    .nav-liquid-indicator {
+      position: absolute;
+      left: 0.5rem;
+      right: 0.5rem;
+      top: 0;
+      height: 58px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
+      box-shadow: 0 6px 20px -2px rgba(249, 115, 22, 0.52), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0;
+      transition: transform 0.36s cubic-bezier(0.34, 1.42, 0.64, 1), opacity 0.2s ease, height 0.2s ease, width 0.2s ease;
+    }
+    .nav-liquid-indicator.ready { opacity: 1; }
+    .nav-liquid-notch-curve { display: none; }
+
     .nav-btn {
       position: relative;
+      z-index: 2;
       background: transparent;
       border: none;
       color: #94A3B8;
@@ -533,7 +552,7 @@
       font-family: inherit;
       font-size: 0.7rem;
       font-weight: 700;
-      transition: all 0.15s;
+      transition: color 0.2s ease, transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .nav-due-badge {
       position: absolute;
@@ -552,10 +571,19 @@
       justify-content: center;
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
       line-height: 1;
+      z-index: 4;
     }
     .nav-btn:hover { background: rgba(255,255,255,0.08); color: #F8FAFC; }
-    .nav-btn.active { background: var(--primary); color: #FFFFFF; }
-    .nav-btn .nav-ico { font-size: 1.25rem; }
+    .nav-btn.active { background: transparent; color: #FFFFFF; }
+    .nav-btn.active:hover { background: transparent; }
+    .nav-btn .nav-ico {
+      font-size: 1.25rem;
+      transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .nav-btn.active .nav-ico { transform: scale(1.08); }
+    .nav-btn.expense-spring .nav-ico {
+      animation: sukiExpenseSpring 0.36s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
 
     /* Main Workspace */
     .main-area {
@@ -2069,6 +2097,280 @@
       .nav-history-badge { top: 0.15rem; right: 16%; }
     }
 
+    /* =========================================
+       OFFLINE-FIRST SYNC PILL & BANK ACCOUNT STYLES (v12)
+       ========================================= */
+    .sync-status-pill {
+      display: none;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.34rem 0.68rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      border: 1px solid rgba(217, 119, 6, 0.38);
+      background: var(--warning-soft);
+      color: var(--warning);
+      transition: all 0.15s;
+    }
+    .sync-status-pill.visible { display: inline-flex; }
+    .sync-status-pill.is-offline {
+      border-color: rgba(220, 38, 38, 0.35);
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+    .sync-status-pill.is-syncing {
+      border-color: rgba(37, 99, 235, 0.35);
+      background: var(--info-soft);
+      color: var(--info);
+    }
+    .sync-queue-item {
+      background: var(--bg-surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.55rem 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+    }
+    .pay-acc-type-row {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      width: 100%;
+    }
+    .pay-acc-type-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.12rem 0.45rem;
+      border-radius: 6px;
+      font-size: 0.66rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      background: var(--info-soft);
+      color: var(--info);
+    }
+    .pay-acc-type-badge.is-bank {
+      background: var(--success-soft);
+      color: var(--success);
+    }
+    .btn-messenger {
+      background: #0084FF;
+      color: #FFFFFF;
+    }
+    .btn-messenger:hover {
+      background: #0070DB;
+    }
+
+    /* =========================================
+       MICRO-ANIMATIONS SUITE (v13 — FAST GPU TRANSFORMS)
+       ========================================= */
+    @keyframes sukiBellRing {
+      0% { transform: rotate(0deg) scale(1); }
+      15% { transform: rotate(-18deg) scale(1.16); }
+      32% { transform: rotate(16deg) scale(1.14); }
+      48% { transform: rotate(-12deg) scale(1.1); }
+      65% { transform: rotate(8deg) scale(1.05); }
+      82% { transform: rotate(-4deg) scale(1.02); }
+      100% { transform: rotate(0deg) scale(1); }
+    }
+    @keyframes sukiEmblemPulse {
+      0% { transform: scale(1); box-shadow: 0 3px 10px rgba(234, 88, 12, 0.28), 0 0 0 0 rgba(249, 115, 22, 0.55); }
+      45% { transform: scale(0.91); box-shadow: 0 2px 8px rgba(234, 88, 12, 0.35), 0 0 0 10px rgba(249, 115, 22, 0.14); }
+      100% { transform: scale(1); box-shadow: 0 3px 10px rgba(234, 88, 12, 0.28), 0 0 0 16px rgba(249, 115, 22, 0); }
+    }
+    @keyframes sukiBadgeBounce {
+      0% { transform: scale(0.55); }
+      55% { transform: scale(1.26); }
+      80% { transform: scale(0.93); }
+      100% { transform: scale(1); }
+    }
+    @keyframes sukiRippleExpand {
+      0% { transform: translate(-50%, -50%) scale(0); opacity: 0.42; }
+      100% { transform: translate(-50%, -50%) scale(2.8); opacity: 0; }
+    }
+    @keyframes sukiExpenseSpring {
+      0% { transform: translateY(0) scale(1); }
+      40% { transform: translateY(-9px) scale(1.18); }
+      75% { transform: translateY(2px) scale(0.95); }
+      100% { transform: translateY(0) scale(1); }
+    }
+    @keyframes sukiCartPop {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+    @keyframes sukiArrowSlide {
+      0%, 100% { transform: translateX(0); }
+      45% { transform: translateX(5px); }
+    }
+    @keyframes sukiMiniSpin {
+      to { transform: rotate(360deg); }
+    }
+    @keyframes sukiCheckPop {
+      0% { transform: scale(0.6); opacity: 0.4; }
+      60% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* 1. Animated Header Bell & ST Emblem */
+    .reminder-bell-ico {
+      display: inline-block;
+      transform-origin: 50% 15%;
+    }
+    .reminder-bell-ico.ringing {
+      animation: sukiBellRing 0.56s ease-in-out;
+    }
+    .header-logo-badge {
+      transition: transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+    }
+    .header-logo-badge:active { transform: scale(0.91); }
+    .header-logo-badge.tap-pulsing {
+      animation: sukiEmblemPulse 0.42s ease-out;
+    }
+
+    /* 2. Tactile Category Pills, Dish Cards & + Add Item Ripple + In-Card Cart Badge */
+    .cat-chip,
+    .prod-card,
+    .btn {
+      position: relative;
+      overflow: hidden;
+    }
+    .cat-chip {
+      transition: transform 0.14s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    .cat-chip:active { transform: scale(0.94); }
+    .cat-chip.active {
+      box-shadow: 0 4px 12px rgba(234, 88, 12, 0.28);
+    }
+
+    .prod-card {
+      transition: transform 0.14s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.16s ease, box-shadow 0.18s ease;
+    }
+    .prod-card:active { transform: scale(0.955); }
+    .prod-card.in-cart {
+      border-color: rgba(234, 88, 12, 0.55);
+      box-shadow: 0 6px 16px -4px rgba(234, 88, 12, 0.2);
+    }
+    .prod-card.card-tapped {
+      box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.42), 0 8px 18px -6px rgba(249, 115, 22, 0.3);
+    }
+
+    .card-qty-badge {
+      position: absolute;
+      top: 0.45rem;
+      left: 0.45rem;
+      min-width: 24px;
+      height: 22px;
+      padding: 0 6px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #FB923C 0%, #EA580C 100%);
+      color: #FFFFFF;
+      font-size: 0.72rem;
+      font-weight: 900;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 10px rgba(234, 88, 12, 0.45);
+      z-index: 3;
+      pointer-events: none;
+      letter-spacing: -0.02em;
+    }
+    .card-qty-badge.visible { display: inline-flex; }
+    .card-qty-badge.bouncing {
+      animation: sukiBadgeBounce 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .prod-card.in-cart .prod-cat-tag {
+      padding-left: 1.95rem;
+    }
+
+    .tap-ripple-ink {
+      position: absolute;
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(249, 115, 22, 0.36) 0%, rgba(249, 115, 22, 0) 70%);
+      pointer-events: none;
+      z-index: 1;
+      animation: sukiRippleExpand 0.36s ease-out forwards;
+    }
+
+    /* 3. Action & Feedback Icons: Cart Arrow Slide, PIN Shield Shake, Export Spinner & Checkmark */
+    .cart-arrow-slide {
+      display: inline-block;
+      transition: transform 0.18s ease;
+    }
+    .mobile-cart-bar:hover .cart-arrow-slide,
+    .mobile-cart-bar.cart-popping .cart-arrow-slide {
+      animation: sukiArrowSlide 0.36s ease-in-out;
+    }
+    .mobile-cart-bar.cart-popping {
+      animation: sukiCartPop 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .pin-shield-ico {
+      display: inline-block;
+      transition: color 0.15s ease;
+    }
+    .pin-shield-ico.shield-err {
+      color: var(--danger);
+      animation: shakePin 0.34s ease-in-out;
+    }
+    .pin-err-msg {
+      display: none;
+      color: var(--danger);
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-align: center;
+      margin-top: -0.35rem;
+    }
+    .pin-err-msg.visible { display: block; }
+
+    .btn-mini-spinner {
+      display: inline-block;
+      width: 13px;
+      height: 13px;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: sukiMiniSpin 0.65s linear infinite;
+      vertical-align: -2px;
+    }
+    .btn-check-pop {
+      display: inline-block;
+      animation: sukiCheckPop 0.26s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Respect User "UI Animations: OFF" Toggle AND OS Reduce Motion */
+    html[data-animations="off"] *,
+    html[data-animations="off"] *::before,
+    html[data-animations="off"] *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+    html[data-animations="off"] .tap-ripple-ink { display: none !important; }
+    @media (prefers-reduced-motion: reduce) {
+      .reminder-bell-ico.ringing,
+      .header-logo-badge.tap-pulsing,
+      .card-qty-badge.bouncing,
+      .tap-ripple-ink,
+      .mobile-cart-bar.cart-popping,
+      .cart-arrow-slide {
+        animation: none !important;
+      }
+      .nav-liquid-indicator,
+      .nav-btn .nav-ico {
+        transition-duration: 0.05s !important;
+      }
+    }
+
     /* Modals */
     .modal-backdrop {
       position: fixed;
@@ -2120,11 +2422,51 @@
         height: auto;
         flex-direction: row;
         justify-content: space-around;
-        padding: 0.35rem 0.25rem;
-        padding-bottom: max(0.35rem, env(safe-area-inset-bottom));
+        padding: 0.42rem 0.25rem 0.38rem;
+        padding-bottom: max(0.42rem, env(safe-area-inset-bottom));
         border-top: 1px solid rgba(255,255,255,0.12);
+        overflow: visible;
       }
-      .nav-btn { flex: 1; padding: 0.4rem 0.15rem; font-size: 0.66rem; }
+      .nav-btn {
+        flex: 1;
+        padding: 0.42rem 0.15rem 0.22rem;
+        font-size: 0.66rem;
+        gap: 0.18rem;
+      }
+      .nav-btn .nav-label-txt {
+        transition: color 0.2s ease, transform 0.24s ease;
+      }
+      .nav-btn.active .nav-ico {
+        transform: translateY(-16px) scale(1.14);
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+      }
+      .nav-btn.active .nav-label-txt {
+        color: #FDBA74;
+        font-weight: 800;
+      }
+      /* Liquid Curved Notch & Glowing Orange Circle on Mobile */
+      .nav-liquid-indicator {
+        left: 0;
+        right: auto;
+        top: -21px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #FB923C 0%, #F97316 52%, #EA580C 100%);
+        border: 4px solid var(--bg-app);
+        box-shadow: 0 8px 22px rgba(249, 115, 22, 0.58), 0 0 18px rgba(249, 115, 22, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.45);
+      }
+      .nav-liquid-notch-curve {
+        display: block;
+        position: absolute;
+        left: 50%;
+        bottom: -6px;
+        transform: translateX(-50%);
+        width: 74px;
+        height: 16px;
+        background: radial-gradient(ellipse at 50% 0%, rgba(249, 115, 22, 0.34) 0%, transparent 72%);
+        pointer-events: none;
+      }
 
       .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.65rem; }
       .stmt-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -2154,7 +2496,7 @@
         position: fixed;
         left: 0.75rem;
         right: 0.75rem;
-        bottom: calc(64px + env(safe-area-inset-bottom));
+        bottom: calc(82px + env(safe-area-inset-bottom));
         background: var(--primary);
         color: #FFFFFF;
         border-radius: var(--radius-md);
@@ -2173,11 +2515,6 @@
 
   <!-- SukiTab Circular Logo & Loading Splash Screen (v11 PWA + Apps Script Dual Mode) -->
   <div id="bootSplash">
-    <div class="splash-mode-pill" id="splashModePill">
-      <span class="splash-mode-dot"></span>
-      <span id="splashModeLabel">SukiTab POS</span>
-    </div>
-
     <div class="suki-emblem-stage">
       <div class="suki-ambient-glow"></div>
       <svg class="suki-ring-svg" viewBox="0 0 240 240" aria-hidden="true">
@@ -2255,7 +2592,7 @@
       <div style="display:flex;gap:0.45rem;justify-content:center;flex-wrap:wrap;">
         <button type="button" class="btn btn-secondary btn-sm" onclick="retryBootLoad()">🔄 Retry</button>
         <button type="button" id="splashEditApiBtn" class="btn btn-secondary btn-sm" style="display:none;" onclick="revealSplashApiEditor()">⚙️ Edit API URL</button>
-        <button type="button" class="btn btn-secondary btn-sm" onclick="dismissSplashToOffline()">Open UI Preview</button>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="dismissSplashToOffline()">📱 Start Offline Now</button>
       </div>
     </div>
   </div>
@@ -2296,37 +2633,41 @@
 
   <div class="app-shell">
     <!-- Uniform 4-Item Navigation Rail / Mobile Bottom Bar -->
-    <nav class="nav-rail">
+    <nav class="nav-rail" id="mainNavRail">
+      <div id="navLiquidIndicator" class="nav-liquid-indicator" aria-hidden="true">
+        <div class="nav-liquid-notch-curve"></div>
+      </div>
+
       <button class="nav-btn active" data-view="posView" onclick="switchView('posView', this)">
         <span class="nav-ico ico-emoji">🏠</span>
         <span class="nav-ico ico-svg"><svg viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
-        <span>POS</span>
+        <span class="nav-label-txt">POS</span>
       </button>
 
       <button class="nav-btn" data-view="ledgerView" onclick="switchView('ledgerView', this)">
         <span id="sidebarDueBadge" class="nav-due-badge" style="display:none;">0</span>
         <span class="nav-ico ico-emoji">📒</span>
         <span class="nav-ico ico-svg"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
-        <span>Ledger</span>
+        <span class="nav-label-txt">Ledger</span>
       </button>
 
-      <button class="nav-btn" onclick="openExpenseModal()">
+      <button class="nav-btn" id="navExpenseBtn" onclick="triggerExpenseNavSpring(this); openExpenseModal();">
         <span class="nav-ico ico-emoji">💸</span>
         <span class="nav-ico ico-svg"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg></span>
-        <span>Expense</span>
+        <span class="nav-label-txt">Expense</span>
       </button>
 
       <button class="nav-btn" data-view="settingsView" onclick="requestSettingsAccess(this)">
         <span class="nav-ico ico-emoji">⚙️</span>
         <span class="nav-ico ico-svg"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
-        <span>Settings</span>
+        <span class="nav-label-txt">Settings</span>
       </button>
 
       <button class="nav-btn" data-view="historyView" onclick="switchView('historyView', this)" title="History, Audit Tracing &amp; Account Cleanup">
         <span id="sidebarHistoryBadge" class="nav-history-badge" style="display:none;">0</span>
         <span class="nav-ico ico-emoji">📜</span>
         <span class="nav-ico ico-svg"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg></span>
-        <span>History</span>
+        <span class="nav-label-txt">History</span>
       </button>
     </nav>
 
@@ -2335,19 +2676,23 @@
       <!-- Top Header -->
       <header class="top-bar">
         <div class="header-brand-group">
-          <div id="headerLogoBadge" class="header-logo-badge" title="SukiTab POS" onclick="previewSplashAnimation()"></div>
+          <div id="headerLogoBadge" class="header-logo-badge" title="SukiTab POS — Tap to pulse &amp; preview" onclick="handleHeaderEmblemTap(this)"></div>
           <div class="store-title-wrap">
             <div class="store-title" id="headerCanteenName">Xinamoon</div>
             <div class="store-sub" id="headerSubtitle">Canteen POS &amp; Utang Ledger</div>
           </div>
         </div>
         <div class="top-actions">
+          <button type="button" id="syncStatusPill" class="sync-status-pill" onclick="openSyncCenterModal()" title="View Offline Queue, Sync to Google Sheets, or Share Excel to Messenger">
+            <span id="syncStatusPillIcon">⏳</span>
+            <span id="syncStatusPillText">Sync</span>
+          </button>
           <button type="button" id="pausedPrivacyPill" class="paused-privacy-pill" onclick="setReminderEnabled(true, true)" title="Reminders hidden for counter privacy — tap to turn ON">
             <span>🙈</span>
             <span>Paused<span class="paused-long-txt"> (Privacy)</span></span>
           </button>
           <div class="reminder-pill-control" title="Toggle Friendly Utang Reminder Banner">
-            <span>🔔</span>
+            <span id="reminderBellIcon" class="reminder-bell-ico">🔔</span>
             <span class="reminder-pill-label">Utang Reminder:</span>
             <label class="switch-sm">
               <input type="checkbox" id="posReminderToggle" checked onchange="setReminderEnabled(this.checked, true)">
@@ -2422,7 +2767,7 @@
                 <span class="ico-svg" style="opacity:0.65;"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
                 <input type="text" id="menuSearch" placeholder="Search food or drinks..." oninput="renderMenu()">
               </div>
-              <button class="btn btn-primary btn-sm" onclick="requestAddProduct()">
+              <button type="button" class="btn btn-primary btn-sm" onclick="spawnTapRipple(this, event); requestAddProduct()">
                 <span>+ Add Item</span>
               </button>
             </div>
@@ -2460,15 +2805,16 @@
                 <label class="form-label">Payment Method</label>
                 <div class="pay-methods">
                   <button type="button" class="pay-opt active" data-method="Cash" onclick="selectPayMethod('Cash', this)">💵 Cash</button>
-                  <button type="button" class="pay-opt" data-method="E-Payment" onclick="selectPayMethod('E-Payment', this)">📱 E-Pay</button>
+                  <button type="button" class="pay-opt" data-method="E-Payment" onclick="selectPayMethod('E-Payment', this)">🏦 Bank/E-Pay</button>
                   <button type="button" class="pay-opt" data-method="Credit" onclick="selectPayMethod('Credit', this)">📒 Credit</button>
                 </div>
               </div>
 
               <div id="epayBox" style="display:none;flex-direction:column;gap:0.45rem;background:var(--bg-surface-2);padding:0.6rem;border-radius:var(--radius-sm);">
-                <label class="form-label">Select E-Payment Account</label>
+                <label class="form-label">Select E-Wallet or Bank Account</label>
                 <select id="epayChannelSelect" class="form-control" onchange="renderSelectedQr()"></select>
                 <div id="epayQrDisplay"></div>
+                <input type="text" id="epayRefInput" class="form-control" style="padding:0.45rem 0.65rem;font-size:0.82rem;" placeholder="Optional Ref # / Transfer Note (e.g. last 4 digits)">
               </div>
 
               <div id="creditDueBox" style="display:none;flex-direction:column;gap:0.35rem;">
@@ -2489,9 +2835,9 @@
         </div>
 
         <!-- Mobile Floating Cart Bar -->
-        <div class="mobile-cart-bar" id="mobileCartBar" onclick="toggleMobileCart(true)">
+        <div class="mobile-cart-bar" id="mobileCartBar" onclick="spawnTapRipple(this, event); toggleMobileCart(true)">
           <span id="mobileCartCount">🛒 0 items</span>
-          <span id="mobileCartTotal">₱0.00 →</span>
+          <span><span id="mobileCartTotal">₱0.00</span> <span class="cart-arrow-slide">→</span></span>
         </div>
       </section>
 
@@ -2505,7 +2851,8 @@
             </div>
             <div class="ledger-header-actions">
               <button type="button" class="btn btn-secondary btn-sm" onclick="openRecentSalesModal()" title="View Recent Sales, Walk-in Orders &amp; Void Purchase">🧾 Recent Sales</button>
-              <button type="button" class="btn btn-success btn-sm" onclick="exportAllCustomersExcel()">📥 Export All Excel</button>
+              <button type="button" class="btn btn-messenger btn-sm" onclick="shareAllExcelToMessenger(this)" title="Download &amp; Share Excel Report to Messenger">💬 Share Report</button>
+              <button type="button" class="btn btn-success btn-sm" onclick="exportAllCustomersExcel(this)">📥 Export Excel</button>
               <button type="button" class="btn btn-primary btn-sm" onclick="openExistingDebtModal()">+ Record Past Debt</button>
             </div>
           </div>
@@ -2689,6 +3036,17 @@
                   </label>
                 </div>
 
+                <div class="setting-row">
+                  <div class="setting-info">
+                    <strong>Enable UI Micro-Animations</strong>
+                    <span>Liquid nav notch, tactile card ripples &amp; icon feedback</span>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="setAnimationsEnabled" checked onchange="applyAppearanceFromInputs()">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
                 <div class="preview-box">
                   <div class="preview-left">
                     <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Live Menu Card Preview</div>
@@ -2758,11 +3116,15 @@
                 </div>
               </div>
 
-              <!-- Card 3: E-Payment & QR Codes -->
+              <!-- Card 3: E-Payment & Bank Accounts -->
               <div class="settings-card">
-                <div class="settings-card-title">📱 E-Payment Accounts &amp; QR</div>
+                <div class="settings-card-title">🏦 Bank Accounts, E-Wallets &amp; QR</div>
+                <div style="font-size:0.74rem;color:var(--text-muted);margin-top:-0.4rem;">Add unlimited banks (BPI, BDO, GoTyme, SeaBank) &amp; e-wallets (GCash, Maya). Saved locally for offline use &amp; synced to Google Sheets.</div>
                 <div id="paymentAccountsContainer" style="display:flex;flex-direction:column;gap:0.65rem;"></div>
-                <button type="button" class="btn btn-secondary btn-sm" onclick="addPaymentAccount()">+ Add E-Wallet / Bank QR</button>
+                <div style="display:flex;gap:0.45rem;flex-wrap:wrap;">
+                  <button type="button" class="btn btn-secondary btn-sm" style="flex:1;" onclick="addPaymentAccount('E-Wallet')">+ Add E-Wallet</button>
+                  <button type="button" class="btn btn-primary btn-sm" style="flex:1;" onclick="addPaymentAccount('Bank')">+ Add Bank Account</button>
+                </div>
               </div>
 
               <!-- Card 4: Credit Rules & Categories -->
@@ -2843,14 +3205,28 @@
                 </div>
               </div>
 
-              <!-- Card 6: GitHub Pages PWA & Google Apps Script API Connection -->
+              <!-- Card 6: Cloud Sync, Google Drive Management Link & Offline Backup -->
               <div class="settings-card" style="grid-column:1 / -1;">
                 <div class="settings-card-title" style="justify-content:space-between;">
-                  <span>☁️ Cloud API &amp; GitHub Pages PWA</span>
+                  <span>☁️ Cloud Sync, Google Drive &amp; Offline Backup</span>
                   <span id="runtimeModeBadge" class="badge badge-info">Checking...</span>
                 </div>
+
+                <!-- Live Sync & Management Google Drive Actions -->
+                <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.65rem;background:var(--bg-surface-2);border:1px solid var(--border);border-radius:var(--radius-md);padding:0.75rem 0.9rem;">
+                  <div>
+                    <div id="settingsSyncSummary" style="font-size:0.84rem;font-weight:800;">Checking local storage...</div>
+                    <div id="settingsLastSyncText" style="font-size:0.73rem;color:var(--text-muted);margin-top:0.12rem;">Last synced: Not yet synced</div>
+                  </div>
+                  <div style="display:flex;flex-wrap:wrap;gap:0.45rem;">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="triggerManualSync()">🔄 Sync Now</button>
+                    <button type="button" id="openDriveSheetBtn" class="btn btn-success btn-sm" onclick="openGoogleDriveSheet()">📊 Open Google Sheet (Drive)</button>
+                    <button type="button" class="btn btn-messenger btn-sm" onclick="shareAllExcelToMessenger(this)">💬 Share Excel to Messenger</button>
+                  </div>
+                </div>
+
                 <div class="form-group">
-                  <label class="form-label" for="setApiUrlInput">Google Apps Script Web App API URL (for GitHub Pages PWA)</label>
+                  <label class="form-label" for="setApiUrlInput">Google Apps Script Web App API URL (auto-syncs every transaction when online)</label>
                   <input type="url" id="setApiUrlInput" class="form-control" placeholder="https://script.google.com/macros/s/.../exec">
                 </div>
                 <div class="setting-row" style="flex-wrap:wrap;">
@@ -2863,8 +3239,20 @@
                     <button type="button" class="btn btn-secondary btn-sm" onclick="clearPwaApiSettings()">Reset</button>
                   </div>
                 </div>
-                <div style="font-size:0.74rem;color:var(--text-muted);line-height:1.4;">
-                  When hosted on <strong>GitHub Pages</strong>, this app talks directly to your Google Apps Script <code>/exec</code> endpoint with multi-device <code>LockService</code> protection and zero Google warning banner.
+
+                <!-- 1-Tap Local Offline Backup & Restore -->
+                <div style="border-top:1px solid var(--border);padding-top:0.75rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0.65rem;">
+                  <div class="setting-info">
+                    <strong>Offline Safety Backup (IndexedDB)</strong>
+                    <span>Download a full .json backup to your phone or restore onto another device anytime</span>
+                  </div>
+                  <div style="display:flex;gap:0.45rem;flex-wrap:wrap;">
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="downloadOfflineJsonBackup()">💾 Download Backup (.json)</button>
+                    <label class="btn btn-secondary btn-sm" style="cursor:pointer;">
+                      📂 Restore Backup
+                      <input type="file" accept=".json,application/json" style="display:none;" onchange="restoreOfflineJsonBackup(event)">
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2881,7 +3269,7 @@
               <p style="font-size:0.78rem;color:var(--text-muted);">Trace voids, utang settlements, and manage settled ₱0.00 account cleanup</p>
             </div>
             <div class="ledger-header-actions">
-              <button type="button" class="btn btn-success btn-sm" onclick="exportTraceLogExcel()">📥 Export Trace Excel</button>
+              <button type="button" class="btn btn-success btn-sm" onclick="exportTraceLogExcel(this)">📥 Export Trace Excel</button>
             </div>
           </div>
 
@@ -2999,7 +3387,7 @@
           <div id="stmtCustomerMeta" style="font-size:0.78rem;color:var(--text-muted);font-weight:600;"></div>
         </div>
         <div style="display:flex;gap:0.45rem;align-items:center;flex-shrink:0;">
-          <button type="button" class="btn btn-success btn-sm" onclick="exportActiveCustomerExcel()">📥 Export Excel</button>
+          <button type="button" class="btn btn-success btn-sm" onclick="exportActiveCustomerExcel(this)">📥 Export Excel</button>
           <button type="button" class="btn btn-secondary btn-sm" onclick="closeModal('customerStatementModal')">✕</button>
         </div>
       </div>
@@ -3053,7 +3441,7 @@
           <button type="button" class="btn btn-secondary btn-sm" onclick="openPastDebtFromStatement()">+ Add Past Debt</button>
         </div>
         <div style="display:flex;gap:0.45rem;margin-left:auto;">
-          <button type="button" class="btn btn-success btn-sm" onclick="exportActiveCustomerExcel()">📥 Export Excel</button>
+          <button type="button" class="btn btn-success btn-sm" onclick="exportActiveCustomerExcel(this)">📥 Export Excel</button>
           <button type="button" class="btn btn-secondary btn-sm" onclick="closeModal('customerStatementModal')">Close</button>
         </div>
       </div>
@@ -3235,15 +3623,39 @@
     </div>
   </div>
 
-  <!-- Customer-Facing Tap-to-Zoom QR Payment Modal -->
-  <div class="modal-backdrop" id="qrZoomModal">
-    <div class="modal-box" style="max-width:370px;text-align:center;">
+  <!-- SYNC & OFFLINE SHARE CENTER MODAL -->
+  <div class="modal-backdrop" id="syncCenterModal" style="z-index:8800;">
+    <div class="modal-box" style="max-width:460px;">
       <div class="modal-header">
-        <span>📲 QR Payment</span>
+        <span>☁️ Sync &amp; Offline Report Center</span>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="closeModal('syncCenterModal')">✕</button>
+      </div>
+
+      <div id="syncModalBanner" style="background:var(--bg-surface-2);border:1px solid var(--border);border-radius:var(--radius-md);padding:0.75rem 0.85rem;font-size:0.82rem;line-height:1.45;"></div>
+
+      <div style="display:flex;flex-direction:column;gap:0.45rem;">
+        <div class="form-label">Pending Google Sheets Queue (<span id="syncModalQueueCount">0</span>)</div>
+        <div id="syncModalQueueList" style="display:flex;flex-direction:column;gap:0.4rem;max-height:30dvh;overflow-y:auto;"></div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:0.45rem;padding-top:0.25rem;">
+        <button type="button" class="btn btn-primary" style="width:100%;" onclick="triggerManualSync()">🔄 Sync Pending Items to Google Sheets</button>
+        <button type="button" class="btn btn-messenger" style="width:100%;" onclick="shareAllExcelToMessenger(this)">💬 Download &amp; Share Excel to Messenger</button>
+        <button type="button" id="syncModalDriveBtn" class="btn btn-secondary" style="width:100%;" onclick="openGoogleDriveSheet()">📊 Open Shared Google Sheet (Drive)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer-Facing Tap-to-Zoom QR / Bank Transfer Modal -->
+  <div class="modal-backdrop" id="qrZoomModal">
+    <div class="modal-box" style="max-width:380px;text-align:center;">
+      <div class="modal-header">
+        <span id="qrZoomHeaderLabel">📲 QR / Bank Payment</span>
         <button class="btn btn-secondary btn-sm" onclick="closeModal('qrZoomModal')">✕</button>
       </div>
       <div id="qrZoomAccountTitle" style="font-size:1.05rem;font-weight:800;">GCash</div>
-      <div id="qrZoomAmountLabel" style="font-size:1.15rem;font-weight:800;color:var(--primary);">Amount to Pay: ₱0.00</div>
+      <div id="qrZoomAccountSub" style="font-size:0.82rem;color:var(--text-muted);font-weight:600;margin-top:-0.45rem;"></div>
+      <div id="qrZoomAmountLabel" style="font-size:1.2rem;font-weight:900;color:var(--primary);">Amount to Pay: ₱0.00</div>
       <div id="qrZoomImgContainer" style="background:#FFF;border:1px solid var(--border);border-radius:14px;padding:0.85rem;display:flex;align-items:center;justify-content:center;min-height:180px;"></div>
       <button class="btn btn-success" style="width:100%;padding:0.75rem;" onclick="confirmQrPaidCheckout()">
         ✅ Done &amp; Confirm Paid
@@ -3265,16 +3677,17 @@
 
   <!-- PIN Authorization Modal -->
   <div class="modal-backdrop" id="pinModal" style="z-index:9000;">
-    <div class="modal-box">
+    <div class="modal-box" id="pinModalBox">
       <div class="modal-header">
-        <span>🔒 Manager Authorization</span>
-        <button class="btn btn-secondary btn-sm" onclick="closeModal('pinModal')">✕</button>
+        <span><span id="pinShieldIcon" class="pin-shield-ico">🛡️</span> Manager Authorization</span>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="closeModal('pinModal')">✕</button>
       </div>
       <p style="font-size:0.82rem;color:var(--text-muted);">Enter the Manager PIN to continue.</p>
-      <input type="password" id="pinEntryInput" class="form-control" maxlength="6" inputmode="numeric" placeholder="••••" style="text-align:center;font-size:1.3rem;letter-spacing:0.35em;" onkeydown="if(event.key==='Enter') verifyPin()">
+      <input type="password" id="pinEntryInput" class="form-control" maxlength="6" inputmode="numeric" placeholder="••••" style="text-align:center;font-size:1.3rem;letter-spacing:0.35em;" oninput="document.getElementById('pinErrorMsg').classList.remove('visible')" onkeydown="if(event.key==='Enter') verifyPin()">
+      <div id="pinErrorMsg" class="pin-err-msg">❌ Incorrect Manager PIN. Try again.</div>
       <div class="modal-actions">
-        <button class="btn btn-secondary" onclick="closeModal('pinModal')">Cancel</button>
-        <button class="btn btn-primary" onclick="verifyPin()">Unlock</button>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('pinModal')">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="verifyPin()">Unlock</button>
       </div>
     </div>
   </div>
@@ -3521,6 +3934,7 @@
         uiStyle: 'solid',
         colorTheme: 'light',
         logoStyle: localStorage.getItem('pos_logo_style') || '1',
+        animationsEnabled: localStorage.getItem('pos_animations') !== 'off',
         soundEnabled: true,
         showClockBanner: true,
         managerPin: '1234',
@@ -3535,7 +3949,7 @@
         defaultDueTerms: 'payday',
         openingCashFloat: 1000,
         lowStockThreshold: 5,
-        paymentAccounts: [{ id: 'PAYACC-1', label: 'GCash', details: '0917-123-4567', qrData: '' }],
+        paymentAccounts: [{ id: 'PAYACC-1', type: 'E-Wallet', label: 'GCash', accountName: '', details: '0917-123-4567', qrData: '' }],
         categories: ['Meals', 'Drinks', 'Snacks', 'Breakfast']
       },
       cart: [],
@@ -3554,7 +3968,12 @@
       currentOperator: localStorage.getItem('pos_operator') || 'Staff',
       pinCallback: null,
       lastRetryFn: null,
-      activePayBalance: 0
+      activePayBalance: 0,
+      sheetName: localStorage.getItem('pos_sheet_name') || '',
+      sheetUrl: localStorage.getItem('pos_sheet_url') || '',
+      syncQueue: [],
+      lastSyncedAt: localStorage.getItem('pos_last_synced_at') || '',
+      isSyncing: false
     };
 
     let bootWatchdog = null;
@@ -3720,7 +4139,6 @@
 
     function updateRuntimeModeUI() {
       const badge = document.getElementById('runtimeModeBadge');
-      const modeLabel = document.getElementById('splashModeLabel');
       const apiInput = document.getElementById('setApiUrlInput');
       const secInput = document.getElementById('setApiSecretInput');
       const isGas = isAppsScriptHost();
@@ -3729,16 +4147,16 @@
       if (apiInput) apiInput.value = apiUrl;
       if (secInput) secInput.value = getConfiguredApiSecret();
 
-      if (isGas) {
-        if (badge) { badge.textContent = 'Google Apps Script'; badge.className = 'badge badge-paid'; }
-        if (modeLabel) modeLabel.textContent = 'Google Apps Script Web App';
+      if (!navigator.onLine) {
+        if (badge) { badge.textContent = 'Offline-First (Local)'; badge.className = 'badge badge-unpaid'; }
+      } else if (isGas) {
+        if (badge) { badge.textContent = 'Apps Script • Connected'; badge.className = 'badge badge-paid'; }
       } else if (apiUrl) {
-        if (badge) { badge.textContent = 'Installed PWA • Linked'; badge.className = 'badge badge-paid'; }
-        if (modeLabel) modeLabel.textContent = 'Installed Web App';
+        if (badge) { badge.textContent = 'Offline-First • Cloud Sync ON'; badge.className = 'badge badge-paid'; }
       } else {
-        if (badge) { badge.textContent = 'PWA • API Not Linked'; badge.className = 'badge badge-unpaid'; }
-        if (modeLabel) modeLabel.textContent = 'Standalone PWA Setup';
+        if (badge) { badge.textContent = 'Local Offline Mode'; badge.className = 'badge badge-unpaid'; }
       }
+      updateSyncStatusUI();
     }
 
     function savePwaApiSettings() {
@@ -3804,7 +4222,11 @@
       } else {
         syncUiStyleUI('solid');
       }
+      const savedAnim = localStorage.getItem('pos_animations') !== 'off';
+      appState.settings.animationsEnabled = savedAnim;
+      syncAnimationsSettingUI(savedAnim);
       setDefaultDueDate();
+      requestAnimationFrame(positionLiquidNavIndicator);
       bootLoadInitialData();
     });
 
@@ -3826,27 +4248,446 @@
       return { valid: true, value: norm };
     }
 
-    function bootLoadInitialData() {
+
+    /* =========================================
+       OFFLINE-FIRST INDEXEDDB & AUTO-SYNC ENGINE (v12)
+       ========================================= */
+    const IDB_NAME = 'SukiTabPOS_DB';
+    const IDB_STORE = 'kv';
+    const IDB_KEY_SNAPSHOT = 'snapshot_v12';
+    const IDB_KEY_QUEUE = 'sync_queue_v12';
+    let idbInstancePromise = null;
+
+    function openSukiIDB() {
+      if (idbInstancePromise) return idbInstancePromise;
+      idbInstancePromise = new Promise((resolve) => {
+        if (typeof indexedDB === 'undefined') {
+          resolve(null);
+          return;
+        }
+        try {
+          const req = indexedDB.open(IDB_NAME, 1);
+          req.onupgradeneeded = (ev) => {
+            const db = ev.target.result;
+            if (!db.objectStoreNames.contains(IDB_STORE)) {
+              db.createObjectStore(IDB_STORE);
+            }
+          };
+          req.onsuccess = (ev) => resolve(ev.target.result);
+          req.onerror = () => resolve(null);
+        } catch (e) {
+          resolve(null);
+        }
+      });
+      return idbInstancePromise;
+    }
+
+    async function idbGet(key) {
+      const db = await openSukiIDB();
+      if (db) {
+        try {
+          return await new Promise((resolve) => {
+            const tx = db.transaction(IDB_STORE, 'readonly');
+            const req = tx.objectStore(IDB_STORE).get(key);
+            req.onsuccess = () => resolve(req.result !== undefined ? req.result : null);
+            req.onerror = () => resolve(null);
+          });
+        } catch (e) {}
+      }
+      try {
+        const raw = localStorage.getItem('idb_fb_' + key);
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    async function idbSet(key, value) {
+      const db = await openSukiIDB();
+      if (db) {
+        try {
+          await new Promise((resolve, reject) => {
+            const tx = db.transaction(IDB_STORE, 'readwrite');
+            tx.objectStore(IDB_STORE).put(value, key);
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+          });
+          return true;
+        } catch (e) {}
+      }
+      try {
+        localStorage.setItem('idb_fb_' + key, JSON.stringify(value));
+      } catch (e) {}
+      return true;
+    }
+
+    function buildCurrentSnapshot() {
+      return {
+        version: 'v13',
+        savedAt: new Date().toISOString(),
+        sheetName: appState.sheetName || '',
+        sheetUrl: appState.sheetUrl || '',
+        products: appState.products || [],
+        customers: appState.customers || [],
+        ledger: appState.ledger || [],
+        storeItems: appState.storeItems || [],
+        archivedCustomers: appState.archivedCustomers || [],
+        recentOrders: appState.recentOrders || [],
+        voidLogs: appState.voidLogs || [],
+        auditLogs: appState.auditLogs || [],
+        settings: appState.settings || {}
+      };
+    }
+
+    function persistLocalState() {
+      const snap = buildCurrentSnapshot();
+      idbSet(IDB_KEY_SNAPSHOT, snap);
+      idbSet(IDB_KEY_QUEUE, appState.syncQueue || []);
+      if (appState.sheetName) localStorage.setItem('pos_sheet_name', appState.sheetName);
+      if (appState.sheetUrl) localStorage.setItem('pos_sheet_url', appState.sheetUrl);
+      if (appState.lastSyncedAt) localStorage.setItem('pos_last_synced_at', appState.lastSyncedAt);
+      updateSyncStatusUI();
+    }
+
+    function makeClientId(prefix, digits) {
+      const len = digits || 4;
+      const min = Math.pow(10, len - 1);
+      const max = Math.pow(10, len) - 1;
+      return prefix + String(Math.floor(min + Math.random() * (max - min + 1)));
+    }
+
+    function getLocalTimestampStr() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    }
+
+    function enqueueOfflineMutation(action, args, label) {
+      const item = {
+        qid: 'Q-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+        action: action,
+        args: args || [],
+        label: label || action,
+        createdAt: getLocalTimestampStr()
+      };
+      appState.syncQueue.push(item);
+      persistLocalState();
+
+      if (navigator.onLine && hasLiveBackend()) {
+        flushSyncQueue(true);
+      }
+    }
+
+    function formatLastSyncedDisplay(isoStr) {
+      if (!isoStr) return 'Not yet synced';
+      try {
+        const dt = new Date(isoStr);
+        if (isNaN(dt.getTime())) return isoStr;
+        return dt.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
+      } catch (e) {
+        return isoStr;
+      }
+    }
+
+    function updateSyncStatusUI() {
+      const pending = (appState.syncQueue || []).length;
+      const online = navigator.onLine !== false;
+      const linked = hasLiveBackend();
+
+      const pill = document.getElementById('syncStatusPill');
+      const pillIcon = document.getElementById('syncStatusPillIcon');
+      const pillTxt = document.getElementById('syncStatusPillText');
+
+      if (pill) {
+        pill.classList.remove('visible', 'is-offline', 'is-syncing');
+        if (appState.isSyncing) {
+          pill.classList.add('visible', 'is-syncing');
+          if (pillIcon) pillIcon.textContent = '🔄';
+          if (pillTxt) pillTxt.textContent = pending > 0 ? `Syncing (${pending})` : 'Syncing';
+        } else if (!online) {
+          pill.classList.add('visible', 'is-offline');
+          if (pillIcon) pillIcon.textContent = '📡';
+          if (pillTxt) pillTxt.textContent = pending > 0 ? `Offline (${pending})` : 'Offline';
+        } else if (pending > 0) {
+          pill.classList.add('visible');
+          if (pillIcon) pillIcon.textContent = '⏳';
+          if (pillTxt) pillTxt.textContent = linked ? `Pending (${pending})` : `Local (${pending})`;
+        }
+      }
+
+      const sumEl = document.getElementById('settingsSyncSummary');
+      const lastEl = document.getElementById('settingsLastSyncText');
+      if (sumEl) {
+        if (!online) {
+          sumEl.textContent = `📡 Offline Mode — ${pending} item${pending === 1 ? '' : 's'} queued safely on device`;
+        } else if (!linked) {
+          sumEl.textContent = `💾 Local Offline Mode — ${pending} unsynced item${pending === 1 ? '' : 's'} (paste API URL below to auto-sync)`;
+        } else if (appState.isSyncing) {
+          sumEl.textContent = `🔄 Syncing ${pending} pending item${pending === 1 ? '' : 's'} to Google Sheets...`;
+        } else if (pending > 0) {
+          sumEl.textContent = `⏳ Online — ${pending} item${pending === 1 ? '' : 's'} waiting to sync`;
+        } else {
+          sumEl.textContent = '✅ All transactions synced with Google Sheets';
+        }
+      }
+      if (lastEl) {
+        lastEl.textContent = 'Last synced: ' + formatLastSyncedDisplay(appState.lastSyncedAt) + (appState.sheetName ? (' • Sheet: ' + appState.sheetName) : '');
+      }
+
+      const driveBtn = document.getElementById('openDriveSheetBtn');
+      const modalDriveBtn = document.getElementById('syncModalDriveBtn');
+      if (driveBtn) driveBtn.style.opacity = appState.sheetUrl ? '1' : '0.65';
+      if (modalDriveBtn) modalDriveBtn.style.display = appState.sheetUrl ? 'inline-flex' : 'none';
+
+      if (document.getElementById('syncCenterModal') && document.getElementById('syncCenterModal').classList.contains('open')) {
+        renderSyncCenterModal();
+      }
+    }
+
+    function openSyncCenterModal() {
+      renderSyncCenterModal();
+      openModal('syncCenterModal');
+    }
+
+    function renderSyncCenterModal() {
+      const pending = appState.syncQueue || [];
+      const online = navigator.onLine !== false;
+      const linked = hasLiveBackend();
+
+      const banner = document.getElementById('syncModalBanner');
+      if (banner) {
+        const statusLine = !online
+          ? '<strong style="color:var(--danger);">📡 Device is Offline</strong> — All sales are saved safely in local memory (IndexedDB). Share the Excel report to Messenger or wait for Wi-Fi to auto-sync.'
+          : (!linked
+              ? '<strong style="color:var(--warning);">💾 Local-Only Mode</strong> — Paste your Google Apps Script API URL in Settings to enable automatic cloud sync for management.'
+              : (pending.length > 0
+                  ? `<strong style="color:var(--warning);">⏳ ${pending.length} item${pending.length === 1 ? '' : 's'} ready to sync</strong> — Tap Sync below to update the shared Google Sheet immediately.`
+                  : '<strong style="color:var(--success);">✅ Fully Synced</strong> — Management can view live data in your shared Google Sheet.'));
+        banner.innerHTML = `${statusLine}<div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.3rem;">Last synced: ${escapeHtml(formatLastSyncedDisplay(appState.lastSyncedAt))}</div>`;
+      }
+
+      const cntEl = document.getElementById('syncModalQueueCount');
+      if (cntEl) cntEl.textContent = String(pending.length);
+
+      const listEl = document.getElementById('syncModalQueueList');
+      if (listEl) {
+        if (pending.length === 0) {
+          listEl.innerHTML = '<div style="text-align:center;color:var(--text-muted);font-size:0.78rem;padding:0.9rem;">No pending items in queue.</div>';
+        } else {
+          listEl.innerHTML = pending.map((q, idx) => `
+            <div class="sync-queue-item">
+              <div style="min-width:0;">
+                <div style="font-weight:700;">${idx + 1}. ${escapeHtml(q.label || q.action)}</div>
+                <div style="font-size:0.7rem;color:var(--text-muted);">${escapeHtml(q.createdAt || '')}</div>
+              </div>
+              <span class="badge badge-unpaid">Queued</span>
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    async function flushSyncQueue(silent) {
+      if (appState.isSyncing) return;
+      if (!navigator.onLine) {
+        if (!silent) showToast('📡 Offline — transactions stay queued safely until internet returns');
+        updateSyncStatusUI();
+        return;
+      }
+      if (!hasLiveBackend()) {
+        if (!silent) showToast('⚠️ Link your Google Apps Script API URL in Settings first');
+        updateSyncStatusUI();
+        return;
+      }
+
+      appState.isSyncing = true;
+      updateSyncStatusUI();
+
+      let syncedCount = 0;
+      let latestAppData = null;
+
+      while (appState.syncQueue.length > 0) {
+        const item = appState.syncQueue[0];
+        try {
+          const res = await new Promise((resolve, reject) => {
+            callBackend(item.action, item.args, resolve, reject);
+          });
+          if (res && res.success === false) {
+            // Stop on auth error or hard validation error
+            if (res.authError) {
+              if (!silent) showToast('⚠️ ' + res.error);
+              break;
+            }
+            // If it's a permanent validation conflict, notify and pause queue
+            if (!silent) showToast('⚠️ Sync paused: ' + (res.error || 'Server rejected item'));
+            break;
+          }
+          appState.syncQueue.shift();
+          syncedCount++;
+          if (res && Array.isArray(res.products)) {
+            latestAppData = res;
+          }
+          await idbSet(IDB_KEY_QUEUE, appState.syncQueue);
+          updateSyncStatusUI();
+        } catch (err) {
+          if (!silent) showToast('📡 Sync interrupted — remaining items stay safely queued');
+          break;
+        }
+      }
+
+      // If queue is completely empty, refresh canonical snapshot from Google Sheets
+      if (appState.syncQueue.length === 0) {
+        if (!latestAppData) {
+          try {
+            const fresh = await new Promise((resolve, reject) => {
+              callBackend('getAppData', [], resolve, reject);
+            });
+            if (fresh && fresh.success !== false) latestAppData = fresh;
+          } catch (e) {}
+        }
+        if (latestAppData) {
+          appState.lastSyncedAt = new Date().toISOString();
+          hydrateApp(latestAppData, true);
+        }
+        if (!silent) {
+          showToast(syncedCount > 0
+            ? `✅ Synced ${syncedCount} item${syncedCount === 1 ? '' : 's'} to Google Sheets!`
+            : '✅ Up to date with Google Sheets!');
+        }
+      }
+
+      appState.isSyncing = false;
+      persistLocalState();
+    }
+
+    function triggerManualSync() {
+      flushSyncQueue(false);
+    }
+
+    function openGoogleDriveSheet() {
+      if (!appState.sheetUrl) {
+        showToast('Sync with Google Sheets once first so your Drive link is saved.');
+        return;
+      }
+      window.open(appState.sheetUrl, '_blank', 'noopener');
+    }
+
+    function downloadOfflineJsonBackup() {
+      const today = getTodayDateString();
+      const backupObj = {
+        app: 'SukiTab POS',
+        version: 'v13',
+        exportedAt: new Date().toISOString(),
+        snapshot: buildCurrentSnapshot(),
+        syncQueue: appState.syncQueue || []
+      };
+      const blob = new Blob([JSON.stringify(backupObj, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `SukiTab_Backup_${sanitizeFilenamePart(appState.settings.canteenName || 'Canteen')}_${today}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      showToast('💾 Offline JSON backup downloaded!');
+    }
+
+    function restoreOfflineJsonBackup(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const parsed = JSON.parse(ev.target.result);
+          const snap = parsed.snapshot || parsed;
+          if (!snap || !Array.isArray(snap.products)) {
+            showToast('⚠️ Invalid SukiTab backup file');
+            return;
+          }
+          appState.syncQueue = Array.isArray(parsed.syncQueue) ? parsed.syncQueue : [];
+          hydrateApp(snap, true);
+          showToast('✅ Offline backup restored cleanly!');
+        } catch (err) {
+          showToast('⚠️ Could not read backup file');
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    }
+
+    window.addEventListener('online', () => {
+      updateSyncStatusUI();
+      if (hasLiveBackend()) {
+        if ((appState.syncQueue || []).length > 0) {
+          showToast('🌐 Back online — syncing queued sales to Google Sheets...');
+        }
+        flushSyncQueue(true);
+      }
+    });
+
+    window.addEventListener('offline', () => {
+      updateSyncStatusUI();
+      showToast('📡 Offline mode active — sales save safely on this device');
+    });
+
+    // Periodic gentle background retry if items are queued and device is online
+    setInterval(() => {
+      if (navigator.onLine && hasLiveBackend() && !appState.isSyncing && (appState.syncQueue || []).length > 0) {
+        flushSyncQueue(true);
+      }
+    }, 30000);
+
+    async function bootLoadInitialData() {
       document.getElementById('splashErrorBox').style.display = 'none';
       document.getElementById('splashStatusWrap').style.display = 'block';
       clearInterval(splashProgressTimer);
       clearTimeout(bootWatchdog);
 
+      setSplashProgress(20, 'Loading Local Memory', 'Opening fast IndexedDB database');
+      const [cachedSnap, cachedQueue] = await Promise.all([
+        idbGet(IDB_KEY_SNAPSHOT),
+        idbGet(IDB_KEY_QUEUE)
+      ]);
+      appState.syncQueue = Array.isArray(cachedQueue) ? cachedQueue : [];
+
+      // OFFLINE-FIRST: If local IndexedDB snapshot exists, boot instantly even with zero internet!
+      if (cachedSnap && Array.isArray(cachedSnap.products)) {
+        hydrateApp(cachedSnap, false);
+        const onlineMsg = navigator.onLine && hasLiveBackend()
+          ? 'Ready • Syncing with Google Sheets in background'
+          : 'Ready in Offline Mode';
+        setSplashProgress(100, 'Welcome back!', onlineMsg);
+        setTimeout(() => {
+          document.getElementById('bootSplash').classList.add('hidden');
+          if (navigator.onLine && hasLiveBackend()) {
+            flushSyncQueue(true);
+          }
+        }, 360);
+        return;
+      }
+
+      // First-time boot on a fresh device (no cached snapshot yet)
       if (!hasLiveBackend()) {
-        setSplashProgress(15, 'Setup Required', 'Connect your Google Apps Script Web App URL');
+        setSplashProgress(15, 'Setup or Offline Start', 'Link Google Sheets API or start locally');
         showSplashDiagnostic(
-          'Paste your deployed Google Apps Script Web App URL (ending in /exec) once to connect this GitHub Pages app to your Google Sheet.',
+          'Paste your Google Apps Script Web App URL (/exec) to auto-sync with management, or tap "Start Offline Now" to use SukiTab locally right away.',
           'api'
         );
         return;
       }
 
-      // Smooth staged radial progress while fetching live Google Sheets data
-      setSplashProgress(18, 'Connecting to Google Sheets', 'Authenticating secure session');
+      if (!navigator.onLine) {
+        dismissSplashToOffline();
+        showToast('📡 Started in fresh Offline Mode — sales will sync when online');
+        return;
+      }
+
+      // First-time online fetch from Google Sheets
+      setSplashProgress(28, 'Connecting to Google Sheets', 'Downloading initial menu & ledger');
       let stage = 0;
       const stages = [
-        { pct: 46, msg: 'Loading Menu & Inventory', sub: 'Checking real-time canteen stock levels' },
-        { pct: 76, msg: 'Syncing Customer Ledger', sub: 'Calculating paid purchases & utang balances' }
+        { pct: 54, msg: 'Loading Menu & Inventory', sub: 'Checking real-time canteen stock levels' },
+        { pct: 80, msg: 'Syncing Customer Ledger', sub: 'Caching locally for offline speed' }
       ];
       splashProgressTimer = setInterval(() => {
         if (stage < stages.length) {
@@ -3855,12 +4696,12 @@
         } else {
           clearInterval(splashProgressTimer);
         }
-      }, 550);
+      }, 520);
 
       bootWatchdog = setTimeout(() => {
         clearInterval(splashProgressTimer);
         showSplashDiagnostic(
-          'Google Sheets took too long to respond. Check your internet connection or verify your API / Sheet link.',
+          'Google Sheets took too long to respond. Tap Retry or Start Offline Now.',
           isAppsScriptHost() ? 'sheet' : 'api'
         );
       }, 15000);
@@ -3873,8 +4714,9 @@
           showSplashDiagnostic((res && res.error) ? res.error : 'Empty response from Code.gs. Check sheet tab names.', mode);
           return;
         }
-        hydrateApp(res);
-        setSplashProgress(100, 'Welcome back!', 'Ready to take orders');
+        appState.lastSyncedAt = new Date().toISOString();
+        hydrateApp(res, true);
+        setSplashProgress(100, 'Welcome back!', 'Cached offline & ready for orders');
         setTimeout(() => {
           document.getElementById('bootSplash').classList.add('hidden');
         }, 380);
@@ -3975,6 +4817,7 @@
       renderLedger();
       renderCart();
       renderHistoryView();
+      persistLocalState();
     }
 
     function runServer(fnName, args, onSuccess, loadingMsg) {
@@ -3996,8 +4839,10 @@
       });
     }
 
-    function hydrateApp(res) {
+    function hydrateApp(res, shouldPersist) {
       if (!res) return;
+      if (res.sheetName) appState.sheetName = res.sheetName;
+      if (res.sheetUrl) appState.sheetUrl = res.sheetUrl;
       appState.products = res.products || [];
       appState.customers = res.customers || [];
       appState.ledger = res.ledger || [];
@@ -4016,6 +4861,11 @@
       renderLedger();
       renderCart();
       renderHistoryView();
+      if (shouldPersist !== false) {
+        persistLocalState();
+      } else {
+        updateSyncStatusUI();
+      }
 
       // Live-refresh open Statement or Recent Sales modals after void/payment
       if (appState.activeStatementCustId && document.getElementById('customerStatementModal').classList.contains('open')) {
@@ -4059,6 +4909,8 @@
       document.getElementById('setColorTheme').value = activeTheme;
       document.getElementById('setShowClockBanner').checked = showBanner;
       document.getElementById('setSoundEnabled').checked = s.soundEnabled !== false;
+      const animFlag = (s.animationsEnabled !== undefined) ? (s.animationsEnabled !== false) : (localStorage.getItem('pos_animations') !== 'off');
+      syncAnimationsSettingUI(animFlag);
       document.getElementById('setManagerPin').value = s.managerPin || '1234';
       document.getElementById('setLockPriceEdits').checked = !!s.lockPriceEdits;
       document.getElementById('setLockExpenses').checked = !!s.lockExpenses;
@@ -4100,6 +4952,8 @@
       syncColorThemeUI(chosenTheme);
       const showBanner = document.getElementById('setShowClockBanner').checked;
       document.getElementById('clockHeroBanner').style.display = showBanner ? 'flex' : 'none';
+      const animChk = document.getElementById('setAnimationsEnabled');
+      if (animChk) syncAnimationsSettingUI(animChk.checked);
       updateLivePreview();
     }
 
@@ -4173,34 +5027,49 @@
       const wrap = document.getElementById('paymentAccountsContainer');
       wrap.innerHTML = '';
       (appState.settings.paymentAccounts || []).forEach((acc, idx) => {
+        const accType = (acc.type === 'Bank') ? 'Bank' : 'E-Wallet';
         const card = document.createElement('div');
         card.className = 'pay-acc-card';
         card.innerHTML = `
-          <div class="pay-acc-top">
-            <input type="text" class="form-control" value="${escapeHtml(acc.label)}" placeholder="Channel (e.g. GCash, Maya, BPI)" onchange="updatePayAcc(${idx}, 'label', this.value)">
+          <div class="pay-acc-type-row">
+            <select class="form-control" style="flex:0 0 118px;padding:0.45rem 0.55rem;font-size:0.8rem;" onchange="updatePayAcc(${idx}, 'type', this.value); renderPaymentAccountsSettings();">
+              <option value="E-Wallet" ${accType === 'E-Wallet' ? 'selected' : ''}>📱 E-Wallet</option>
+              <option value="Bank" ${accType === 'Bank' ? 'selected' : ''}>🏦 Bank</option>
+            </select>
+            <input type="text" class="form-control" style="flex:1;" value="${escapeHtml(acc.label)}" placeholder="${accType === 'Bank' ? 'Bank Name (e.g. BPI, BDO, GoTyme)' : 'E-Wallet (e.g. GCash, Maya)'}" onchange="updatePayAcc(${idx}, 'label', this.value)">
             <button type="button" class="btn btn-danger btn-sm" onclick="removePayAcc(${idx})">✕</button>
           </div>
-          <input type="text" class="form-control" value="${escapeHtml(acc.details)}" placeholder="Account Number / Name" onchange="updatePayAcc(${idx}, 'details', this.value)">
-          <div style="display:flex;align-items:center;gap:0.65rem;">
-            ${acc.qrData ? `<img src="${acc.qrData}" class="qr-thumb" alt="QR">` : ''}
-            <label class="btn btn-secondary btn-sm" style="cursor:pointer;">
-              📷 ${acc.qrData ? 'Change QR' : 'Upload QR'}
-              <input type="file" accept="image/*" style="display:none;" onchange="handleQrUpload(event, ${idx})">
-            </label>
+          <div class="setting-row" style="gap:0.45rem;">
+            <input type="text" class="form-control" style="flex:1;" value="${escapeHtml(acc.accountName || '')}" placeholder="Account Holder Name" onchange="updatePayAcc(${idx}, 'accountName', this.value)">
+            <input type="text" class="form-control" style="flex:1;" value="${escapeHtml(acc.details || '')}" placeholder="Account / Mobile Number" onchange="updatePayAcc(${idx}, 'details', this.value)">
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:0.65rem;">
+            <div style="display:flex;align-items:center;gap:0.65rem;">
+              ${acc.qrData ? `<img src="${acc.qrData}" class="qr-thumb" alt="QR">` : ''}
+              <label class="btn btn-secondary btn-sm" style="cursor:pointer;">
+                📷 ${acc.qrData ? 'Change QR' : 'Upload QR'}
+                <input type="file" accept="image/*" style="display:none;" onchange="handleQrUpload(event, ${idx})">
+              </label>
+            </div>
+            <span class="pay-acc-type-badge ${accType === 'Bank' ? 'is-bank' : ''}">${accType}</span>
           </div>
         `;
         wrap.appendChild(card);
       });
     }
 
-    function addPaymentAccount() {
+    function addPaymentAccount(accountType) {
+      const kind = accountType === 'Bank' ? 'Bank' : 'E-Wallet';
       appState.settings.paymentAccounts.push({
-        id: 'PAYACC-' + Date.now(),
-        label: 'Maya',
+        id: 'PAYACC-' + Date.now() + '-' + Math.floor(Math.random() * 100),
+        type: kind,
+        label: kind === 'Bank' ? 'BPI' : 'Maya',
+        accountName: '',
         details: '',
         qrData: ''
       });
       renderPaymentAccountsSettings();
+      showToast(kind === 'Bank' ? '🏦 New bank account added — enter details & tap Save Settings' : '📱 New e-wallet added — enter details & tap Save Settings');
     }
 
     function updatePayAcc(idx, field, val) {
@@ -4253,6 +5122,7 @@
         logoStyle: document.getElementById('setLogoStyle').value || '1',
         showClockBanner: document.getElementById('setShowClockBanner').checked,
         soundEnabled: document.getElementById('setSoundEnabled').checked,
+        animationsEnabled: document.getElementById('setAnimationsEnabled').checked,
         managerPin: document.getElementById('setManagerPin').value.trim() || '1234',
         lockPriceEdits: document.getElementById('setLockPriceEdits').checked,
         lockExpenses: document.getElementById('setLockExpenses').checked,
@@ -4266,11 +5136,158 @@
         lowStockThreshold: Number(document.getElementById('setLowStock').value) || 5
       });
 
-      runServer('saveAppSettings', [updated], (res) => {
-        hydrateApp(res);
-        localStorage.setItem('pos_reminder_enabled', updated.reminderEnabled ? 'true' : 'false');
-        showToast('✅ Settings saved!');
-      }, 'Saving settings...');
+      appState.settings = Object.assign({}, appState.settings, updated);
+      localStorage.setItem('pos_reminder_enabled', updated.reminderEnabled ? 'true' : 'false');
+      applySettingsToUI();
+      renderCategories();
+      renderMenu();
+      renderLedger();
+      enqueueOfflineMutation('saveAppSettings', [updated], 'Update Store Settings');
+      showToast(navigator.onLine && hasLiveBackend() ? '✅ Settings saved & syncing!' : '💾 Settings saved offline (will auto-sync)');
+    }
+
+
+    /* =========================================
+       MICRO-ANIMATIONS ENGINE (v13)
+       ========================================= */
+    function isAnimationsOn() {
+      return document.documentElement.getAttribute('data-animations') !== 'off';
+    }
+
+    function syncAnimationsSettingUI(enabled) {
+      const flag = enabled !== false;
+      document.documentElement.setAttribute('data-animations', flag ? 'on' : 'off');
+      localStorage.setItem('pos_animations', flag ? 'on' : 'off');
+      const chk = document.getElementById('setAnimationsEnabled');
+      if (chk) chk.checked = flag;
+    }
+
+    function spawnTapRipple(el, evt) {
+      if (!el || !isAnimationsOn()) return;
+      const rect = el.getBoundingClientRect();
+      const ink = document.createElement('span');
+      ink.className = 'tap-ripple-ink';
+      let x = rect.width / 2;
+      let y = rect.height / 2;
+      if (evt && typeof evt.clientX === 'number' && evt.clientX > 0) {
+        x = evt.clientX - rect.left;
+        y = evt.clientY - rect.top;
+      }
+      ink.style.left = x + 'px';
+      ink.style.top = y + 'px';
+      el.appendChild(ink);
+      setTimeout(() => { if (ink.parentNode) ink.parentNode.removeChild(ink); }, 380);
+    }
+
+    function ringReminderBell() {
+      const bell = document.getElementById('reminderBellIcon');
+      if (!bell || !isAnimationsOn()) return;
+      bell.classList.remove('ringing');
+      void bell.offsetWidth;
+      bell.classList.add('ringing');
+      setTimeout(() => bell.classList.remove('ringing'), 600);
+    }
+
+    function handleHeaderEmblemTap(el) {
+      if (el && isAnimationsOn()) {
+        el.classList.remove('tap-pulsing');
+        void el.offsetWidth;
+        el.classList.add('tap-pulsing');
+        setTimeout(() => el.classList.remove('tap-pulsing'), 440);
+      }
+      setTimeout(() => previewSplashAnimation(), isAnimationsOn() ? 150 : 0);
+    }
+
+    function triggerExpenseNavSpring(btnEl) {
+      if (!btnEl || !isAnimationsOn()) return;
+      btnEl.classList.remove('expense-spring');
+      void btnEl.offsetWidth;
+      btnEl.classList.add('expense-spring');
+      setTimeout(() => btnEl.classList.remove('expense-spring'), 390);
+    }
+
+    function positionLiquidNavIndicator() {
+      const rail = document.getElementById('mainNavRail');
+      const ind = document.getElementById('navLiquidIndicator');
+      if (!rail || !ind) return;
+      const activeBtn = rail.querySelector('.nav-btn.active');
+      if (!activeBtn) return;
+
+      const isMobile = window.innerWidth <= 719;
+      if (isMobile) {
+        const centerX = activeBtn.offsetLeft + (activeBtn.offsetWidth / 2);
+        const indW = ind.offsetWidth || 50;
+        ind.style.height = '50px';
+        ind.style.transform = `translate3d(${Math.round(centerX - indW / 2)}px, 0, 0)`;
+      } else {
+        ind.style.height = activeBtn.offsetHeight + 'px';
+        ind.style.transform = `translate3d(0, ${Math.round(activeBtn.offsetTop)}px, 0)`;
+      }
+      ind.classList.add('ready');
+    }
+
+    let navResizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(navResizeTimer);
+      navResizeTimer = setTimeout(positionLiquidNavIndicator, 80);
+    });
+
+    function runButtonFeedback(btnEl, busyLabel, doneLabel, workFn) {
+      if (!btnEl) {
+        return workFn();
+      }
+      if (btnEl.dataset.busy === '1') return;
+      const origHtml = btnEl.innerHTML;
+      btnEl.dataset.busy = '1';
+      btnEl.innerHTML = `<span class="btn-mini-spinner"></span> ${escapeHtml(busyLabel || 'Preparing...')}`;
+
+      setTimeout(async () => {
+        try {
+          await workFn();
+          btnEl.innerHTML = `<span class="btn-check-pop">✓</span> ${escapeHtml(doneLabel || 'Done!')}`;
+        } catch (err) {
+          btnEl.innerHTML = origHtml;
+          btnEl.dataset.busy = '0';
+          return;
+        }
+        setTimeout(() => {
+          btnEl.innerHTML = origHtml;
+          btnEl.dataset.busy = '0';
+        }, 950);
+      }, isAnimationsOn() ? 180 : 0);
+    }
+
+    function getCartQtyMap() {
+      const map = {};
+      (appState.cart || []).forEach(ci => {
+        map[ci.Product_ID] = (map[ci.Product_ID] || 0) + Number(ci.qty || 0);
+      });
+      return map;
+    }
+
+    function syncProductCardBadges(bouncedProdId) {
+      const qtyMap = getCartQtyMap();
+      document.querySelectorAll('#productGrid .prod-card[data-prod-id]').forEach(card => {
+        const pid = card.getAttribute('data-prod-id');
+        const qty = qtyMap[pid] || 0;
+        const badge = card.querySelector('.card-qty-badge');
+        card.classList.toggle('in-cart', qty > 0);
+        if (badge) {
+          if (qty > 0) {
+            badge.textContent = '×' + qty;
+            badge.classList.add('visible');
+            if (bouncedProdId && pid === bouncedProdId && isAnimationsOn()) {
+              badge.classList.remove('bouncing');
+              void badge.offsetWidth;
+              badge.classList.add('bouncing');
+              card.classList.add('card-tapped');
+              setTimeout(() => card.classList.remove('card-tapped'), 240);
+            }
+          } else {
+            badge.classList.remove('visible', 'bouncing');
+          }
+        }
+      });
     }
 
     /* Navigation & Auth */
@@ -4278,7 +5295,9 @@
       document.querySelectorAll('.view-panel').forEach(v => v.classList.remove('active'));
       document.getElementById(viewId).classList.add('active');
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      if (btnEl) btnEl.classList.add('active');
+      const targetBtn = btnEl || document.querySelector(`.nav-btn[data-view="${viewId}"]`);
+      if (targetBtn) targetBtn.classList.add('active');
+      requestAnimationFrame(positionLiquidNavIndicator);
 
       // Auto-lock Delete Mode OFF whenever navigating away from History for counter safety
       if (viewId !== 'historyView' && appState.historyDeleteMode) {
@@ -4301,16 +5320,34 @@
       }
       appState.pinCallback = callback;
       document.getElementById('pinEntryInput').value = '';
+      const errEl = document.getElementById('pinErrorMsg');
+      if (errEl) errEl.classList.remove('visible');
       openModal('pinModal');
       setTimeout(() => document.getElementById('pinEntryInput').focus(), 100);
     }
 
     function verifyPin() {
-      const entered = document.getElementById('pinEntryInput').value.trim();
+      const pinInp = document.getElementById('pinEntryInput');
+      const shield = document.getElementById('pinShieldIcon');
+      const errEl = document.getElementById('pinErrorMsg');
+      const entered = pinInp.value.trim();
       if (entered === String(appState.settings.managerPin || '1234').trim()) {
+        if (errEl) errEl.classList.remove('visible');
         closeModal('pinModal');
         if (appState.pinCallback) appState.pinCallback();
       } else {
+        if (errEl) errEl.classList.add('visible');
+        if (isAnimationsOn()) {
+          pinInp.classList.remove('animate-shake');
+          void pinInp.offsetWidth;
+          pinInp.classList.add('animate-shake');
+          if (shield) {
+            shield.classList.remove('shield-err');
+            void shield.offsetWidth;
+            shield.classList.add('shield-err');
+            setTimeout(() => shield.classList.remove('shield-err'), 420);
+          }
+        }
         showToast('❌ Incorrect Manager PIN');
       }
     }
@@ -4385,7 +5422,8 @@
         const btn = document.createElement('button');
         btn.className = 'cat-chip' + (appState.activeCategory === c ? ' active' : '');
         btn.textContent = c;
-        btn.onclick = () => {
+        btn.onclick = (evt) => {
+          spawnTapRipple(btn, evt);
           appState.activeCategory = c;
           renderCategories();
           renderMenu();
@@ -4414,14 +5452,18 @@
         return;
       }
 
+      const cartQtyMap = getCartQtyMap();
       filtered.forEach(p => {
         const stock = Number(p.Stock_Quantity || 0);
+        const inCartQty = cartQtyMap[p.Product_ID] || 0;
         const card = document.createElement('div');
-        card.className = 'prod-card' + (stock <= 0 ? ' out-of-stock' : '');
+        card.className = 'prod-card' + (stock <= 0 ? ' out-of-stock' : '') + (inCartQty > 0 ? ' in-cart' : '');
+        card.setAttribute('data-prod-id', p.Product_ID);
         const badgeCls = stock <= 0 ? 'zero' : (stock <= lowThresh ? 'low' : '');
         const badgeTxt = stock <= 0 ? 'Sold Out' : stock + ' left';
 
         card.innerHTML = `
+          <span class="card-qty-badge ${inCartQty > 0 ? 'visible' : ''}">${inCartQty > 0 ? '×' + inCartQty : ''}</span>
           <button type="button" class="edit-prod-btn" title="Edit Stock / Price">✏️</button>
           <div>
             <div class="prod-cat-tag">${escapeHtml(p.Category)}</div>
@@ -4437,7 +5479,8 @@
           e.stopPropagation();
           requestEditProduct(p);
         };
-        card.onclick = () => {
+        card.onclick = (evt) => {
+          spawnTapRipple(card, evt);
           if (stock <= 0) {
             showToast('⚠️ Out of stock — tap ✏️ on card to restock');
             return;
@@ -4500,15 +5543,28 @@
       }
       closeModal('productModal');
       if (id) {
-        runServer('updateProduct', [id, name, price, stock, cat], (res) => {
-          hydrateApp(res);
-          showToast('✅ Item updated');
-        }, 'Updating menu item...');
+        const target = appState.products.find(p => p.Product_ID === id);
+        if (target) {
+          target.Product_Name = name;
+          target.Price = price;
+          target.Stock_Quantity = stock;
+          target.Category = cat;
+        }
+        renderMenu();
+        enqueueOfflineMutation('updateProduct', [id, name, price, stock, cat], 'Update Item: ' + name);
+        showToast('✅ Item updated');
       } else {
-        runServer('addNewProduct', [name, price, stock, cat], (res) => {
-          hydrateApp(res);
-          showToast('✅ Item added');
-        }, 'Adding menu item...');
+        const newProdId = makeClientId('PROD-', 3);
+        appState.products.push({
+          Product_ID: newProdId,
+          Product_Name: name,
+          Price: price,
+          Stock_Quantity: stock,
+          Category: cat
+        });
+        renderMenu();
+        enqueueOfflineMutation('addNewProduct', [name, price, stock, cat, newProdId], 'Add Item: ' + name);
+        showToast('✅ Item added');
       }
     }
 
@@ -4530,7 +5586,7 @@
         });
       }
       playBeep();
-      renderCart();
+      renderCart(prod.Product_ID);
     }
 
     function updateCartQty(idx, delta) {
@@ -4554,7 +5610,7 @@
       renderCart();
     }
 
-    function renderCart() {
+    function renderCart(bouncedProdId) {
       const wrap = document.getElementById('cartItems');
       wrap.innerHTML = '';
       let total = 0;
@@ -4586,7 +5642,18 @@
 
       document.getElementById('cartTotalDisplay').textContent = '₱' + total.toFixed(2);
       document.getElementById('mobileCartCount').textContent = `🛒 ${count} item${count === 1 ? '' : 's'}`;
-      document.getElementById('mobileCartTotal').textContent = `₱${total.toFixed(2)} →`;
+      document.getElementById('mobileCartTotal').textContent = `₱${total.toFixed(2)}`;
+      syncProductCardBadges(bouncedProdId);
+
+      if (bouncedProdId && isAnimationsOn()) {
+        const bar = document.getElementById('mobileCartBar');
+        if (bar) {
+          bar.classList.remove('cart-popping');
+          void bar.offsetWidth;
+          bar.classList.add('cart-popping');
+          setTimeout(() => bar.classList.remove('cart-popping'), 380);
+        }
+      }
     }
 
     function toggleMobileCart(open) {
@@ -4615,8 +5682,9 @@
       sel.innerHTML = '';
       (appState.settings.paymentAccounts || []).forEach((acc, idx) => {
         const opt = document.createElement('option');
+        const kindTag = acc.type === 'Bank' ? '🏦 ' : '📱 ';
         opt.value = idx;
-        opt.textContent = `${acc.label}${acc.details ? ' — ' + acc.details : ''}`;
+        opt.textContent = `${kindTag}${acc.label}${acc.details ? ' — ' + acc.details : ''}`;
         sel.appendChild(opt);
       });
     }
@@ -4626,15 +5694,22 @@
       const acc = (appState.settings.paymentAccounts || [])[idx];
       const box = document.getElementById('epayQrDisplay');
       if (!acc) { box.innerHTML = ''; return; }
+      const isBank = acc.type === 'Bank';
       const thumb = acc.qrData
         ? `<img src="${acc.qrData}" class="qr-thumb" alt="QR">`
-        : `<div class="qr-thumb" style="display:flex;align-items:center;justify-content:center;font-size:1.3rem;">📲</div>`;
+        : `<div class="qr-thumb" style="display:flex;align-items:center;justify-content:center;font-size:1.3rem;">${isBank ? '🏦' : '📲'}</div>`;
+      const holderSub = acc.accountName ? `<div style="font-size:0.72rem;color:var(--text-muted);">${escapeHtml(acc.accountName)}</div>` : '';
       box.innerHTML = `
         <div class="epay-thumb-trigger" onclick="openQrZoomModal()">
           ${thumb}
           <div style="min-width:0;flex:1;">
-            <div style="font-weight:800;font-size:0.82rem;">${escapeHtml(acc.label)} ${acc.details ? '• ' + escapeHtml(acc.details) : ''}</div>
-            <div style="font-size:0.74rem;color:var(--primary);font-weight:700;">🔍 Tap to zoom QR for customer</div>
+            <div style="display:flex;align-items:center;gap:0.35rem;flex-wrap:wrap;">
+              <span style="font-weight:800;font-size:0.82rem;">${escapeHtml(acc.label)}</span>
+              <span class="pay-acc-type-badge ${isBank ? 'is-bank' : ''}">${isBank ? 'Bank' : 'E-Wallet'}</span>
+            </div>
+            ${holderSub}
+            <div style="font-size:0.74rem;font-weight:700;color:var(--text-main);">${escapeHtml(acc.details || 'No account # set')}</div>
+            <div style="font-size:0.72rem;color:var(--primary);font-weight:700;">🔍 Tap to show full details / QR</div>
           </div>
         </div>
       `;
@@ -4642,15 +5717,23 @@
 
     function openQrZoomModal() {
       const idx = Number(document.getElementById('epayChannelSelect').value || 0);
-      const acc = (appState.settings.paymentAccounts || [])[idx] || { label: 'E-Payment', details: '', qrData: '' };
+      const acc = (appState.settings.paymentAccounts || [])[idx] || { type: 'E-Wallet', label: 'E-Payment', accountName: '', details: '', qrData: '' };
+      const isBank = acc.type === 'Bank';
       const total = appState.cart.reduce((s, i) => s + i.Price * i.qty, 0);
 
-      document.getElementById('qrZoomAccountTitle').textContent =
-        acc.label + (acc.details ? ' • ' + acc.details : '');
+      document.getElementById('qrZoomHeaderLabel').textContent = isBank ? '🏦 Bank Transfer' : '📲 QR E-Payment';
+      document.getElementById('qrZoomAccountTitle').textContent = acc.label || 'Payment Account';
+      document.getElementById('qrZoomAccountSub').textContent =
+        [acc.accountName, acc.details].filter(Boolean).join(' • ') || 'Configure details in Settings';
       document.getElementById('qrZoomAmountLabel').textContent = 'Amount to Pay: ₱' + total.toFixed(2);
       document.getElementById('qrZoomImgContainer').innerHTML = acc.qrData
         ? `<img src="${acc.qrData}" style="width:220px;height:220px;object-fit:contain;" alt="Customer QR">`
-        : `<div style="color:#475569;font-size:0.84rem;padding:1.25rem;">No QR image uploaded yet.<br><span style="font-size:0.75rem;">Upload your QR in Settings → E-Payment Accounts &amp; QR.</span></div>`;
+        : `<div style="color:#475569;font-size:0.84rem;padding:1.25rem;line-height:1.45;">
+            <div style="font-size:2rem;margin-bottom:0.35rem;">${isBank ? '🏦' : '📲'}</div>
+            <strong>${escapeHtml(acc.label)}</strong><br>
+            ${acc.accountName ? escapeHtml(acc.accountName) + '<br>' : ''}
+            <span style="font-family:monospace;font-size:0.95rem;font-weight:800;">${escapeHtml(acc.details || 'No account number')}</span>
+          </div>`;
       openModal('qrZoomModal');
     }
 
@@ -4704,26 +5787,130 @@
 
       const epayIdx = Number(document.getElementById('epayChannelSelect').value || 0);
       const epayAcc = (appState.settings.paymentAccounts || [])[epayIdx];
+      const refInput = document.getElementById('epayRefInput');
+      const paymentRef = (appState.paymentMethod === 'E-Payment' && refInput) ? refInput.value.trim() : '';
+      const today = getTodayDateString();
+      const orderId = makeClientId('ORD-', 4);
+      const isCredit = (appState.paymentMethod === 'Credit');
+      const storedMethod = (appState.paymentMethod === 'E-Payment' && epayAcc) ? epayAcc.label : appState.paymentMethod;
+      const dueDate = isCredit ? (document.getElementById('creditDueDate').value || today) : today;
+      const itemsCopy = appState.cart.map(i => Object.assign({}, i));
 
       const payload = {
+        orderId: orderId,
+        orderDate: today,
         customerId: customerId,
         customerName: customerName,
         paymentMethod: appState.paymentMethod,
         epayChannel: epayAcc ? epayAcc.label : 'E-Payment',
-        dueDate: document.getElementById('creditDueDate').value,
-        total: total,
-        items: appState.cart,
+        paymentRef: paymentRef,
+        dueDate: dueDate,
+        total: Number(total.toFixed(2)),
+        items: itemsCopy,
         operator: appState.currentOperator
       };
 
+      // Instant local offline-first application (zero counter lag!)
+      itemsCopy.forEach(ci => {
+        const prod = appState.products.find(p => p.Product_ID === ci.Product_ID);
+        if (prod) prod.Stock_Quantity = Math.max(0, Number(prod.Stock_Quantity || 0) - Number(ci.qty || 1));
+      });
+
+      const statusLabel = isCredit ? 'Unpaid' : 'Paid';
+      const itemsSummary = itemsCopy.map(i => `${i.qty}x ${i.Product_Name}`).join(', ');
+      const detList = itemsCopy.map(i => ({
+        orderId: orderId,
+        productId: i.Product_ID,
+        itemName: i.Product_Name,
+        qty: Number(i.qty || 1),
+        unitPrice: Number(i.Price || 0),
+        subtotal: Number((Number(i.Price || 0) * Number(i.qty || 1)).toFixed(2))
+      }));
+
+      appState.recentOrders.unshift({
+        rowOrder: Date.now(),
+        orderId: orderId,
+        date: today,
+        customerId: customerId,
+        customerName: customerName,
+        isWalkIn: customerId === 'WALK-IN',
+        total: Number(total.toFixed(2)),
+        originalTotal: Number(total.toFixed(2)),
+        paymentMethod: storedMethod,
+        paymentRef: paymentRef,
+        isCredit: isCredit,
+        isVoided: false,
+        voidInfo: '',
+        status: statusLabel,
+        operator: appState.currentOperator,
+        itemsSummary: itemsSummary,
+        items: detList
+      });
+
+      detList.forEach(d => {
+        appState.storeItems.unshift({
+          date: today,
+          orderId: orderId,
+          customerId: customerId,
+          customerName: customerName,
+          itemName: d.itemName,
+          qty: d.qty,
+          unitPrice: d.unitPrice,
+          subtotal: d.subtotal,
+          originalSubtotal: d.subtotal,
+          paymentMethod: storedMethod,
+          paymentRef: paymentRef,
+          isCredit: isCredit,
+          isVoided: false,
+          voidInfo: '',
+          status: statusLabel
+        });
+      });
+
+      const custRow = appState.ledger.find(l => l.Customer_ID === customerId);
+      if (custRow) {
+        if (isCredit) {
+          custRow.totalCredit = Number((Number(custRow.totalCredit || 0) + total).toFixed(2));
+          custRow.Total_Credit = custRow.totalCredit;
+          custRow.balance = Number(Math.max(0, custRow.totalCredit - Number(custRow.totalPaidUtang || 0)).toFixed(2));
+          custRow.Balance = custRow.balance;
+          if (!custRow.Due_Date || dueDate < custRow.Due_Date) custRow.Due_Date = dueDate;
+        } else {
+          custRow.paidPurchasesTotal = Number((Number(custRow.paidPurchasesTotal || 0) + total).toFixed(2));
+          custRow.paidOrdersCount = Number(custRow.paidOrdersCount || 0) + 1;
+        }
+        if (!Array.isArray(custRow.items)) custRow.items = [];
+        detList.forEach((d, idx) => {
+          custRow.items.unshift({
+            date: today,
+            orderId: orderId,
+            isFirstOrderLine: idx === 0,
+            itemName: d.itemName,
+            qty: d.qty,
+            unitPrice: d.unitPrice,
+            subtotal: d.subtotal,
+            originalSubtotal: d.subtotal,
+            paymentMethod: storedMethod,
+            paymentRef: paymentRef,
+            isCredit: isCredit,
+            isVoided: false,
+            voidInfo: '',
+            status: statusLabel
+          });
+        });
+      }
+
+      appState.cart = [];
+      document.getElementById('customerSelect').value = 'WALK-IN';
+      if (refInput) refInput.value = '';
       toggleMobileCart(false);
-      runServer('submitOrder', [payload], (res) => {
-        appState.cart = [];
-        document.getElementById('customerSelect').value = 'WALK-IN';
-        hydrateApp(res);
-        playBeep();
-        showToast('✅ Sale recorded for ' + customerName + '!');
-      }, 'Recording sale...');
+      renderMenu();
+      renderCart();
+      renderLedger();
+      renderHistoryView();
+      playBeep();
+      enqueueOfflineMutation('submitOrder', [payload], `Sale ${orderId} • ₱${total.toFixed(2)} (${storedMethod})`);
+      showToast(`✅ Sale ${orderId} saved for ${customerName}!`);
     }
 
     /* Customers */
@@ -4761,17 +5948,32 @@
       closeModal('newCustomerModal');
       document.getElementById('newCustName').value = '';
       document.getElementById('newCustPhone').value = '';
-      runServer('addNewCustomer', [name, check.value], (res) => {
-        hydrateApp(res);
-        if (res.selectedCustomerId) {
-          document.getElementById('customerSelect').value = res.selectedCustomerId;
-        } else if (res.customers && res.customers.length > 0) {
-          document.getElementById('customerSelect').value = res.customers[res.customers.length - 1].Customer_ID;
-        }
-        showToast(res.mergedExistingCustomer
-          ? '✅ Matched existing customer profile'
-          : '✅ Customer registered');
-      }, 'Saving customer...');
+      const existing = appState.customers.find(c =>
+        (check.value && c.Phone && c.Phone === check.value) ||
+        (!check.value && c.Name.toLowerCase() === name.toLowerCase())
+      );
+      if (existing) {
+        document.getElementById('customerSelect').value = existing.Customer_ID;
+        showToast('✅ Matched existing customer profile');
+      } else {
+        const newCid = makeClientId('CUST-', 3);
+        const newCustObj = { Customer_ID: newCid, Name: name, Phone: check.value };
+        appState.customers.push(newCustObj);
+        appState.ledger.push({
+          Customer_ID: newCid, Name: name, Phone: check.value,
+          paidPurchasesTotal: 0, paidOrdersCount: 0,
+          totalCredit: 0, totalPaidUtang: 0, balance: 0,
+          Total_Credit: 0, Total_Paid: 0, Balance: 0,
+          Due_Date: '', isArchived: false, archivedInfo: '',
+          items: [], payments: [], History: []
+        });
+        renderCustomers();
+        renderLedger();
+        renderHistoryView();
+        document.getElementById('customerSelect').value = newCid;
+        enqueueOfflineMutation('addNewCustomer', [name, check.value, newCid], 'Register Customer: ' + name);
+        showToast('✅ Customer registered');
+      }
     }
 
     /* =========================================
@@ -4879,6 +6081,9 @@
       localStorage.setItem('pos_reminder_enabled', flag ? 'true' : 'false');
       syncReminderToggleControls(flag);
       renderReminderSystem();
+      if (flag && showFeedback) {
+        ringReminderBell();
+      }
       if (showFeedback) {
         showToast(flag ? '🔔 Utang reminders turned ON' : '🙈 Utang reminders hidden for counter privacy');
       }
@@ -5320,7 +6525,7 @@
                   <td>${Number(item.qty || 1)}</td>
                   <td style="white-space:nowrap;">₱${Number(item.unitPrice || 0).toFixed(2)}</td>
                   <td class="amt-cell" style="white-space:nowrap;font-weight:800;">${subDisplay}</td>
-                  <td style="white-space:nowrap;">${escapeHtml(item.paymentMethod || 'Cash')}</td>
+                  <td style="white-space:nowrap;">${escapeHtml(item.paymentMethod || 'Cash')}${item.paymentRef ? `<div style="font-size:0.68rem;color:var(--text-muted);">Ref: ${escapeHtml(item.paymentRef)}</div>` : ''}</td>
                   <td><span class="badge ${stCls}">${escapeHtml(st)}</span></td>
                   <td>${actionCell}</td>
                 </tr>
@@ -5350,9 +6555,11 @@
       return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     }
 
-    function exportActiveCustomerExcel() {
+    function exportActiveCustomerExcel(btnEl) {
       if (!appState.activeStatementCustId) return;
-      exportCustomerStatementExcel(appState.activeStatementCustId);
+      runButtonFeedback(btnEl, 'Exporting...', 'Exported!', () => {
+        exportCustomerStatementExcel(appState.activeStatementCustId);
+      });
     }
 
     function exportCustomerStatementExcel(custId) {
@@ -5451,11 +6658,7 @@
       showToast('📥 Downloaded ' + filename);
     }
 
-    function exportAllCustomersExcel() {
-      if (typeof XLSX === 'undefined') {
-        showToast('⚠️ Excel export library still loading — check internet and retry');
-        return;
-      }
+    function buildMasterExcelWorkbook() {
       const today = getTodayDateString();
       const wb = XLSX.utils.book_new();
 
@@ -5516,9 +6719,9 @@
       ];
       XLSX.utils.book_append_sheet(wb, wsLedger, 'Customer Ledger');
 
-      // Sheet 2: Complete Store-Wide Itemized Purchase Log
+      // Sheet 2: Complete Store-Wide Itemized Purchase Log (Includes Walk-in + Payment Ref #)
       const logRows = [
-        ['Date', 'Order ID', 'Customer ID', 'Customer Name', 'Item Name', 'Quantity', 'Unit Price (PHP)', 'Line Total (PHP)', 'Payment Method', 'Status']
+        ['Date', 'Order ID', 'Customer ID', 'Customer Name', 'Item Name', 'Quantity', 'Unit Price (PHP)', 'Line Total (PHP)', 'Payment Method', 'Payment Ref #', 'Status']
       ];
       let gLine = 0;
       const storeLog = Array.isArray(appState.storeItems) ? appState.storeItems : [];
@@ -5535,19 +6738,44 @@
           Number(it.unitPrice || 0),
           sub,
           it.paymentMethod || 'Cash',
+          it.paymentRef || '',
           it.status || 'Paid'
         ]);
       });
-      logRows.push(['', '', '', '', 'GRAND TOTAL', '', '', Number(gLine.toFixed(2)), '', '']);
+      logRows.push(['', '', '', '', 'GRAND TOTAL', '', '', Number(gLine.toFixed(2)), '', '', '']);
 
       const wsLog = XLSX.utils.aoa_to_sheet(logRows);
       wsLog['!cols'] = [
         { wch: 13 }, { wch: 13 }, { wch: 13 }, { wch: 22 }, { wch: 26 },
-        { wch: 10 }, { wch: 16 }, { wch: 16 }, { wch: 16 }, { wch: 12 }
+        { wch: 10 }, { wch: 16 }, { wch: 16 }, { wch: 16 }, { wch: 16 }, { wch: 12 }
       ];
       XLSX.utils.book_append_sheet(wb, wsLog, 'Store Itemized Log');
 
-      // Sheet 3: Void Purchase Audit Log
+      // Sheet 3: Channel & Bank Breakdown (Cash, GCash, BPI, BDO, Credit)
+      const channelTotals = {};
+      const activeOrders = (appState.recentOrders || []).filter(o => !o.isVoided);
+      let grandChannelAmt = 0;
+      activeOrders.forEach(o => {
+        const m = String(o.paymentMethod || 'Cash').trim();
+        if (!channelTotals[m]) channelTotals[m] = { orders: 0, total: 0 };
+        channelTotals[m].orders += 1;
+        channelTotals[m].total += Number(o.total || 0);
+        grandChannelAmt += Number(o.total || 0);
+      });
+      const chanRows = [
+        ['Payment Channel / Bank', 'Order Count', 'Net Total (PHP)', 'Share (%)']
+      ];
+      Object.keys(channelTotals).sort().forEach(ch => {
+        const rec = channelTotals[ch];
+        const share = grandChannelAmt > 0 ? Number(((rec.total / grandChannelAmt) * 100).toFixed(1)) : 0;
+        chanRows.push([ch, rec.orders, Number(rec.total.toFixed(2)), share]);
+      });
+      chanRows.push(['TOTAL NET SALES', activeOrders.length, Number(grandChannelAmt.toFixed(2)), 100]);
+      const wsChan = XLSX.utils.aoa_to_sheet(chanRows);
+      wsChan['!cols'] = [{ wch: 26 }, { wch: 14 }, { wch: 18 }, { wch: 12 }];
+      XLSX.utils.book_append_sheet(wb, wsChan, 'Channel & Bank Summary');
+
+      // Sheet 4: Void Purchase Audit Log
       const vLogs = Array.isArray(appState.voidLogs) ? appState.voidLogs : [];
       const voidRows = [
         ['Void ID', 'Voided At', 'Order ID', 'Order Date', 'Customer ID', 'Customer Name', 'Original Total (PHP)', 'Payment Method', 'Items Restored', 'Reason', 'Authorized By']
@@ -5578,9 +6806,52 @@
       ];
       XLSX.utils.book_append_sheet(wb, wsVoids, 'Void Audit Log');
 
-      const filename = `SukiTab_All_Customers_${today}.xlsx`;
-      XLSX.writeFile(wb, filename);
-      showToast('📥 Downloaded ' + filename);
+      const storeSlug = sanitizeFilenamePart(appState.settings.canteenName || 'SukiTab');
+      return { wb: wb, filename: `${storeSlug}_Report_${today}.xlsx` };
+    }
+
+    function exportAllCustomersExcel(btnEl) {
+      if (typeof XLSX === 'undefined') {
+        showToast('⚠️ Excel engine not loaded yet — connect once to cache offline');
+        return;
+      }
+      runButtonFeedback(btnEl, 'Building...', 'Exported!', () => {
+        const { wb, filename } = buildMasterExcelWorkbook();
+        XLSX.writeFile(wb, filename);
+        showToast('📥 Downloaded ' + filename);
+      });
+    }
+
+    function shareAllExcelToMessenger(btnEl) {
+      if (typeof XLSX === 'undefined') {
+        showToast('⚠️ Excel engine not loaded yet — connect once to cache offline');
+        return;
+      }
+      runButtonFeedback(btnEl, 'Preparing...', 'Ready!', async () => {
+        const { wb, filename } = buildMasterExcelWorkbook();
+        const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        const mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        const file = new File([wbout], filename, { type: mime });
+        const storeName = appState.settings.canteenName || 'SukiTab';
+
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({
+              title: `${storeName} POS & Utang Report`,
+              text: `Daily SukiTab POS report for ${storeName} (${getTodayDateString()}).`,
+              files: [file]
+            });
+            showToast('💬 Report shared!');
+            return;
+          } catch (err) {
+            if (err && err.name === 'AbortError') return;
+          }
+        }
+
+        // Clean fallback on desktop or browsers without Web Share file support
+        XLSX.writeFile(wb, filename);
+        showToast('📥 Downloaded ' + filename + ' — attach it in your Messenger chat!');
+      });
     }
 
 
@@ -5850,11 +7121,38 @@
       }
 
       closeModal('deleteCustomerModal');
-      runServer('archiveCustomer', [custId, reason, appState.currentOperator], (res) => {
-        hydrateApp(res);
-        playBeep();
-        showToast(`🗑️ ${res.archivedCustomerName || 'Customer'} archived & traced in History`);
-      }, 'Archiving customer & recording audit trace...');
+      const idxL = appState.ledger.findIndex(c => c.Customer_ID === custId);
+      let archName = custId;
+      if (idxL !== -1) {
+        const cust = appState.ledger.splice(idxL, 1)[0];
+        archName = cust.Name;
+        cust.isArchived = true;
+        cust.archivedInfo = `ARCHIVED — ${reason} | By ${appState.currentOperator} @ ${getLocalTimestampStr()}`;
+        appState.archivedCustomers.unshift(cust);
+        appState.customers = appState.customers.filter(c => c.Customer_ID !== custId);
+        appState.auditLogs.unshift({
+          rowOrder: Date.now(),
+          logId: makeClientId('LOG-', 5),
+          timestamp: getLocalTimestampStr(),
+          category: 'deletion',
+          badge: 'ACCOUNT DELETED',
+          title: `${cust.Name}${cust.Phone ? ' (' + cust.Phone + ')' : ''} — Removed from Active Ledger`,
+          details: `Archived Snapshot: Paid Purchases ₱${Number(cust.paidPurchasesTotal || 0).toFixed(2)} • Settled Credit ₱${Number(cust.totalCredit || 0).toFixed(2)} • Balance ₱0.00.`,
+          reason: reason,
+          verifiedBy: `Manager PIN Verified (${appState.currentOperator})`,
+          refId: custId,
+          customerId: custId,
+          customerName: cust.Name,
+          restorable: true,
+          restored: false
+        });
+      }
+      renderCustomers();
+      renderLedger();
+      renderHistoryView();
+      playBeep();
+      enqueueOfflineMutation('archiveCustomer', [custId, reason, appState.currentOperator], `Archive Customer: ${archName}`);
+      showToast(`🗑️ ${archName} archived & traced in History`);
     }
 
     function openRestoreCustomerModal(custId, logId, label) {
@@ -5885,19 +7183,54 @@
       }
 
       closeModal('restoreCustomerModal');
-      runServer('restoreCustomer', [custId, logId, appState.currentOperator], (res) => {
-        hydrateApp(res);
-        playBeep();
-        showToast(`♻️ ${res.restoredCustomerName || 'Customer'} restored to active Ledger!`);
-      }, 'Restoring customer to active Ledger...');
+      const idxA = appState.archivedCustomers.findIndex(c => c.Customer_ID === custId);
+      let restName = custId;
+      if (idxA !== -1) {
+        const cust = appState.archivedCustomers.splice(idxA, 1)[0];
+        restName = cust.Name;
+        cust.isArchived = false;
+        cust.archivedInfo = '';
+        appState.ledger.push(cust);
+        if (!appState.customers.some(c => c.Customer_ID === custId)) {
+          appState.customers.push({ Customer_ID: cust.Customer_ID, Name: cust.Name, Phone: cust.Phone });
+        }
+      }
+      (appState.auditLogs || []).forEach(l => {
+        if ((logId && l.logId === logId) || (l.category === 'deletion' && l.customerId === custId)) {
+          l.restorable = false;
+          l.restored = true;
+        }
+      });
+      appState.auditLogs.unshift({
+        rowOrder: Date.now(),
+        logId: makeClientId('LOG-', 5),
+        timestamp: getLocalTimestampStr(),
+        category: 'deletion',
+        badge: 'ACCOUNT RESTORED',
+        title: `${restName} — Restored to Active Ledger`,
+        details: 'Profile restored back to active POS & Customer Ledger with full purchase and settlement history intact.',
+        reason: 'Manager Restoration',
+        verifiedBy: `Manager PIN Verified (${appState.currentOperator})`,
+        refId: custId,
+        customerId: custId,
+        restorable: false,
+        restored: false
+      });
+      renderCustomers();
+      renderLedger();
+      renderHistoryView();
+      playBeep();
+      enqueueOfflineMutation('restoreCustomer', [custId, logId, appState.currentOperator], `Restore Customer: ${restName}`);
+      showToast(`♻️ ${restName} restored to active Ledger!`);
     }
 
-    function exportTraceLogExcel() {
+    function exportTraceLogExcel(btnEl) {
       if (typeof XLSX === 'undefined') {
         showToast('⚠️ Excel export library still loading — check internet and retry');
         return;
       }
-      const today = getTodayDateString();
+      runButtonFeedback(btnEl, 'Exporting...', 'Exported!', () => {
+        const today = getTodayDateString();
       const wb = XLSX.utils.book_new();
 
       // Sheet 1: Audit Timeline
@@ -5955,6 +7288,7 @@
       const filename = `${storeSlug}_Trace_Log_${today}.xlsx`;
       XLSX.writeFile(wb, filename);
       showToast('📥 Downloaded ' + filename);
+      });
     }
 
     /* =========================================
@@ -6032,7 +7366,7 @@
                   ${escapeHtml(o.orderId)} • ${escapeHtml(o.customerName)}
                 </div>
                 <div style="font-size:0.74rem;color:var(--text-muted);margin-top:0.1rem;">
-                  📅 ${escapeHtml(o.date || '-')} • ${escapeHtml(o.paymentMethod)} • By ${escapeHtml(o.operator || 'Staff')}
+                  📅 ${escapeHtml(o.date || '-')} • ${escapeHtml(o.paymentMethod)}${o.paymentRef ? ' (Ref: ' + escapeHtml(o.paymentRef) + ')' : ''} • By ${escapeHtml(o.operator || 'Staff')}
                 </div>
               </div>
               <span class="badge ${stCls}">${escapeHtml(o.status)}</span>
@@ -6092,11 +7426,104 @@
 
       const executeVoid = () => {
         closeModal('voidOrderModal');
-        runServer('voidOrder', [orderId, reason, appState.currentOperator], (res) => {
-          hydrateApp(res);
-          playBeep();
-          showToast('↩️ Order ' + orderId + ' voided & stock restored!');
-        }, 'Voiding order & restoring stock...');
+        const targetOrd = (appState.recentOrders || []).find(o => o.orderId === orderId);
+        const voidedAt = getLocalTimestampStr();
+        const origTotal = targetOrd ? Number(targetOrd.originalTotal || targetOrd.total || 0) : 0;
+        const voidInfo = `VOIDED (Orig ₱${origTotal.toFixed(2)}) — ${reason} | By ${appState.currentOperator} @ ${voidedAt}`;
+        const restoredParts = [];
+
+        if (targetOrd && !targetOrd.isVoided) {
+          // Restore local stock
+          (targetOrd.items || []).forEach(d => {
+            if (d.productId && String(d.productId).indexOf('PAST:') !== 0) {
+              const p = appState.products.find(pr => pr.Product_ID === d.productId);
+              if (p) {
+                p.Stock_Quantity = Number(p.Stock_Quantity || 0) + Number(d.qty || 0);
+                restoredParts.push(`${d.qty}x ${p.Product_Name} (+stock)`);
+              }
+            } else if (d.itemName) {
+              restoredParts.push(`${d.qty}x ${d.itemName}`);
+            }
+          });
+
+          targetOrd.isVoided = true;
+          targetOrd.total = 0;
+          targetOrd.status = 'Voided';
+          targetOrd.voidInfo = voidInfo;
+
+          (appState.storeItems || []).forEach(si => {
+            if (si.orderId === orderId) {
+              si.isVoided = true;
+              si.subtotal = 0;
+              si.status = 'Voided';
+              si.voidInfo = voidInfo;
+            }
+          });
+
+          const custRow = appState.ledger.find(l => l.Customer_ID === targetOrd.customerId);
+          if (custRow) {
+            if (targetOrd.isCredit) {
+              custRow.totalCredit = Number(Math.max(0, Number(custRow.totalCredit || 0) - origTotal).toFixed(2));
+              custRow.Total_Credit = custRow.totalCredit;
+              custRow.balance = Number(Math.max(0, custRow.totalCredit - Number(custRow.totalPaidUtang || 0)).toFixed(2));
+              custRow.Balance = custRow.balance;
+            } else {
+              custRow.paidPurchasesTotal = Number(Math.max(0, Number(custRow.paidPurchasesTotal || 0) - origTotal).toFixed(2));
+              custRow.paidOrdersCount = Math.max(0, Number(custRow.paidOrdersCount || 0) - 1);
+            }
+            (custRow.items || []).forEach(it => {
+              if (it.orderId === orderId) {
+                it.isVoided = true;
+                it.subtotal = 0;
+                it.status = 'Voided';
+                it.voidInfo = voidInfo;
+              }
+            });
+          }
+
+          appState.voidLogs.unshift({
+            voidId: makeClientId('VOID-', 4),
+            voidedAt: voidedAt,
+            orderId: orderId,
+            orderDate: targetOrd.date,
+            customerId: targetOrd.customerId,
+            customerName: targetOrd.customerName,
+            originalTotal: origTotal,
+            paymentMethod: targetOrd.paymentMethod,
+            itemsRestored: restoredParts.join(', ') || 'No stock items',
+            reason: reason,
+            authorizedBy: appState.currentOperator
+          });
+
+          appState.auditLogs.unshift({
+            rowOrder: Date.now(),
+            logId: makeClientId('LOG-', 5),
+            timestamp: voidedAt,
+            category: 'void',
+            badge: 'VOIDED ORDER',
+            title: `${orderId} — Voided (${targetOrd.customerName})`,
+            details: `Reversed ₱${origTotal.toFixed(2)} (${targetOrd.paymentMethod}). ${restoredParts.length ? 'Restored: ' + restoredParts.join(', ') : 'No stock deducted.'}`,
+            reason: reason,
+            verifiedBy: `Manager PIN Verified (${appState.currentOperator})`,
+            refId: orderId,
+            customerId: targetOrd.customerId,
+            restorable: false,
+            restored: false
+          });
+        }
+
+        renderMenu();
+        renderLedger();
+        renderHistoryView();
+        if (appState.activeStatementCustId && document.getElementById('customerStatementModal').classList.contains('open')) {
+          renderCustomerStatementModal(appState.activeStatementCustId);
+        }
+        if (document.getElementById('recentSalesModal').classList.contains('open')) {
+          renderRecentSalesList();
+        }
+        playBeep();
+        enqueueOfflineMutation('voidOrder', [orderId, reason, appState.currentOperator], `Void ${orderId}`);
+        showToast('↩️ Order ' + orderId + ' voided & stock restored!');
       };
 
       if (appState.settings.lockVoidOrders !== false) {
@@ -6127,11 +7554,53 @@
         return;
       }
       closeModal('paymentModal');
-      runServer('recordDebtPayment', [custId, amt, appState.currentOperator], (res) => {
-        hydrateApp(res);
-        playBeep();
-        showToast('✅ Payment recorded');
-      }, 'Recording payment...');
+      const payId = makeClientId('PAY-', 4);
+      const today = getTodayDateString();
+      const cust = appState.ledger.find(l => l.Customer_ID === custId);
+      if (cust) {
+        cust.totalPaidUtang = Number((Number(cust.totalPaidUtang || 0) + amt).toFixed(2));
+        cust.Total_Paid = cust.totalPaidUtang;
+        cust.balance = Number(Math.max(0, Number(cust.totalCredit || 0) - cust.totalPaidUtang).toFixed(2));
+        cust.Balance = cust.balance;
+        if (!Array.isArray(cust.payments)) cust.payments = [];
+        cust.payments.unshift({
+          paymentId: payId,
+          date: today,
+          amount: amt,
+          method: 'Cash',
+          operator: appState.currentOperator,
+          notes: 'Collected by ' + appState.currentOperator
+        });
+        if (cust.balance <= 0) {
+          cust.Due_Date = '';
+          (cust.items || []).forEach(it => { if (it.isCredit && !it.isVoided) it.status = 'Settled'; });
+          (appState.recentOrders || []).forEach(o => { if (o.customerId === custId && o.isCredit && !o.isVoided) o.status = 'Settled'; });
+          (appState.storeItems || []).forEach(si => { if (si.customerId === custId && si.isCredit && !si.isVoided) si.status = 'Settled'; });
+        }
+        appState.auditLogs.unshift({
+          rowOrder: Date.now(),
+          logId: makeClientId('LOG-', 5),
+          timestamp: getLocalTimestampStr(),
+          category: 'payment',
+          badge: cust.balance <= 0 ? 'UTANG SETTLED' : 'UTANG PAYMENT',
+          title: `${cust.Name} — ${cust.balance <= 0 ? 'Utang Settlement' : 'Partial Payment'} ₱${amt.toFixed(2)}`,
+          details: `Payment received (₱${amt.toFixed(2)}). Remaining Utang balance updated to ₱${cust.balance.toFixed(2)}.`,
+          reason: cust.balance <= 0 ? 'Full Settlement' : 'Installment Payment',
+          verifiedBy: appState.currentOperator,
+          refId: payId,
+          customerId: custId,
+          restorable: false,
+          restored: false
+        });
+      }
+      renderLedger();
+      renderHistoryView();
+      if (appState.activeStatementCustId === custId && document.getElementById('customerStatementModal').classList.contains('open')) {
+        renderCustomerStatementModal(custId);
+      }
+      playBeep();
+      enqueueOfflineMutation('recordDebtPayment', [custId, amt, appState.currentOperator, payId], `Payment ${payId} • ₱${amt.toFixed(2)}`);
+      showToast('✅ Payment recorded');
     }
 
     /* =========================================
@@ -6444,31 +7913,150 @@
         return;
       }
 
+      const dueDateVal = document.getElementById('debtDueInput').value || getTodayDateString();
+      const debtDateVal = document.getElementById('debtDateInput').value || getTodayDateString();
+
+      // Assign deterministic UTG- IDs for each item so offline retries are 100% idempotent
+      cleanItems.forEach(ci => { ci.orderId = makeClientId('UTG-', 4); });
+
+      let targetCustId = document.getElementById('debtCustSelect').value;
+      let targetCustName = '';
+      let newCustomerId = '';
+
+      if (isNew) {
+        const existingMatch = appState.customers.find(c =>
+          (normPhone && c.Phone && c.Phone === normPhone) ||
+          (!normPhone && c.Name.toLowerCase() === newName.toLowerCase())
+        );
+        if (existingMatch) {
+          targetCustId = existingMatch.Customer_ID;
+          targetCustName = existingMatch.Name;
+          newCustomerId = existingMatch.Customer_ID;
+        } else {
+          newCustomerId = makeClientId('CUST-', 3);
+          targetCustId = newCustomerId;
+          targetCustName = newName;
+          appState.customers.push({ Customer_ID: newCustomerId, Name: newName, Phone: normPhone });
+          appState.ledger.push({
+            Customer_ID: newCustomerId, Name: newName, Phone: normPhone,
+            paidPurchasesTotal: 0, paidOrdersCount: 0,
+            totalCredit: 0, totalPaidUtang: 0, balance: 0,
+            Total_Credit: 0, Total_Paid: 0, Balance: 0,
+            Due_Date: dueDateVal, isArchived: false, archivedInfo: '',
+            items: [], payments: [], History: []
+          });
+        }
+      } else {
+        const foundC = appState.customers.find(c => c.Customer_ID === targetCustId);
+        targetCustName = foundC ? foundC.Name : targetCustId;
+      }
+
       const payload = {
         isNewCustomer: isNew,
-        customerId: document.getElementById('debtCustSelect').value,
+        customerId: targetCustId,
+        newCustomerId: newCustomerId,
         newName: newName,
         newPhone: normPhone,
-        debtDate: document.getElementById('debtDateInput').value || getTodayDateString(),
-        dueDate: document.getElementById('debtDueInput').value || getTodayDateString(),
+        debtDate: debtDateVal,
+        dueDate: dueDateVal,
         items: cleanItems,
         amount: Number(grandTotal.toFixed(2)),
         operator: appState.currentOperator
       };
 
-      closeModal('existingDebtModal');
-      const loadLabel = `Saving ${cleanItems.length} separate item${cleanItems.length === 1 ? '' : 's'} to Google Sheets...`;
-      runServer('recordExistingDebt', [payload], (res) => {
-        hydrateApp(res);
-        playBeep();
-        const savedCnt = res.recordedItemCount || cleanItems.length;
-        const savedTot = Number(res.recordedTotal || grandTotal).toFixed(2);
-        showToast(`✅ Saved ${savedCnt} separate item${savedCnt === 1 ? '' : 's'} (₱${savedTot})`);
-        // Automatically show Customer Statement with all newly recorded UTG line items ready for review / partial void / Excel export
-        if (res.recordedCustomerId) {
-          openCustomerStatement(res.recordedCustomerId);
+      // Apply locally right away
+      const custLedger = appState.ledger.find(l => l.Customer_ID === targetCustId);
+      if (custLedger) {
+        custLedger.totalCredit = Number((Number(custLedger.totalCredit || 0) + grandTotal).toFixed(2));
+        custLedger.Total_Credit = custLedger.totalCredit;
+        custLedger.balance = Number(Math.max(0, custLedger.totalCredit - Number(custLedger.totalPaidUtang || 0)).toFixed(2));
+        custLedger.Balance = custLedger.balance;
+        if (custLedger.balance > 0 && (!custLedger.Due_Date || dueDateVal < custLedger.Due_Date)) {
+          custLedger.Due_Date = dueDateVal;
         }
-      }, loadLabel);
+        if (!Array.isArray(custLedger.items)) custLedger.items = [];
+
+        cleanItems.forEach(ci => {
+          const lineTot = Number((ci.qty * ci.unitPrice).toFixed(2));
+          custLedger.items.unshift({
+            date: ci.itemDate,
+            orderId: ci.orderId,
+            isFirstOrderLine: true,
+            itemName: ci.description,
+            qty: ci.qty,
+            unitPrice: ci.unitPrice,
+            subtotal: lineTot,
+            originalSubtotal: lineTot,
+            paymentMethod: 'Credit',
+            paymentRef: '',
+            isCredit: true,
+            isVoided: false,
+            voidInfo: '',
+            status: custLedger.balance <= 0 ? 'Settled' : 'Unpaid'
+          });
+          appState.recentOrders.unshift({
+            rowOrder: Date.now(),
+            orderId: ci.orderId,
+            date: ci.itemDate,
+            customerId: targetCustId,
+            customerName: targetCustName,
+            isWalkIn: false,
+            total: lineTot,
+            originalTotal: lineTot,
+            paymentMethod: 'Credit',
+            paymentRef: '',
+            isCredit: true,
+            isVoided: false,
+            voidInfo: '',
+            status: custLedger.balance <= 0 ? 'Settled' : 'Unpaid',
+            operator: appState.currentOperator,
+            itemsSummary: `${ci.qty}x ${ci.description}`,
+            items: [{ orderId: ci.orderId, productId: 'PAST: ' + ci.description, itemName: ci.description, qty: ci.qty, unitPrice: ci.unitPrice, subtotal: lineTot }]
+          });
+          appState.storeItems.unshift({
+            date: ci.itemDate,
+            orderId: ci.orderId,
+            customerId: targetCustId,
+            customerName: targetCustName,
+            itemName: ci.description,
+            qty: ci.qty,
+            unitPrice: ci.unitPrice,
+            subtotal: lineTot,
+            originalSubtotal: lineTot,
+            paymentMethod: 'Credit',
+            paymentRef: '',
+            isCredit: true,
+            isVoided: false,
+            voidInfo: '',
+            status: custLedger.balance <= 0 ? 'Settled' : 'Unpaid'
+          });
+        });
+
+        appState.auditLogs.unshift({
+          rowOrder: Date.now(),
+          logId: makeClientId('LOG-', 5),
+          timestamp: getLocalTimestampStr(),
+          category: 'debt',
+          badge: 'PAST DEBT',
+          title: `${targetCustName} — Past Debt ₱${grandTotal.toFixed(2)} (${cleanItems.length} item${cleanItems.length === 1 ? '' : 's'})`,
+          details: 'Logged separate utang items: ' + cleanItems.map(c => `${c.qty}x ${c.description} (₱${(c.qty * c.unitPrice).toFixed(2)})`).join(', '),
+          reason: 'Existing / Notebook Balance Entry',
+          verifiedBy: appState.currentOperator,
+          refId: '',
+          customerId: targetCustId,
+          restorable: false,
+          restored: false
+        });
+      }
+
+      closeModal('existingDebtModal');
+      renderCustomers();
+      renderLedger();
+      renderHistoryView();
+      playBeep();
+      enqueueOfflineMutation('recordExistingDebt', [payload], `Past Debt (${cleanItems.length} items • ₱${grandTotal.toFixed(2)})`);
+      showToast(`✅ Saved ${cleanItems.length} separate item${cleanItems.length === 1 ? '' : 's'} (₱${grandTotal.toFixed(2)})`);
+      if (targetCustId) openCustomerStatement(targetCustId);
     }
 
     function openExpenseModal() {
@@ -6489,9 +8077,9 @@
         return;
       }
       closeModal('expenseModal');
-      runServer('recordExpense', [amt, desc, appState.currentOperator], () => {
-        showToast('✅ Expense logged');
-      }, 'Logging expense...');
+      const expId = makeClientId('EXP-', 4);
+      enqueueOfflineMutation('recordExpense', [amt, desc, appState.currentOperator, expId], `Expense ${expId} • ₱${amt.toFixed(2)}`);
+      showToast('✅ Expense logged');
     }
 
     /* UI Helpers */
