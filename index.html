@@ -329,7 +329,7 @@
     .sync-dot.pending { display: block; background: var(--amber); }
     .sync-dot.offline { display: block; background: var(--red); }
 
-    /* Lively Counter Clock Banner (v14.8 — adjustable sizes, time-of-day glow, live seconds) */
+    /* Lively Counter Clock Banner (v14.9 — adjustable sizes, time-of-day glow, live seconds) */
     .clock-banner {
       display: none;
       position: relative;
@@ -1782,7 +1782,7 @@
     }
 
     /* =====================================================================
-       v14.8 ARCHITECTURE — NO BOTTOM BAR, SPACIOUS TOP HEADER,
+       v14.9 ARCHITECTURE — NO BOTTOM BAR, SPACIOUS TOP HEADER,
        4 CRISP ROUND BUTTONS, SCROLL-TO-JOIN SEARCH, OPTION A SWITCHER,
        UNIVERSAL SMART SEARCH & READ-ONLY LIVE DAILY MENU
        ===================================================================== */
@@ -2396,6 +2396,487 @@
       text-align: center;
       margin-top: 20px;
     }
+
+    /* =====================================================================
+       v14.9 — MINIMAL WHITE HIGH-CONTRAST MODE, AUTO-BRIGHT LEDGER,
+       SMOOTHER TACTILE TAP MOTION, ANTI-DOUBLE-ENTRY LOCK & QR CROP STUDIO
+       ===================================================================== */
+
+    /* Smoother, Zero-Delay Tactile Motion Physics */
+    :root {
+      --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+      --ledger-bright-filter: brightness(1.08) contrast(1.06);
+    }
+    button, a, .prod-card, .list-item, .pill, .nav-drop-item, .staff-tile, .key-btn, .top-icon-btn, .acc-head, .suggest-row {
+      touch-action: manipulation;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .btn, .pill, .prod-card, .list-item, .top-icon-btn, .seg-btn, .key-btn, .nav-drop-item, .staff-tile {
+      transition:
+        transform 180ms var(--ease-spring),
+        background-color 180ms var(--ease-spring),
+        border-color 180ms var(--ease-spring),
+        box-shadow 180ms var(--ease-spring),
+        opacity 180ms var(--ease-spring);
+      will-change: transform;
+    }
+    .btn:active { transform: scale(0.965); }
+    .prod-card:active { transform: scale(0.972); box-shadow: 0 2px 10px rgba(234, 88, 12, 0.20); }
+    .list-item:active { transform: scale(0.988); }
+    .pill:active { transform: scale(0.94); }
+    .top-icon-btn:active { transform: scale(0.91); }
+    .key-btn:active { transform: scale(0.92); }
+    .modal-card {
+      animation: sheetGlideIn 260ms var(--ease-spring);
+    }
+    @keyframes sheetGlideIn {
+      from { opacity: 0; transform: translateY(18px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* High-Contrast MINIMAL WHITE Theme (Low-Brightness & Sunlight Glare Ready) */
+    html[data-theme="minimal-white"],
+    body.ledger-bright-active {
+      --bg: #ffffff;
+      --bg-elev: #ffffff;
+      --card: #ffffff;
+      --card-solid: #ffffff;
+      --card-hover: #f8fafc;
+      --border: #cbd5e1;
+      --text: #000000;
+      --text-muted: #334155;
+      --text-soft: #0f172a;
+      --accent: #c2410c;
+      --accent-2: #9a3412;
+      --accent-light: #c2410c;
+      --accent-glow: rgba(194, 65, 12, 0.24);
+      --accent-soft: #fff7ed;
+      --green: #047857;
+      --green-soft: #ecfdf5;
+      --red: #b91c1c;
+      --red-soft: #fef2f2;
+      --amber: #b45309;
+      --amber-soft: #fffbeb;
+      --blue: #1d4ed8;
+      --blue-soft: #eff6ff;
+      --header-frost: rgba(255, 255, 255, 0.97);
+      --nav-bg: #ffffff;
+      --shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+    }
+    html[data-theme="minimal-white"] .prod-card,
+    html[data-theme="minimal-white"] .kpi-card,
+    html[data-theme="minimal-white"] .list-item,
+    html[data-theme="minimal-white"] .acc-card,
+    html[data-theme="minimal-white"] .section-card,
+    html[data-theme="minimal-white"] .clock-banner,
+    html[data-theme="minimal-white"] .due-alert-banner,
+    html[data-theme="minimal-white"] .nav-dropdown-menu,
+    html[data-theme="minimal-white"] .smart-suggest-menu,
+    body.ledger-bright-active .kpi-card,
+    body.ledger-bright-active .list-item,
+    body.ledger-bright-active .section-card,
+    body.ledger-bright-active .top-icon-btn {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      background: #ffffff !important;
+      border: 1.5px solid #cbd5e1 !important;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05) !important;
+    }
+    html[data-theme="minimal-white"] .btn-primary,
+    body.ledger-bright-active .btn-primary {
+      background: #c2410c !important;
+      color: #ffffff !important;
+      box-shadow: 0 3px 10px rgba(194, 65, 12, 0.25) !important;
+    }
+    html[data-theme="minimal-white"] .pill.active,
+    html[data-theme="minimal-white"] .seg-btn.active,
+    body.ledger-bright-active .pill.active,
+    body.ledger-bright-active .seg-btn.active {
+      background: #c2410c !important;
+      color: #ffffff !important;
+      border-color: #c2410c !important;
+    }
+    html[data-theme="minimal-white"] .amount-main.paid,
+    html[data-theme="minimal-white"] .kpi-val.green,
+    body.ledger-bright-active .amount-main.paid,
+    body.ledger-bright-active .kpi-val.green {
+      color: #047857 !important;
+    }
+    html[data-theme="minimal-white"] .badge-unpaid,
+    body.ledger-bright-active .badge-unpaid {
+      background: #ffedd5;
+      color: #9a3412;
+      border: 1px solid #fdba74;
+    }
+    html[data-theme="minimal-white"] .badge-paid,
+    body.ledger-bright-active .badge-paid {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #6ee7b7;
+    }
+    html[data-theme="minimal-white"] .badge-void,
+    body.ledger-bright-active .badge-void {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+    }
+    html[data-theme="minimal-white"] .badge-prev-utang,
+    body.ledger-bright-active .badge-prev-utang {
+      background: #fff7ed;
+      color: #c2410c;
+      border: 1.5px solid #ea580c;
+    }
+    html[data-theme="minimal-white"] .stock-chip {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    html[data-theme="minimal-white"] .stock-chip.low {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    html[data-theme="minimal-white"] .stock-chip.out {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    html[data-theme="minimal-white"] .clock-hm {
+      background: none;
+      -webkit-background-clip: initial;
+      background-clip: initial;
+      color: #000000;
+    }
+    html[data-theme="minimal-white"] .btn-soft-blue,
+    body.ledger-bright-active .btn-soft-blue {
+      background: #eff6ff;
+      color: #1d4ed8;
+      border-color: #93c5fd;
+    }
+    html[data-theme="minimal-white"] .btn-soft-green,
+    body.ledger-bright-active .btn-soft-green {
+      background: #ecfdf5;
+      color: #047857;
+      border-color: #6ee7b7;
+    }
+    html[data-theme="minimal-white"] .btn-soft-orange,
+    body.ledger-bright-active .btn-soft-orange {
+      background: #fff7ed;
+      color: #c2410c;
+      border-color: #fdba74;
+    }
+    html[data-theme="minimal-white"] .btn-danger,
+    body.ledger-bright-active .btn-danger {
+      background: #fef2f2;
+      color: #b91c1c;
+      border-color: #fca5a5;
+    }
+
+    /* Auto-Bright Ledger Display Boost Filter */
+    body.ledger-bright-active #view-ledger {
+      filter: var(--ledger-bright-filter);
+    }
+
+    /* Previous Utang / New Utang Explicit Badges */
+    .badge-prev-utang {
+      background: rgba(234, 88, 12, 0.18);
+      color: #fb923c;
+      border: 1px solid rgba(251, 146, 60, 0.45);
+    }
+    .badge-new-utang {
+      background: rgba(59, 130, 246, 0.16);
+      color: #60a5fa;
+      border: 1px solid rgba(96, 165, 250, 0.40);
+    }
+
+    /* Ledger Top Status & Bright View Bar */
+    .ledger-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .sync-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 800;
+      border: 1px solid var(--border);
+      background: var(--green-soft);
+      color: #10b981;
+      cursor: pointer;
+    }
+    .sync-status-pill.syncing {
+      background: var(--amber-soft);
+      color: #d97706;
+      border-color: rgba(245, 158, 11, 0.45);
+    }
+    .sync-status-pill.offline {
+      background: var(--red-soft);
+      color: #ef4444;
+      border-color: rgba(239, 68, 68, 0.45);
+    }
+    .sync-status-pill svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.3;
+    }
+    .sync-status-pill.syncing svg {
+      animation: spin360 0.85s linear infinite;
+    }
+    .bright-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 800;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      cursor: pointer;
+    }
+    .bright-toggle-btn.active {
+      background: #c2410c;
+      color: #ffffff;
+      border-color: #c2410c;
+    }
+    .bright-toggle-btn svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.2;
+    }
+
+    /* Global Floating Sync Pill (shows while background syncing on any tab) */
+    .global-sync-pill {
+      position: fixed;
+      top: calc(env(safe-area-inset-top, 0px) + 64px);
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      z-index: 165;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: #0f172a;
+      color: #ffffff;
+      border: 1.5px solid rgba(255, 173, 77, 0.65);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.38);
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 220ms var(--ease-spring), opacity 200ms ease;
+    }
+    .global-sync-pill.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .global-sync-pill svg {
+      width: 15px;
+      height: 15px;
+      stroke: #ffad4d;
+      fill: none;
+      stroke-width: 2.4;
+      animation: spin360 0.85s linear infinite;
+    }
+
+    /* Full-Card "Saving & Syncing… Please Wait" Anti-Double-Entry Lock Overlay */
+    .saving-lock-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 210;
+      background: rgba(2, 6, 23, 0.66);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .saving-lock-overlay.open {
+      display: flex;
+      animation: fadeIn 140ms ease;
+    }
+    .saving-lock-card {
+      width: 100%;
+      max-width: 340px;
+      background: var(--bg-elev);
+      border: 2px solid var(--accent-light);
+      border-radius: 22px;
+      padding: 24px 20px;
+      text-align: center;
+      box-shadow: 0 22px 54px rgba(0, 0, 0, 0.45);
+      animation: sheetGlideIn 200ms var(--ease-spring);
+    }
+    .saving-spinner {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-light);
+    }
+    .saving-spinner svg {
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.5;
+      animation: spin360 0.85s linear infinite;
+    }
+    .saving-lock-title {
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 0.01em;
+      margin: 0 0 6px;
+      color: var(--text);
+    }
+    .saving-lock-sub {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-soft);
+      margin: 0 0 8px;
+    }
+    .saving-lock-hint {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--accent-light);
+      margin: 0;
+    }
+    .btn.is-saving {
+      opacity: 0.72;
+      pointer-events: none;
+    }
+
+    /* Editable Multi-Bank Account Selector inside Statement Builder */
+    .stmt-acc-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 6px 0 8px;
+    }
+    .stmt-acc-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: var(--bg-elev);
+      border: 1.5px solid var(--border);
+    }
+    .stmt-acc-row.checked {
+      border-color: var(--accent-light);
+      background: var(--accent-soft);
+    }
+    .stmt-acc-chk {
+      width: 18px;
+      height: 18px;
+      accent-color: #ea580c;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .stmt-acc-info {
+      min-width: 0;
+      flex: 1;
+      cursor: pointer;
+    }
+    .stmt-acc-primary {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .stmt-acc-secondary {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .bank-preset-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 8px;
+    }
+    .bank-preset-chip {
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .bank-preset-chip:hover, .bank-preset-chip.active {
+      border-color: var(--accent-light);
+      background: var(--accent-soft);
+      color: var(--accent-light);
+    }
+
+    /* Credit Surplus Warning Box in Record Utang Modal */
+    .utang-notice-box {
+      padding: 9px 11px;
+      border-radius: 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      line-height: 1.38;
+      margin-bottom: 10px;
+      background: var(--accent-soft);
+      color: var(--accent-light);
+      border: 1px solid rgba(234, 88, 12, 0.35);
+    }
+    .utang-notice-box.warn {
+      background: var(--amber-soft);
+      color: #b45309;
+      border-color: rgba(245, 158, 11, 0.55);
+    }
+    html[data-theme="dark"] .utang-notice-box.warn {
+      color: #fbbf24;
+    }
+
+    /* Digital QR Photo Crop & Refine Studio Modal */
+    .qr-crop-stage-wrap {
+      position: relative;
+      width: 280px;
+      height: 280px;
+      margin: 0 auto 12px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #ffffff;
+      border: 2.5px solid var(--accent-light);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+      touch-action: none;
+      cursor: grab;
+    }
+    .qr-crop-stage-wrap:active { cursor: grabbing; }
+    #qrCropStageCanvas {
+      width: 280px;
+      height: 280px;
+      display: block;
+    }
+    .qr-crop-guide {
+      position: absolute;
+      inset: 14px;
+      border: 2px dashed rgba(234, 88, 12, 0.65);
+      border-radius: 10px;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -2456,7 +2937,7 @@
     </div>
   </div>
 
-  <!-- ===================== TOP HEADER (v14.8 — SPACIOUS BRAND, SCROLL-TO-JOIN SEARCH, 4 CRISP ROUND BUTTONS) ===================== -->
+  <!-- ===================== TOP HEADER (v14.9 — SPACIOUS BRAND, SCROLL-TO-JOIN SEARCH, 4 CRISP ROUND BUTTONS) ===================== -->
   <header id="topHeader" class="top-header-wrap">
     <div class="top-header-inner">
       <div class="top-brand-left" onclick="scrollToTopPOS()">
@@ -2634,8 +3115,18 @@
       <div id="posProductGrid" class="product-grid"></div>
     </section>
 
-    <!-- TAB 2: LEDGER (UTANG) — "PAYMENT RECORDS" SPELLED OUT -->
+    <!-- TAB 2: LEDGER (UTANG) — "PAYMENT RECORDS" SPELLED OUT + BRIGHT VIEW & SYNC PILL -->
     <section id="view-ledger" class="view-panel">
+      <div class="ledger-status-bar">
+        <button type="button" id="ledgerSyncStatusPill" class="sync-status-pill" onclick="manualSyncNow()" title="Tap to sync with Google Sheets">
+          <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+          <span id="ledgerSyncStatusText">Synced to Sheet</span>
+        </button>
+        <button type="button" id="btnLedgerBrightToggle" class="bright-toggle-btn" onclick="toggleLedgerBrightMode()" title="High-contrast bright white mode for low-brightness screens">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+          <span id="btnLedgerBrightText">Bright View</span>
+        </button>
+      </div>
       <div class="kpi-grid">
         <div class="kpi-card">
           <div class="kpi-lbl">Utang Balance</div>
@@ -2658,7 +3149,7 @@
           <button id="ledgerSearchClear" type="button" class="search-clear-btn" onclick="clearSearchField('ledger')" aria-label="Clear">×</button>
           <div id="ledgerSuggestMenu" class="smart-suggest-menu"></div>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="openPastDebtModal('')">+ Past Debt</button>
+        <button class="btn btn-primary btn-sm" onclick="openPastDebtModal('', 'previous')">+ Utang</button>
       </div>
 
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;">
@@ -2696,7 +3187,7 @@
           <input id="expDesc" type="text" placeholder="e.g., LPG refill, market veggies, ice" oninput="renderExpenseSuggestions()" onfocus="renderExpenseSuggestions()" onkeydown="onSearchKeyDown(event, 'expense')" autocomplete="off" />
           <div id="expSuggestMenu" class="smart-suggest-menu"></div>
         </div>
-        <button class="btn btn-primary" style="width:100%;" onclick="submitExpense()">Save Expense</button>
+        <button id="btnSubmitExpense" class="btn btn-primary" style="width:100%;" onclick="submitExpense()">Save Expense</button>
       </div>
 
       <div id="expenseList" class="list-stack"></div>
@@ -2736,7 +3227,7 @@
       <div class="settings-header-bar">
         <div>
           <h2 class="settings-title">Manager Settings</h2>
-          <div id="settingsActiveUserMeta" class="settings-sub">Nichel Karenderya • v14.8</div>
+          <div id="settingsActiveUserMeta" class="settings-sub">Nichel Karenderya • v14.9</div>
         </div>
         <button class="btn btn-primary btn-sm" onclick="saveAllSettings()">Save All</button>
       </div>
@@ -2755,7 +3246,8 @@
           <input id="qrAccountUploadInput" type="file" accept="image/*" style="display:none;" onchange="handleAccountQrUpload(this)" />
 
           <div style="background:var(--bg-elev);border:1px solid var(--border);border-radius:12px;padding:10px;">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;">Add E-Wallet or Bank Account</div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;">Quick PH Bank / E-Wallet Presets</div>
+            <div id="settingsBankPresets" class="bank-preset-strip"></div>
             <div class="grid-2">
               <div class="field" style="margin-bottom:8px;">
                 <label>Type</label>
@@ -2938,13 +3430,28 @@
           </div>
           <div id="logoPickerGrid" class="logo-picker-grid"></div>
 
-          <!-- Instant Color Theme & UI Surface Style -->
-          <div class="field" style="margin-bottom:6px;">
+          <!-- Instant 3-Way Color Theme (Dark / Soft Light / Minimal White) -->
+          <div class="field" style="margin-bottom:8px;">
             <label>Color Theme (Instant Preview)</label>
-            <div class="seg-group">
+            <div class="seg-group-3">
               <button type="button" id="btnThemeDark" class="seg-btn active" onclick="selectColorTheme('dark')">Dark Mode</button>
-              <button type="button" id="btnThemeLight" class="seg-btn" onclick="selectColorTheme('light')">Light Mode</button>
+              <button type="button" id="btnThemeLight" class="seg-btn" onclick="selectColorTheme('light')">Soft Light</button>
+              <button type="button" id="btnThemeMinimal" class="seg-btn" onclick="selectColorTheme('minimal-white')">Minimal White</button>
             </div>
+          </div>
+
+          <!-- Auto High-Visibility Ledger Brightness Boost -->
+          <div class="setting-row">
+            <div>
+              <div class="setting-row-title">Auto High-Visibility Ledger (Bright View)</div>
+              <div class="setting-row-desc">Automatically boosts clarity &amp; pure white contrast whenever you open Ledger</div>
+            </div>
+            <label class="switch"><input id="setLedgerAutoBright" type="checkbox" checked onchange="previewLedgerBrightSettings()" /><span class="slider"></span></label>
+          </div>
+          <div class="volume-row" id="ledgerBrightBoostRow">
+            <span style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Ledger Boost</span>
+            <input id="setLedgerBrightBoost" class="volume-slider" type="range" min="100" max="125" step="2" value="108" oninput="previewLedgerBrightSettings()" />
+            <span id="ledgerBrightBoostPct" class="volume-pct">108%</span>
           </div>
 
           <div class="field" style="margin-bottom:10px;">
@@ -3166,7 +3673,7 @@
 
       <div style="display:flex;gap:8px;margin-top:8px;">
         <button class="btn btn-ghost" onclick="clearCart()">Clear</button>
-        <button class="btn btn-primary" style="flex:1;" onclick="finalizeOrder()">Complete Sale</button>
+        <button id="btnFinalizeOrder" class="btn btn-primary" style="flex:1;" onclick="finalizeOrder()">Complete Sale</button>
       </div>
     </div>
   </div>
@@ -3250,7 +3757,7 @@
       </div>
       <div class="grid-3-eq" style="margin-bottom:12px;">
         <button id="btnCustomerRemind" class="btn btn-soft-blue btn-sm" onclick="sendFriendlyReminder(activeDetailCustomerId)">Remind</button>
-        <button class="btn btn-ghost btn-sm" onclick="closeModal('customerDetailModal'); openPastDebtModal(activeDetailCustomerId);">+ Past Debt</button>
+        <button class="btn btn-ghost btn-sm" onclick="closeModal('customerDetailModal'); openPastDebtModal(activeDetailCustomerId, 'previous');">+ Utang</button>
         <button id="btnToggleArchiveCust" class="btn btn-ghost btn-sm" onclick="toggleArchiveCustomer()">Archive</button>
       </div>
 
@@ -3329,6 +3836,47 @@
           </label>
         </div>
 
+        <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--border);">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px;">
+            <span style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:var(--accent-light);">Select &amp; Edit Payment Accounts</span>
+            <button type="button" class="btn btn-soft-orange btn-sm" style="padding:4px 9px;font-size:11px;" onclick="toggleStmtAddAccountForm()">+ Add Bank</button>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;">Check the banks/wallets to show on this card. Tap pencil to edit or QR to crop a digital scan.</div>
+          <div id="stmtAccountsList" class="stmt-acc-list"></div>
+
+          <div id="stmtAddAccountBox" style="display:none;background:var(--bg-elev);border:1.5px dashed var(--accent-light);border-radius:12px;padding:10px;margin:8px 0;">
+            <div style="font-size:10.5px;font-weight:800;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;">Tap a Bank / Wallet Preset or Type Custom</div>
+            <div id="stmtBankPresets" class="bank-preset-strip"></div>
+            <div class="grid-2">
+              <div class="field" style="margin-bottom:6px;">
+                <label>Type</label>
+                <select id="stmtNewPayType"><option value="Bank">Bank</option><option value="E-Wallet">E-Wallet</option></select>
+              </div>
+              <div class="field" style="margin-bottom:6px;">
+                <label>Bank / Wallet</label>
+                <input id="stmtNewPayLabel" type="text" placeholder="e.g., BDO, BPI, SeaBank" />
+              </div>
+            </div>
+            <div class="field" style="margin-bottom:6px;">
+              <label>Account Name (Optional)</label>
+              <input id="stmtNewPayAccName" type="text" placeholder="e.g., Nichel Karenderya" />
+            </div>
+            <div class="field" style="margin-bottom:8px;">
+              <label>Account / Mobile Number</label>
+              <input id="stmtNewPayDetails" type="text" placeholder="e.g., 0045-8821-19" />
+            </div>
+            <div class="grid-2">
+              <button type="button" class="btn btn-ghost btn-sm" onclick="toggleStmtAddAccountForm(false)">Cancel</button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="addAccountFromStatementModal()">Add to Statement</button>
+            </div>
+          </div>
+
+          <label style="display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;color:var(--text-soft);margin:8px 0 4px;cursor:pointer;">
+            <input id="stmtSaveToDefaults" type="checkbox" style="width:16px;height:16px;accent-color:#ea580c;" />
+            <span>Save account edits/additions to store defaults</span>
+          </label>
+        </div>
+
         <div class="field" id="billQrAccWrap" style="margin-top:8px;">
           <label>QR Code to Display (E-Wallet / Bank)</label>
           <select id="billQrAccountSelect" onchange="renderBillingCanvas()"></select>
@@ -3342,18 +3890,29 @@
     </div>
   </div>
 
-  <!-- ===================== COMPACT RECORD PAST DEBT MODAL (WITH EDIT ICON) ===================== -->
+  <!-- ===================== RECORD UTANG MODAL (PREVIOUS UTANG & NEW UTANG + 1-TAP SAVE) ===================== -->
   <div id="pastDebtModal" class="modal-backdrop">
     <div class="modal-card">
       <div class="modal-head">
-        <h3 class="modal-title">Record Past Utang</h3>
+        <h3 id="pdModalTitle" class="modal-title">Record Utang</h3>
         <button class="icon-close" onclick="closeModal('pastDebtModal')">×</button>
       </div>
+
+      <!-- 2-Way Toggle: Previous Utang vs New Utang -->
+      <div class="seg-group" style="margin-bottom:10px;">
+        <button type="button" id="btnUtangTypePrev" class="seg-btn active" onclick="setUtangEntryType('previous')">Previous Utang</button>
+        <button type="button" id="btnUtangTypeNew" class="seg-btn" onclick="setUtangEntryType('new')">New Utang</button>
+      </div>
+
+      <div id="pdStatusNotice" class="utang-notice-box">
+        Tagged strictly as <strong>Unpaid (Previous Utang)</strong> — older payments will never auto-mark this Paid.
+      </div>
+      <div id="pdSurplusWarn" class="utang-notice-box warn" style="display:none;"></div>
 
       <div class="grid-2">
         <div class="field">
           <label>Customer</label>
-          <select id="pdCustomerSelect"></select>
+          <select id="pdCustomerSelect" onchange="checkSelectedCustomerSurplus()"></select>
         </div>
         <div class="field">
           <label>Due Date (5th / 20th)</label>
@@ -3363,15 +3922,16 @@
 
       <div class="section-card" style="padding:10px;margin-bottom:8px;">
         <div class="grid-3">
-          <div class="field" style="margin-bottom:6px;position:relative;"><label>Item</label><input id="pdItemName" type="text" placeholder="e.g., Malabon" oninput="renderPastItemSuggestions()" onfocus="renderPastItemSuggestions()" onkeydown="onSearchKeyDown(event, 'pastitem')" autocomplete="off" /><div id="pdSuggestMenu" class="smart-suggest-menu" style="min-width:220px;"></div></div>
-          <div class="field" style="margin-bottom:6px;"><label>Qty</label><input id="pdItemQty" type="number" min="1" step="1" value="1" /></div>
-          <div class="field" style="margin-bottom:6px;"><label>Unit ₱</label><input id="pdItemPrice" type="number" step="0.01" min="0" placeholder="35" /></div>
+          <div class="field" style="margin-bottom:6px;position:relative;"><label>Item</label><input id="pdItemName" type="text" placeholder="e.g., Adobo w/ Rice" oninput="renderPastItemSuggestions(); updatePastDraftSummary();" onfocus="renderPastItemSuggestions()" onkeydown="onSearchKeyDown(event, 'pastitem')" autocomplete="off" /><div id="pdSuggestMenu" class="smart-suggest-menu" style="min-width:220px;"></div></div>
+          <div class="field" style="margin-bottom:6px;"><label>Qty</label><input id="pdItemQty" type="number" min="1" step="1" value="1" oninput="updatePastDraftSummary()" /></div>
+          <div class="field" style="margin-bottom:6px;"><label>Unit ₱</label><input id="pdItemPrice" type="number" step="0.01" min="0" placeholder="65" oninput="updatePastDraftSummary()" /></div>
         </div>
         <div style="display:flex;gap:8px;align-items:flex-end;">
           <div class="field" style="flex:1;margin-bottom:0;"><label>Date</label><input id="pdItemDate" type="date" /></div>
-          <button id="pdAddBtn" class="btn btn-soft-orange" onclick="addOrUpdatePastItem()">+ Add Line</button>
-          <button id="pdCancelEditBtn" class="btn btn-ghost btn-sm" style="display:none;" onclick="cancelPastItemEdit()">Cancel</button>
+          <button id="pdAddBtn" type="button" class="btn btn-soft-orange" onclick="addOrUpdatePastItem()">+ Add Another</button>
+          <button id="pdCancelEditBtn" type="button" class="btn btn-ghost btn-sm" style="display:none;" onclick="cancelPastItemEdit()">Cancel</button>
         </div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">Tip: For just 1 item, type it above and tap <strong>Save</strong> directly — no need to tap + Add Another.</div>
       </div>
 
       <div id="pdDraftList" class="past-draft-list"></div>
@@ -3380,7 +3940,7 @@
         <span id="pdDraftCount" style="font-size:12px;color:var(--text-muted);">0 items</span>
         <span id="pdDraftTotal" style="font-size:16px;color:var(--accent-light);">₱0.00</span>
       </div>
-      <button class="btn btn-primary" style="width:100%;" onclick="submitPastDebtBatch()">Save Past Utang</button>
+      <button id="btnSaveUtangSubmit" type="button" class="btn btn-primary" style="width:100%;" onclick="submitPastDebtBatch()">Save Previous Utang</button>
     </div>
   </div>
 
@@ -3400,7 +3960,7 @@
       <div class="field"><label>Note / Reference (Optional)</label><input id="payNoteInput" type="text" placeholder="e.g., Ref # or payday settlement" /></div>
       <div class="grid-2">
         <button class="btn btn-ghost" onclick="fillFullBalancePay()">Full Balance</button>
-        <button class="btn btn-primary" onclick="submitUtangPayment()">Confirm &amp; Receipt</button>
+        <button id="btnSubmitUtangPay" class="btn btn-primary" onclick="submitUtangPayment()">Confirm &amp; Receipt</button>
       </div>
     </div>
   </div>
@@ -3541,12 +4101,76 @@
     </div>
   </div>
 
+
+  <!-- ===================== DIGITAL QR PHOTO CROP & REFINE STUDIO ===================== -->
+  <div id="qrCropModal" class="modal-backdrop" style="z-index:145;">
+    <div class="modal-card" style="max-width:440px;">
+      <div class="modal-head">
+        <div>
+          <h3 class="modal-title">Crop &amp; Refine QR Photo</h3>
+          <div style="font-size:11.5px;color:var(--text-muted);">Drag to center the QR square, zoom, and pick digital polish</div>
+        </div>
+        <button class="icon-close" onclick="closeModal('qrCropModal')">×</button>
+      </div>
+
+      <div id="qrCropStageWrap" class="qr-crop-stage-wrap">
+        <canvas id="qrCropStageCanvas" width="280" height="280"></canvas>
+        <div class="qr-crop-guide"></div>
+      </div>
+
+      <div class="field" style="margin-bottom:8px;">
+        <label>Digital Image Mode</label>
+        <div class="seg-group-3">
+          <button type="button" id="btnQrModeDigital" class="seg-btn active" onclick="setQrRefineMode('digital')">Digital Crisp</button>
+          <button type="button" id="btnQrModeBw" class="seg-btn" onclick="setQrRefineMode('bw')">B&amp;W Scan</button>
+          <button type="button" id="btnQrModeColor" class="seg-btn" onclick="setQrRefineMode('color')">Original</button>
+        </div>
+      </div>
+
+      <div class="volume-row" style="border-bottom:none;padding:2px 0 6px;">
+        <span style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;min-width:62px;">Zoom</span>
+        <input id="qrCropZoom" class="volume-slider" type="range" min="100" max="320" step="2" value="110" oninput="onQrCropControlChange()" />
+        <span id="qrCropZoomPct" class="volume-pct">1.1×</span>
+      </div>
+
+      <div class="volume-row" style="border-bottom:none;padding:2px 0 10px;">
+        <span style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;min-width:62px;">Clarity</span>
+        <input id="qrCropClarity" class="volume-slider" type="range" min="70" max="170" step="5" value="125" oninput="onQrCropControlChange()" />
+        <span id="qrCropClarityPct" class="volume-pct">125%</span>
+      </div>
+
+      <div class="grid-3-eq" style="margin-top:4px;">
+        <button type="button" class="btn btn-ghost btn-sm" onclick="rotateQrCropImage()">Rotate 90°</button>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="resetQrCropPosition()">Reset</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="applyCroppedQrPhoto()">Apply QR</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== GLOBAL FLOATING SYNC PILL ===================== -->
+  <div id="globalSyncPill" class="global-sync-pill" role="status" aria-live="polite">
+    <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+    <span id="globalSyncPillText">Syncing to Sheet — please wait…</span>
+  </div>
+
+  <!-- ===================== SAVING & SYNCING ANTI-DOUBLE-ENTRY LOCK OVERLAY ===================== -->
+  <div id="savingLockOverlay" class="saving-lock-overlay" role="alertdialog" aria-modal="true">
+    <div class="saving-lock-card">
+      <div class="saving-spinner">
+        <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+      </div>
+      <h4 id="savingLockTitle" class="saving-lock-title">SAVING &amp; SYNCING… PLEASE WAIT</h4>
+      <p id="savingLockSub" class="saving-lock-sub">Updating your ledger safely…</p>
+      <p class="saving-lock-hint">Double-entry protected — do not double-tap or close.</p>
+    </div>
+  </div>
+
   <!-- ===================== TOAST ===================== -->
   <div id="toast" class="toast"></div>
 
 <script>
 /* ============================================================================
-   SUKITAB POS v14.8 — NICHEL KARENDERYA
+   SUKITAB POS v14.9 — NICHEL KARENDERYA
    - POS retained as-is + Bank Transfer checkout support
    - Multi-account E-Wallets & Banks + Bank-ready minimalist Statement Card
    - Settings moved to 5th camouflaged bottom tab (lighter logo highlight on click)
@@ -3592,6 +4216,8 @@ let appState = {
     dueBannerLeadDays: 2,
     publicMenuEnabled: true,
     publicMenuHideSoldOut: false,
+    ledgerAutoBright: true,
+    ledgerBrightnessBoost: 108,
     showNavLabels: true,
     animationsEnabled: true,
     uiStyle: 'glass',
@@ -3638,7 +4264,12 @@ let uiState = {
   payMethod: 'Cash',
   shareMenuTab: 'link',
   activePaymentReceipt: null,
-  activeOrderReceiptId: ''
+  activeOrderReceiptId: '',
+  utangEntryType: 'previous',
+  isSavingLock: false,
+  ledgerBrightOverride: null,
+  stmtDraftAccounts: [],
+  stmtSelectedIds: {}
 };
 
 let activeDetailCustomerId = '';
@@ -4061,13 +4692,49 @@ function callBackend(action, args, onSuccess, onFailure) {
 function updateSyncIndicator(syncing) {
   const btn = document.getElementById('btnTopSync');
   const dot = document.getElementById('topSyncDot');
-  if (!btn || !dot) return;
-  btn.classList.toggle('spinning', !!syncing);
-  dot.className = 'sync-dot';
-  if (!navigator.onLine) {
-    dot.classList.add('offline');
-  } else if (appState.syncQueue.length > 0) {
-    dot.classList.add('pending');
+  const qLen = (appState.syncQueue || []).length;
+  const offline = !navigator.onLine;
+
+  if (btn && dot) {
+    btn.classList.toggle('spinning', !!syncing);
+    dot.className = 'sync-dot';
+    if (offline) dot.classList.add('offline');
+    else if (qLen > 0) dot.classList.add('pending');
+  }
+
+  // Update Ledger Sync Status Pill
+  const lPill = document.getElementById('ledgerSyncStatusPill');
+  const lTxt = document.getElementById('ledgerSyncStatusText');
+  if (lPill && lTxt) {
+    lPill.classList.remove('syncing', 'offline');
+    if (syncing) {
+      lPill.classList.add('syncing');
+      lTxt.textContent = qLen > 0 ? `Syncing (${qLen}) — please wait…` : 'Syncing to Sheet…';
+      lPill.querySelector('svg').innerHTML = '<path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/>';
+    } else if (offline) {
+      lPill.classList.add('offline');
+      lTxt.textContent = qLen > 0 ? `Offline (${qLen} saved locally)` : 'Offline Mode';
+      lPill.querySelector('svg').innerHTML = '<circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/>';
+    } else if (qLen > 0) {
+      lPill.classList.add('syncing');
+      lTxt.textContent = `Pending sync (${qLen}) — Tap to sync`;
+      lPill.querySelector('svg').innerHTML = '<path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/>';
+    } else {
+      lTxt.textContent = 'Synced to Sheet';
+      lPill.querySelector('svg').innerHTML = '<path d="M20 6 9 17l-5-5"/>';
+    }
+  }
+
+  // Global floating pill while actively syncing
+  const gPill = document.getElementById('globalSyncPill');
+  const gTxt = document.getElementById('globalSyncPillText');
+  if (gPill && gTxt) {
+    if (syncing && !uiState.isSavingLock) {
+      gTxt.textContent = qLen > 0 ? `Syncing ${qLen} update${qLen > 1 ? 's' : ''} — please wait…` : 'Syncing with Google Sheets…';
+      gPill.classList.add('visible');
+    } else {
+      gPill.classList.remove('visible');
+    }
   }
 }
 
@@ -4076,7 +4743,46 @@ async function enqueueAndSync(action, args) {
   await persistLocalState();
   updateSyncIndicator(false);
   if (navigator.onLine) {
-    flushSyncQueue(false);
+    return flushSyncQueue(false);
+  }
+  return false;
+}
+
+function showSavingLock(title, sub, btnId) {
+  uiState.isSavingLock = true;
+  if (btnId) {
+    const b = document.getElementById(btnId);
+    if (b) { b.disabled = true; b.classList.add('is-saving'); }
+  }
+  document.getElementById('savingLockTitle').textContent = title || 'SAVING & SYNCING… PLEASE WAIT';
+  document.getElementById('savingLockSub').textContent = sub || 'Updating your ledger safely…';
+  document.getElementById('savingLockOverlay').classList.add('open');
+  updateSyncIndicator(true);
+}
+
+function hideSavingLock(btnId) {
+  uiState.isSavingLock = false;
+  if (btnId) {
+    const b = document.getElementById(btnId);
+    if (b) { b.disabled = false; b.classList.remove('is-saving'); }
+  }
+  document.getElementById('savingLockOverlay').classList.remove('open');
+  updateSyncIndicator(false);
+}
+
+async function enqueueAndAwaitSync(action, args, timeoutMs) {
+  appState.syncQueue.push({ id: makeId('Q', 5), action: action, args: args || [], createdAt: nowStamp() });
+  await persistLocalState();
+  updateSyncIndicator(true);
+  if (!navigator.onLine) return { synced: false, offline: true };
+  try {
+    await Promise.race([
+      flushSyncQueue(false),
+      new Promise(res => setTimeout(res, timeoutMs || 8500))
+    ]);
+    return { synced: appState.syncQueue.length === 0, offline: false };
+  } catch (e) {
+    return { synced: false, offline: false };
   }
 }
 
@@ -4145,6 +4851,8 @@ function hydrateSnapshot(data, persist) {
     if (!data.settings.dueAlertMode) appState.settings.dueAlertMode = (data.settings.showDueBanner === false ? 'off' : 'badge');
     if (data.settings.publicMenuEnabled === undefined) appState.settings.publicMenuEnabled = true;
     if (data.settings.publicMenuHideSoldOut === undefined) appState.settings.publicMenuHideSoldOut = false;
+    if (data.settings.ledgerAutoBright === undefined) appState.settings.ledgerAutoBright = true;
+    if (data.settings.ledgerBrightnessBoost === undefined) appState.settings.ledgerBrightnessBoost = 108;
     if (data.settings.dueBannerLeadDays === undefined) appState.settings.dueBannerLeadDays = 2;
     if (data.settings.uiStyle === undefined || !data.settings.uiStyle) appState.settings.uiStyle = 'glass';
     if (data.settings.fontStyle === undefined || !data.settings.fontStyle) appState.settings.fontStyle = 'sans';
@@ -4190,7 +4898,9 @@ function recomputeCustomerBalancesLocally() {
 
 function applyDisplayPreferences() {
   const s = appState.settings;
-  document.documentElement.setAttribute('data-theme', s.colorTheme === 'light' ? 'light' : 'dark');
+  const th = (s.colorTheme === 'light' || s.colorTheme === 'minimal-white') ? s.colorTheme : 'dark';
+  document.documentElement.setAttribute('data-theme', th);
+  applyLedgerBrightMode();
   document.documentElement.setAttribute('data-surface', s.uiStyle === 'solid' ? 'solid' : 'glass');
   document.documentElement.setAttribute('data-font-style', s.fontStyle || 'sans');
   document.documentElement.setAttribute('data-font', s.fontSize || 'medium');
@@ -4310,7 +5020,7 @@ function previewDisplaySettings() {
 }
 
 function selectColorTheme(theme) {
-  appState.settings.colorTheme = theme === 'light' ? 'light' : 'dark';
+  appState.settings.colorTheme = (theme === 'light' || theme === 'minimal-white') ? theme : 'dark';
   applyDisplayPreferences();
   syncThemeSurfaceButtons();
   playSound('tap');
@@ -4324,14 +5034,16 @@ function selectSurfaceStyle(style) {
 }
 
 function syncThemeSurfaceButtons() {
-  const isLight = appState.settings.colorTheme === 'light';
+  const th = appState.settings.colorTheme || 'dark';
   const isSolid = appState.settings.uiStyle === 'solid';
   const bDark = document.getElementById('btnThemeDark');
   const bLight = document.getElementById('btnThemeLight');
+  const bMin = document.getElementById('btnThemeMinimal');
   const bGlass = document.getElementById('btnSurfaceGlass');
   const bSolid = document.getElementById('btnSurfaceSolid');
-  if (bDark) bDark.classList.toggle('active', !isLight);
-  if (bLight) bLight.classList.toggle('active', isLight);
+  if (bDark) bDark.classList.toggle('active', th === 'dark');
+  if (bLight) bLight.classList.toggle('active', th === 'light');
+  if (bMin) bMin.classList.toggle('active', th === 'minimal-white');
   if (bGlass) bGlass.classList.toggle('active', !isSolid);
   if (bSolid) bSolid.classList.toggle('active', isSolid);
 }
@@ -5015,6 +5727,7 @@ function applyTabSwitch(tabName) {
   updateCartFabVisibility();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 
+  applyLedgerBrightMode();
   if (tabName === 'pos') renderPosDueBanner();
   if (tabName === 'ledger') renderLedger();
   if (tabName === 'expenses') renderExpenses();
@@ -5271,8 +5984,8 @@ function populateCustomerSelect(selectId, includeWalkIn) {
   document.getElementById(selectId).innerHTML = opts.join('');
 }
 
-function finalizeOrder() {
-  if (uiState.cart.length === 0) return;
+async function finalizeOrder() {
+  if (uiState.isSavingLock || uiState.cart.length === 0) return;
   const method = uiState.checkoutMethod;
   const cid = document.getElementById('checkoutCustomerSelect').value || 'WALK-IN';
   if (method === 'Credit' && (!cid || cid === 'WALK-IN')) {
@@ -5342,14 +6055,17 @@ function finalizeOrder() {
   });
   recomputeCustomerBalancesLocally();
 
+  showSavingLock('SAVING & SYNCING… PLEASE WAIT', `${method === 'Credit' ? 'Recording Utang' : 'Completing ' + method + ' sale'} for ${cname} (${fmtPeso(total)})`, 'btnFinalizeOrder');
   uiState.cart = [];
+  const res = await enqueueAndAwaitSync('submitOrder', [orderObj], 8000);
+  hideSavingLock('btnFinalizeOrder');
   closeModal('checkoutModal');
   renderAllViews();
   updateCartFabVisibility();
   playSound('success');
-  showToast(method === 'Credit' ? `Utang saved for ${cname} (${fmtPeso(total)})` : `${method} sale completed (${fmtPeso(total)})`);
-
-  enqueueAndSync('submitOrder', [orderObj]);
+  showToast(res.synced
+    ? (method === 'Credit' ? `Utang synced for ${cname} (${fmtPeso(total)})` : `${method} sale synced (${fmtPeso(total)})`)
+    : `Saved locally (${fmtPeso(total)}) — will auto-sync when online`);
 }
 
 /* ============================================================================
@@ -5585,7 +6301,10 @@ function openCustomerDetail(customerId) {
   const events = [];
   appState.orders.filter(o => o.customerId === c.id && String(o.method || '').toLowerCase() === 'credit').forEach(o => {
     const desc = describeOrderItems(o.id);
-    events.push({ date: o.date, type: 'order', id: o.id, title: desc || o.id, amount: o.total, status: o.status, due: o.dueDate });
+    const refLow = String(o.paymentRef || '').toLowerCase();
+    const isPrev = refLow.includes('previous utang') || String(o.id || '').startsWith('UTG-') && !refLow.includes('new utang');
+    const isNewUtg = refLow.includes('new utang');
+    events.push({ date: o.date, type: 'order', id: o.id, title: desc || o.id, amount: o.total, status: o.status, due: o.dueDate, isPrev, isNewUtg });
   });
   appState.payments.filter(p => p.customerId === c.id).forEach(p => {
     events.push({ date: p.date, type: 'payment', id: p.id, title: 'Payment received (' + p.operator + ')', amount: p.amount, status: 'Payment' });
@@ -5605,9 +6324,14 @@ function openCustomerDetail(customerId) {
       }
       const isVoid = String(ev.status).toLowerCase() === 'voided';
       const isPaid = String(ev.status).toLowerCase() === 'paid';
+      const tagBadge = isVoid ? '<span class="badge badge-void" style="margin-left:5px;">VOID</span>'
+        : (isPaid ? '<span class="badge badge-paid" style="margin-left:5px;">PAID</span>'
+        : (ev.isPrev ? '<span class="badge badge-prev-utang" style="margin-left:5px;">PREVIOUS UTANG</span>'
+        : (ev.isNewUtg ? '<span class="badge badge-new-utang" style="margin-left:5px;">NEW UTANG</span>'
+        : '<span class="badge badge-unpaid" style="margin-left:5px;">UNPAID</span>')));
       return `<div class="past-row" style="cursor:pointer;" onclick="openOrderReceiptModal('${escHtml(ev.id)}')" title="Tap to view order receipt">
         <div class="past-row-text" style="${isVoid ? 'text-decoration:line-through;opacity:0.55;' : ''}">
-          <span class="past-row-date">${fmtShortDate(ev.date)}</span>${escHtml(ev.title)}
+          <span class="past-row-date">${fmtShortDate(ev.date)}</span>${escHtml(ev.title)}${tagBadge}
         </div>
         <span class="past-row-price" style="${isPaid ? 'color:#34d399;' : ''}">${fmtPeso(ev.amount)}</span>
       </div>`;
@@ -5698,7 +6422,7 @@ function describeOrderItems(orderId) {
   if (dets.length === 0) return '';
   return dets.map(d => {
     const raw = String(d.productId || '');
-    const name = raw.toUpperCase().startsWith('PAST:') ? raw.replace(/^PAST:\s*/i, '') : (prodMap[raw] || raw);
+    const name = /^(PAST|UTANG):/i.test(raw) ? raw.replace(/^(PAST|UTANG):\s*/i, '') : (prodMap[raw] || raw);
     return (Number(d.qty || 1) > 1 ? d.qty + 'x ' : '') + name;
   }).join(', ');
 }
@@ -5743,15 +6467,20 @@ function openBillingCardModal(customerId, initialMode) {
   document.getElementById('billCustomDatesWrap').style.display = 'none';
   syncBillingRangePills();
 
-  // Populate QR account picker
-  const qrSel = document.getElementById('billQrAccountSelect');
-  const accs = appState.settings.paymentAccounts || [];
-  const withQr = accs.filter(a => !!getAccountQrDataUrl(a.id));
-  const pool = withQr.length > 0 ? withQr : accs;
-  qrSel.innerHTML = pool.map(a =>
-    `<option value="${escHtml(a.id)}">${escHtml(a.label)} (${escHtml(a.type || 'E-Wallet')})${getAccountQrDataUrl(a.id) ? ' — QR Ready' : ''}</option>`
-  ).join('');
-  document.getElementById('billQrAccWrap').style.display = pool.length > 0 ? 'block' : 'none';
+  // Initialize per-statement editable payment account list (safe copy)
+  uiState.stmtDraftAccounts = (appState.settings.paymentAccounts || []).map(a => Object.assign({}, a));
+  uiState.stmtSelectedIds = {};
+  uiState.stmtDraftAccounts.forEach(a => {
+    if (String(a.details || '').trim() !== '' || getAccountQrDataUrl(a.id)) {
+      uiState.stmtSelectedIds[a.id] = true;
+    }
+  });
+  const saveDefEl = document.getElementById('stmtSaveToDefaults');
+  if (saveDefEl) saveDefEl.checked = false;
+  const addBox = document.getElementById('stmtAddAccountBox');
+  if (addBox) addBox.style.display = 'none';
+  renderStmtBankPresetChips();
+  renderStatementAccountsEditor();
 
   openModal('billingCardModal');
   renderBillingCanvas();
@@ -5925,16 +6654,17 @@ function renderBillingCanvas() {
 
   document.getElementById('billQrAccWrap').style.display = includeQr ? 'block' : 'none';
 
-  // Active payment lines (all E-Wallets + Banks with details filled in)
-  const activePayLines = getActivePaymentAccounts()
-    .filter(a => String(a.details || '').trim() !== '')
-    .map(a => {
-      const holder = String(a.accountName || '').trim();
-      return {
-        primary: `${a.label} • ${a.details}`,
-        secondary: holder ? `${a.type || 'Account'} • ${holder}` : ''
-      };
-    });
+  // Active payment lines (uses checked & edited accounts from Statement Builder)
+  const stmtPool = (uiState.stmtDraftAccounts && uiState.stmtDraftAccounts.length)
+    ? uiState.stmtDraftAccounts.filter(a => uiState.stmtSelectedIds[a.id] && String(a.details || '').trim() !== '')
+    : getActivePaymentAccounts().filter(a => String(a.details || '').trim() !== '');
+  const activePayLines = stmtPool.map(a => {
+    const holder = String(a.accountName || '').trim();
+    return {
+      primary: `${a.label} • ${a.details}`,
+      secondary: holder ? `${a.type || 'Account'} • ${holder}` : ''
+    };
+  });
 
   if (activePayLines.length === 0) {
     const ep = String(appState.settings.epayAccount || 'GCash • 0995 600 0359').replace(/\s*-\s*/, ' • ');
@@ -5983,7 +6713,9 @@ function renderBillingCanvas() {
   const byDate = {};
   rawOrders.forEach(o => {
     const dKey = o.date || todayYMD();
-    const desc = describeOrderItems(o.id) || o.paymentRef || 'Canteen Order';
+    const baseDesc = describeOrderItems(o.id) || o.paymentRef || 'Canteen Order';
+    const isPrevU = String(o.paymentRef || '').toLowerCase().includes('previous utang');
+    const desc = isPrevU && !baseDesc.toLowerCase().includes('prev') ? ('[Prev] ' + baseDesc) : baseDesc;
     if (!byDate[dKey]) {
       byDate[dKey] = { date: dKey, parts: [], total: 0, allPaid: true };
       grouped.push(byDate[dKey]);
@@ -6311,7 +7043,7 @@ function renderBillingCanvas() {
   };
 
   if (includeQr) {
-    const qrAcc = (appState.settings.paymentAccounts || []).find(a => a.id === selectedQrAccId);
+    const qrAcc = (uiState.stmtDraftAccounts || []).find(a => a.id === selectedQrAccId) || (appState.settings.paymentAccounts || []).find(a => a.id === selectedQrAccId);
     const qrSrc = (qrAcc && getAccountQrDataUrl(qrAcc.id)) || getPrimaryQrDataUrl();
     const qrLabel = qrAcc && qrAcc.label ? ('Scan via ' + qrAcc.label) : 'Scan to Pay';
     const qSize = 172;
@@ -6392,9 +7124,52 @@ async function shareBillingImage() {
 /* ============================================================================
    COMPACT PAST-DEBT MODAL WITH EDIT ICON
    ============================================================================ */
-function openPastDebtModal(preselectCustId) {
+function setUtangEntryType(type) {
+  playSound('tap');
+  uiState.utangEntryType = type === 'new' ? 'new' : 'previous';
+  const isPrev = uiState.utangEntryType === 'previous';
+  document.getElementById('btnUtangTypePrev').classList.toggle('active', isPrev);
+  document.getElementById('btnUtangTypeNew').classList.toggle('active', !isPrev);
+  document.getElementById('pdModalTitle').textContent = isPrev ? 'Record Previous Utang' : 'Record New Utang';
+  document.getElementById('btnSaveUtangSubmit').textContent = isPrev ? 'Save Previous Utang' : 'Save New Utang';
+  document.getElementById('pdStatusNotice').innerHTML = isPrev
+    ? 'Tagged strictly as <strong>Unpaid (Previous Utang)</strong> — older payments will never auto-mark this Paid.'
+    : 'Tagged strictly as <strong>Unpaid (New Utang)</strong> — logged straight into Ledger with anti-duplicate protection.';
+}
+
+function checkSelectedCustomerSurplus() {
+  const cid = document.getElementById('pdCustomerSelect').value;
+  const warnEl = document.getElementById('pdSurplusWarn');
+  if (!warnEl) return;
+  const c = appState.customers.find(x => x.id === cid);
+  if (c && Number(c.totalPaid || 0) > Number(c.totalCredit || 0) + 0.005) {
+    const diff = Number(c.totalPaid || 0) - Number(c.totalCredit || 0);
+    warnEl.innerHTML = `Note: <strong>${escHtml(c.name)}</strong> currently has ${fmtPeso(diff)} more logged payments than logged orders. This new entry will still be tagged <strong>Unpaid (${uiState.utangEntryType === 'previous' ? 'Previous Utang' : 'New Utang'})</strong>.`;
+    warnEl.style.display = 'block';
+  } else {
+    warnEl.style.display = 'none';
+  }
+}
+
+function updatePastDraftSummary() {
+  let count = uiState.pastDraftItems.length;
+  let total = uiState.pastDraftItems.reduce((s, x) => s + x.lineTotal, 0);
+  // Preview pending single-item line if user hasn't clicked + Add Another
+  const pName = (document.getElementById('pdItemName').value || '').trim();
+  const pQty = Math.max(1, Number(document.getElementById('pdItemQty').value || 1));
+  const pPrice = Number(document.getElementById('pdItemPrice').value || 0);
+  if (uiState.pastEditIndex < 0 && pName && pPrice > 0) {
+    count += 1;
+    total += Math.round((pQty * pPrice + Number.EPSILON) * 100) / 100;
+  }
+  document.getElementById('pdDraftCount').textContent = count + (count === 1 ? ' item' : ' items');
+  document.getElementById('pdDraftTotal').textContent = fmtPeso(total);
+}
+
+function openPastDebtModal(preselectCustId, initialType) {
   uiState.pastDraftItems = [];
   uiState.pastEditIndex = -1;
+  uiState.utangEntryType = initialType === 'new' ? 'new' : 'previous';
   populateCustomerSelect('pdCustomerSelect', false);
   if (preselectCustId) document.getElementById('pdCustomerSelect').value = preselectCustId;
   document.getElementById('pdDueDate').value = getNextPayday520();
@@ -6402,8 +7177,10 @@ function openPastDebtModal(preselectCustId) {
   document.getElementById('pdItemName').value = '';
   document.getElementById('pdItemQty').value = 1;
   document.getElementById('pdItemPrice').value = '';
-  document.getElementById('pdAddBtn').textContent = '+ Add Line';
+  document.getElementById('pdAddBtn').textContent = '+ Add Another';
   document.getElementById('pdCancelEditBtn').style.display = 'none';
+  setUtangEntryType(uiState.utangEntryType);
+  checkSelectedCustomerSurplus();
   renderPastDraftList();
   openModal('pastDebtModal');
 }
@@ -6448,7 +7225,7 @@ function cancelPastItemEdit() {
   document.getElementById('pdItemName').value = '';
   document.getElementById('pdItemQty').value = 1;
   document.getElementById('pdItemPrice').value = '';
-  document.getElementById('pdAddBtn').textContent = '+ Add Line';
+  document.getElementById('pdAddBtn').textContent = '+ Add Another';
   document.getElementById('pdCancelEditBtn').style.display = 'none';
   renderPastDraftList();
 }
@@ -6487,18 +7264,46 @@ function renderPastDraftList() {
   `).join('');
 }
 
-function submitPastDebtBatch() {
+async function submitPastDebtBatch() {
+  if (uiState.isSavingLock) return;
   const cid = document.getElementById('pdCustomerSelect').value;
   if (!cid) { showToast('Select a customer'); return; }
-  if (uiState.pastDraftItems.length === 0) { showToast('Add at least one item'); return; }
+
+  // Smart 1-tap single-item save: include typed item automatically if not yet added to draft list
+  const pendingName = (document.getElementById('pdItemName').value || '').trim();
+  const pendingQty = Math.max(1, Number(document.getElementById('pdItemQty').value || 1));
+  const pendingPrice = Number(document.getElementById('pdItemPrice').value || 0);
+  const pendingDate = document.getElementById('pdItemDate').value || todayYMD();
+  if (pendingName && pendingPrice > 0) {
+    const lineTotal = Math.round((pendingQty * pendingPrice + Number.EPSILON) * 100) / 100;
+    const itemObj = { name: pendingName, qty: pendingQty, unitPrice: pendingPrice, lineTotal, date: pendingDate };
+    if (uiState.pastEditIndex >= 0 && uiState.pastDraftItems[uiState.pastEditIndex]) {
+      uiState.pastDraftItems[uiState.pastEditIndex] = itemObj;
+    } else {
+      uiState.pastDraftItems.push(itemObj);
+    }
+    uiState.pastEditIndex = -1;
+    document.getElementById('pdItemName').value = '';
+    document.getElementById('pdItemPrice').value = '';
+  }
+
+  if (uiState.pastDraftItems.length === 0) {
+    showToast('Enter at least 1 item name and unit price');
+    return;
+  }
 
   const cust = appState.customers.find(c => c.id === cid);
   const cname = cust ? cust.name : cid;
   const dueDate = document.getElementById('pdDueDate').value || getNextPayday520();
   const op = activeOperatorName();
+  const entryType = uiState.utangEntryType === 'new' ? 'new' : 'previous';
+  const tagLabel = entryType === 'previous' ? 'Previous Utang' : 'New Utang';
+  const grandTotal = uiState.pastDraftItems.reduce((s, x) => s + x.lineTotal, 0);
+
+  showSavingLock('SAVING & SYNCING… PLEASE WAIT', `Recording ${tagLabel} (${fmtPeso(grandTotal)}) for ${cname}`, 'btnSaveUtangSubmit');
 
   const itemsPayload = uiState.pastDraftItems.map(it => ({
-    orderId: makeId('UTG', 4),
+    orderId: makeId('UTG', 5),
     detailId: makeId('DET', 5),
     name: it.name,
     qty: it.qty,
@@ -6511,19 +7316,31 @@ function submitPastDebtBatch() {
     appState.orders.push({
       id: it.orderId, date: it.date, customerId: cid, customerName: cname,
       total: it.lineTotal, method: 'Credit', status: 'Unpaid', dueDate: dueDate,
-      operator: op, voidInfo: '', paymentRef: ''
+      operator: op, voidInfo: '', paymentRef: tagLabel
     });
     appState.orderDetails.push({
-      id: it.detailId, orderId: it.orderId, productId: 'PAST: ' + it.name, qty: it.qty, lineTotal: it.lineTotal
+      id: it.detailId, orderId: it.orderId, productId: (entryType === 'previous' ? 'PAST: ' : 'UTANG: ') + it.name, qty: it.qty, lineTotal: it.lineTotal
     });
   });
 
   recomputeCustomerBalancesLocally();
+  const res = await enqueueAndAwaitSync('recordExistingDebt', [{
+    customerId: cid,
+    customerName: cname,
+    dueDate: dueDate,
+    operator: op,
+    entryType: entryType,
+    items: itemsPayload
+  }], 8500);
+
+  hideSavingLock('btnSaveUtangSubmit');
   closeModal('pastDebtModal');
   renderLedger();
+  renderPosDueBanner();
   playSound('success');
-  showToast(`Recorded ${itemsPayload.length} past item(s) for ${cname}`);
-  enqueueAndSync('recordExistingDebt', [{ customerId: cid, customerName: cname, dueDate: dueDate, operator: op, items: itemsPayload }]);
+  showToast(res.synced
+    ? `${tagLabel} synced as Unpaid for ${cname}`
+    : `${tagLabel} saved locally — will auto-sync`);
 }
 
 /* ============================================================================
@@ -6561,7 +7378,8 @@ function fillFullBalancePay() {
   if (c) document.getElementById('payAmountInput').value = c.balance;
 }
 
-function submitUtangPayment() {
+async function submitUtangPayment() {
+  if (uiState.isSavingLock) return;
   const c = appState.customers.find(x => x.id === activePayCustomerId);
   const amt = Number(document.getElementById('payAmountInput').value || 0);
   const rawNote = document.getElementById('payNoteInput').value.trim();
@@ -6571,8 +7389,10 @@ function submitUtangPayment() {
   const method = uiState.payMethod || 'Cash';
   const combinedNote = rawNote ? `${method} • ${rawNote}` : method;
   const op = activeOperatorName();
-  const payId = makeId('PAY', 4);
+  const payId = makeId('PAY', 5);
   const payDate = todayYMD();
+
+  showSavingLock('SAVING & SYNCING… PLEASE WAIT', `Recording ${fmtPeso(amt)} payment (${method}) for ${c.name}`, 'btnSubmitUtangPay');
 
   appState.payments.push({ id: payId, date: payDate, customerId: c.id, amount: amt, operator: op, method: method, note: combinedNote });
   appState.auditLogs.push({
@@ -6590,14 +7410,16 @@ function submitUtangPayment() {
   recomputeCustomerBalancesLocally();
   const remBal = Number(c.balance || 0);
 
+  const res = await enqueueAndAwaitSync('recordDebtPayment', [c.id, amt, op, combinedNote, payId], 8500);
+  hideSavingLock('btnSubmitUtangPay');
+
   closeModal('payUtangModal');
   closeModal('customerDetailModal');
   renderLedger();
   renderPosDueBanner();
   renderHistory();
   playSound('success');
-  showToast(`Payment ${fmtPeso(amt)} recorded for ${c.name}`);
-  enqueueAndSync('recordDebtPayment', [c.id, amt, op, combinedNote]);
+  showToast(res.synced ? `Payment ${fmtPeso(amt)} synced for ${c.name}` : `Payment ${fmtPeso(amt)} saved locally`);
 
   // Open shareable Payment Receipt Card immediately!
   openPaymentReceiptModal({
@@ -6639,20 +7461,24 @@ function renderExpenses() {
       </div>`).join('');
 }
 
-function submitExpense() {
+async function submitExpense() {
+  if (uiState.isSavingLock) return;
   const amt = Number(document.getElementById('expAmount').value || 0);
   const desc = document.getElementById('expDesc').value.trim();
   const dt = document.getElementById('expDate').value || todayYMD();
   if (amt <= 0 || !desc) { showToast('Enter amount and description'); return; }
 
   const op = activeOperatorName();
-  appState.expenses.push({ id: makeId('EXP', 4), date: dt, amount: amt, description: desc, operator: op });
+  const expId = makeId('EXP', 5);
+  showSavingLock('SAVING & SYNCING… PLEASE WAIT', `Logging expense: ${desc} (${fmtPeso(amt)})`, 'btnSubmitExpense');
+  appState.expenses.push({ id: expId, date: dt, amount: amt, description: desc, operator: op });
   document.getElementById('expAmount').value = '';
   document.getElementById('expDesc').value = '';
+  const res = await enqueueAndAwaitSync('recordExpense', [amt, desc, op, dt, expId], 8000);
+  hideSavingLock('btnSubmitExpense');
   renderExpenses();
   playSound('success');
-  showToast('Expense saved');
-  enqueueAndSync('recordExpense', [amt, desc, op, dt]);
+  showToast(res.synced ? 'Expense synced to Sheet' : 'Expense saved locally');
 }
 
 function renderHistory() {
@@ -6796,8 +7622,15 @@ function populateSettingsUI() {
   document.getElementById('setClockSize').value = s.clockSize || 'balanced';
   document.getElementById('setAnimations').checked = s.animationsEnabled !== false;
   document.getElementById('setLockPrice').checked = s.lockPriceEdits === true;
+  const autoBr = s.ledgerAutoBright !== false;
+  const boostVal = Number(s.ledgerBrightnessBoost || 108);
+  document.getElementById('setLedgerAutoBright').checked = autoBr;
+  document.getElementById('setLedgerBrightBoost').value = String(boostVal);
+  document.getElementById('ledgerBrightBoostPct').textContent = boostVal + '%';
+  document.getElementById('ledgerBrightBoostRow').style.opacity = autoBr ? '1' : '0.45';
   syncThemeSurfaceButtons();
   renderLogoPickerGrid();
+  renderSettingsBankPresetChips();
 
   renderSettingsPaymentAccounts();
   renderSettingsStaffList();
@@ -6897,21 +7730,11 @@ function triggerAccountQrUpload(accountId) {
 function handleAccountQrUpload(input) {
   const file = input.files && input.files[0];
   if (!file || !qrUploadTargetAccountId) return;
-  const targetId = qrUploadTargetAccountId;
   const reader = new FileReader();
   reader.onload = () => {
     const img = new Image();
     img.onload = () => {
-      const c = document.createElement('canvas');
-      const sz = 280;
-      c.width = sz; c.height = sz;
-      const ctx = c.getContext('2d');
-      ctx.fillStyle = '#fff';
-      ctx.fillRect(0, 0, sz, sz);
-      ctx.drawImage(img, 0, 0, sz, sz);
-      appState.qrCodes[targetId] = c.toDataURL('image/png');
-      renderSettingsPaymentAccounts();
-      showToast('QR code attached — tap Save All to sync');
+      openQrCropStudio(img, qrUploadTargetAccountId);
     };
     img.src = reader.result;
   };
@@ -7006,6 +7829,8 @@ function saveAllSettings() {
   s.clockSize = document.getElementById('setClockSize').value || 'balanced';
   s.animationsEnabled = document.getElementById('setAnimations').checked;
   s.lockPriceEdits = document.getElementById('setLockPrice').checked;
+  s.ledgerAutoBright = document.getElementById('setLedgerAutoBright').checked;
+  s.ledgerBrightnessBoost = Number(document.getElementById('setLedgerBrightBoost').value || 108);
 
   // Keep legacy epayAccount synced with first active payment account
   const firstActive = getActivePaymentAccounts()[0];
@@ -7095,7 +7920,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ============================================================================
-   v14.8 UNIVERSAL OFFLINE SMART SEARCH RECOMMENDATIONS + HEADER SYNC
+   v14.9 UNIVERSAL OFFLINE SMART SEARCH RECOMMENDATIONS + HEADER SYNC
    ============================================================================ */
 function closeAllSuggestMenus() {
   ['posSuggestMenu', 'ledgerSuggestMenu', 'historySuggestMenu', 'headerSuggestMenu', 'expSuggestMenu', 'pdSuggestMenu'].forEach(id => {
@@ -7643,7 +8468,7 @@ function renderQuickPayCanvas(cust, includeQr, showPhone, selectedQrAccId, msg, 
   };
 
   if (includeQr) {
-    const qrAcc = (appState.settings.paymentAccounts || []).find(a => a.id === selectedQrAccId);
+    const qrAcc = (uiState.stmtDraftAccounts || []).find(a => a.id === selectedQrAccId) || (appState.settings.paymentAccounts || []).find(a => a.id === selectedQrAccId);
     const qrSrc = (qrAcc && getAccountQrDataUrl(qrAcc.id)) || getPrimaryQrDataUrl();
     const qrLabel = qrAcc && qrAcc.label ? ('Scan via ' + qrAcc.label) : 'Scan to Pay';
     const qSize = 188;
@@ -8009,7 +8834,7 @@ function renderOrderReceiptCanvas(ord) {
   const dets = appState.orderDetails.filter(d => d.orderId === ord.id);
   const rows = dets.length > 0 ? dets.map(d => {
     const raw = String(d.productId || '');
-    const name = raw.toUpperCase().startsWith('PAST:') ? raw.replace(/^PAST:\s*/i, '') : (prodMap[raw] || raw);
+    const name = /^(PAST|UTANG):/i.test(raw) ? raw.replace(/^(PAST|UTANG):\s*/i, '') : (prodMap[raw] || raw);
     return { label: `${d.qty}× ${name}`, total: Number(d.lineTotal || 0) };
   }) : [{ label: ord.paymentRef || 'Canteen Order', total: Number(ord.total || 0) }];
 
@@ -8658,7 +9483,7 @@ function renderPublicMenuView() {
   const d = publicMenuData;
   if (!d) return;
 
-  document.documentElement.setAttribute('data-theme', d.colorTheme === 'light' ? 'light' : 'dark');
+  document.documentElement.setAttribute('data-theme', (d.colorTheme === 'light' || d.colorTheme === 'minimal-white') ? d.colorTheme : 'dark');
   document.documentElement.setAttribute('data-surface', d.uiStyle === 'solid' ? 'solid' : 'glass');
   document.documentElement.setAttribute('data-font-style', d.fontStyle || 'sans');
   document.documentElement.setAttribute('data-bold', d.boldText !== false ? 'true' : 'false');
@@ -8720,6 +9545,449 @@ function renderPublicMenuView() {
   const methods = Array.isArray(d.paymentMethods) && d.paymentMethods.length ? d.paymentMethods.join(' • ') : 'Cash • GCash • Maya • Bank Transfer';
   document.getElementById('pmFooter').innerHTML = `<strong>Accepted Payments:</strong> ${escHtml(methods)}`;
 }
+
+
+/* ============================================================================
+   v14.9 AUTO HIGH-VISIBILITY LEDGER BRIGHTNESS & CONTRAST BOOST
+   ============================================================================ */
+function applyLedgerBrightMode() {
+  const isLedger = uiState.tab === 'ledger';
+  const defaultAuto = appState.settings.ledgerAutoBright !== false;
+  const active = isLedger && (uiState.ledgerBrightOverride !== null ? uiState.ledgerBrightOverride : defaultAuto);
+  const boost = Math.max(100, Math.min(125, Number(appState.settings.ledgerBrightnessBoost || 108)));
+  const bVal = (boost / 100).toFixed(2);
+  const cVal = (1 + (boost - 100) * 0.008).toFixed(2);
+  document.documentElement.style.setProperty('--ledger-bright-filter', `brightness(${bVal}) contrast(${cVal})`);
+  document.body.classList.toggle('ledger-bright-active', active);
+
+  const btn = document.getElementById('btnLedgerBrightToggle');
+  const txt = document.getElementById('btnLedgerBrightText');
+  if (btn && txt) {
+    btn.classList.toggle('active', active);
+    txt.textContent = active ? `Bright View ON (${boost}%)` : 'Bright View';
+  }
+}
+
+function toggleLedgerBrightMode() {
+  playSound('tap');
+  const current = document.body.classList.contains('ledger-bright-active');
+  uiState.ledgerBrightOverride = !current;
+  applyLedgerBrightMode();
+  showToast(!current ? 'High-visibility Ledger Bright View ON' : 'Ledger Bright View OFF');
+}
+
+function previewLedgerBrightSettings() {
+  const on = document.getElementById('setLedgerAutoBright').checked;
+  const boost = Number(document.getElementById('setLedgerBrightBoost').value || 108);
+  appState.settings.ledgerAutoBright = on;
+  appState.settings.ledgerBrightnessBoost = boost;
+  uiState.ledgerBrightOverride = null;
+  document.getElementById('ledgerBrightBoostPct').textContent = boost + '%';
+  document.getElementById('ledgerBrightBoostRow').style.opacity = on ? '1' : '0.45';
+  applyLedgerBrightMode();
+}
+
+/* ============================================================================
+   PH BANK & E-WALLET PRESETS + EDITABLE MULTI-BANK STATEMENT BUILDER
+   ============================================================================ */
+const PH_PAYMENT_PRESETS = [
+  { label: 'GCash', type: 'E-Wallet' },
+  { label: 'Maya', type: 'E-Wallet' },
+  { label: 'BPI', type: 'Bank' },
+  { label: 'BDO', type: 'Bank' },
+  { label: 'Metrobank', type: 'Bank' },
+  { label: 'UnionBank', type: 'Bank' },
+  { label: 'LandBank', type: 'Bank' },
+  { label: 'SeaBank', type: 'Bank' },
+  { label: 'GoTyme', type: 'Bank' },
+  { label: 'Security Bank', type: 'Bank' },
+  { label: 'PNB', type: 'Bank' },
+  { label: 'Chinabank', type: 'Bank' }
+];
+
+function renderSettingsBankPresetChips() {
+  const el = document.getElementById('settingsBankPresets');
+  if (!el) return;
+  el.innerHTML = PH_PAYMENT_PRESETS.map(p =>
+    `<button type="button" class="bank-preset-chip" onclick="pickBankPreset('settings', '${escHtml(p.label)}', '${escHtml(p.type)}')">${escHtml(p.label)}</button>`
+  ).join('');
+}
+
+function renderStmtBankPresetChips() {
+  const el = document.getElementById('stmtBankPresets');
+  if (!el) return;
+  el.innerHTML = PH_PAYMENT_PRESETS.map(p =>
+    `<button type="button" class="bank-preset-chip" onclick="pickBankPreset('stmt', '${escHtml(p.label)}', '${escHtml(p.type)}')">${escHtml(p.label)}</button>`
+  ).join('');
+}
+
+function pickBankPreset(scope, label, type) {
+  playSound('tap');
+  if (scope === 'stmt') {
+    document.getElementById('stmtNewPayType').value = type;
+    document.getElementById('stmtNewPayLabel').value = label;
+    document.getElementById('stmtNewPayDetails').focus();
+  } else {
+    document.getElementById('newPayType').value = type;
+    document.getElementById('newPayLabel').value = label;
+    document.getElementById('newPayDetails').focus();
+  }
+}
+
+function renderStatementAccountsEditor() {
+  const listEl = document.getElementById('stmtAccountsList');
+  if (!listEl) return;
+  const accs = uiState.stmtDraftAccounts || [];
+  if (!accs.length) {
+    listEl.innerHTML = `<div style="font-size:12px;color:var(--text-muted);text-align:center;padding:8px;">No payment accounts yet — tap <strong>+ Add Bank</strong> above.</div>`;
+  } else {
+    listEl.innerHTML = accs.map((a, idx) => {
+      const checked = !!uiState.stmtSelectedIds[a.id];
+      const hasQr = !!getAccountQrDataUrl(a.id);
+      return `<div class="stmt-acc-row ${checked ? 'checked' : ''}">
+        <input type="checkbox" class="stmt-acc-chk" ${checked ? 'checked' : ''} onchange="toggleStmtAccountCheck('${escHtml(a.id)}', this.checked)" />
+        <div class="stmt-acc-info" onclick="toggleStmtAccountCheck('${escHtml(a.id)}', ${!checked})">
+          <div class="stmt-acc-primary">${escHtml(a.label || 'Account')} • ${escHtml(a.details || 'No number')}</div>
+          <div class="stmt-acc-secondary">${escHtml(a.type || 'Bank')}${a.accountName ? ' • ' + escHtml(a.accountName) : ''}${hasQr ? ' • QR Ready' : ''}</div>
+        </div>
+        <button type="button" class="mini-icon-btn" onclick="editStmtAccountInline(${idx})" title="Edit account details">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        </button>
+        <button type="button" class="btn btn-soft-orange btn-sm" style="padding:4px 8px;font-size:10.5px;" onclick="triggerAccountQrUpload('${escHtml(a.id)}')" title="Crop & attach digital QR">${hasQr ? 'QR ✓' : '+ QR'}</button>
+      </div>`;
+    }).join('');
+  }
+
+  // Refresh QR dropdown to include any newly added/edited accounts
+  const qrSel = document.getElementById('billQrAccountSelect');
+  if (qrSel) {
+    const prevVal = qrSel.value;
+    const withQr = accs.filter(a => !!getAccountQrDataUrl(a.id));
+    const pool = withQr.length > 0 ? withQr : accs;
+    qrSel.innerHTML = pool.map(a =>
+      `<option value="${escHtml(a.id)}">${escHtml(a.label)} (${escHtml(a.type || 'E-Wallet')})${getAccountQrDataUrl(a.id) ? ' — QR Ready' : ''}</option>`
+    ).join('');
+    if (prevVal && pool.some(a => a.id === prevVal)) qrSel.value = prevVal;
+    document.getElementById('billQrAccWrap').style.display = pool.length > 0 ? 'block' : 'none';
+  }
+}
+
+function toggleStmtAccountCheck(accountId, checked) {
+  playSound('tap');
+  uiState.stmtSelectedIds[accountId] = !!checked;
+  renderStatementAccountsEditor();
+  renderBillingCanvas();
+}
+
+function toggleStmtAddAccountForm(forceState) {
+  playSound('tap');
+  const box = document.getElementById('stmtAddAccountBox');
+  if (!box) return;
+  const nextShow = typeof forceState === 'boolean' ? forceState : (box.style.display === 'none');
+  box.style.display = nextShow ? 'block' : 'none';
+  if (nextShow) {
+    renderStmtBankPresetChips();
+    document.getElementById('stmtNewPayLabel').focus();
+  }
+}
+
+function maybePersistStatementAccountsToDefaults() {
+  const saveDef = document.getElementById('stmtSaveToDefaults');
+  if (!saveDef || !saveDef.checked) return;
+  const commit = () => {
+    appState.settings.paymentAccounts = uiState.stmtDraftAccounts.map(a => Object.assign({}, a));
+    renderSettingsPaymentAccounts();
+    enqueueAndSync('saveAppSettings', [{ settings: appState.settings, qrCodes: appState.qrCodes }]);
+    showToast('Payment accounts saved to store defaults');
+  };
+  if (isManagerActive()) {
+    commit();
+  } else {
+    requireManagerPin('Save Store Payment Defaults', 'Manager PIN required to update permanent store bank accounts.', () => commit());
+  }
+}
+
+function editStmtAccountInline(idx) {
+  const acc = uiState.stmtDraftAccounts[idx];
+  if (!acc) return;
+  const newLabel = prompt('Bank or E-Wallet Name:', acc.label || '');
+  if (newLabel === null) return;
+  const newAccName = prompt('Account Holder Name (optional):', acc.accountName || '');
+  if (newAccName === null) return;
+  const newDetails = prompt('Account / Mobile Number:', acc.details || '');
+  if (newDetails === null) return;
+
+  acc.label = newLabel.trim() || acc.label;
+  acc.accountName = newAccName.trim();
+  acc.details = newDetails.trim();
+  uiState.stmtSelectedIds[acc.id] = true;
+  renderStatementAccountsEditor();
+  renderBillingCanvas();
+  maybePersistStatementAccountsToDefaults();
+}
+
+function addAccountFromStatementModal() {
+  const type = document.getElementById('stmtNewPayType').value || 'Bank';
+  const label = document.getElementById('stmtNewPayLabel').value.trim();
+  const accountName = document.getElementById('stmtNewPayAccName').value.trim();
+  const details = document.getElementById('stmtNewPayDetails').value.trim();
+  if (!label || !details) {
+    showToast('Enter Bank/Wallet Name and Account Number');
+    return;
+  }
+  const acc = {
+    id: 'PAYACC-' + Date.now(),
+    type, label, accountName, details
+  };
+  uiState.stmtDraftAccounts.push(acc);
+  uiState.stmtSelectedIds[acc.id] = true;
+  document.getElementById('stmtNewPayLabel').value = '';
+  document.getElementById('stmtNewPayAccName').value = '';
+  document.getElementById('stmtNewPayDetails').value = '';
+  toggleStmtAddAccountForm(false);
+  renderStatementAccountsEditor();
+  renderBillingCanvas();
+  playSound('success');
+  showToast(`Added ${label} to statement`);
+  maybePersistStatementAccountsToDefaults();
+}
+
+/* ============================================================================
+   INTERACTIVE DIGITAL QR PHOTO CROPPER & CRISP DIGITAL REFINE ENGINE
+   ============================================================================ */
+let qrCropState = {
+  img: null,
+  targetAccountId: '',
+  mode: 'digital', // 'digital' | 'bw' | 'color'
+  zoom: 1.1,
+  clarity: 125,
+  rotation: 0,
+  offsetX: 0,
+  offsetY: 0,
+  dragging: false,
+  lastX: 0,
+  lastY: 0
+};
+
+function openQrCropStudio(img, accountId) {
+  qrCropState.img = img;
+  qrCropState.targetAccountId = accountId;
+  qrCropState.mode = 'digital';
+  qrCropState.zoom = 1.1;
+  qrCropState.clarity = 125;
+  qrCropState.rotation = 0;
+  qrCropState.offsetX = 0;
+  qrCropState.offsetY = 0;
+
+  document.getElementById('qrCropZoom').value = '110';
+  document.getElementById('qrCropZoomPct').textContent = '1.1×';
+  document.getElementById('qrCropClarity').value = '125';
+  document.getElementById('qrCropClarityPct').textContent = '125%';
+  syncQrModeButtons();
+  openModal('qrCropModal');
+  renderQrCropPreview();
+}
+
+function syncQrModeButtons() {
+  const m = qrCropState.mode;
+  document.getElementById('btnQrModeDigital').classList.toggle('active', m === 'digital');
+  document.getElementById('btnQrModeBw').classList.toggle('active', m === 'bw');
+  document.getElementById('btnQrModeColor').classList.toggle('active', m === 'color');
+}
+
+function setQrRefineMode(mode) {
+  playSound('tap');
+  qrCropState.mode = mode;
+  syncQrModeButtons();
+  renderQrCropPreview();
+}
+
+function onQrCropControlChange() {
+  qrCropState.zoom = Number(document.getElementById('qrCropZoom').value || 110) / 100;
+  qrCropState.clarity = Number(document.getElementById('qrCropClarity').value || 125);
+  document.getElementById('qrCropZoomPct').textContent = qrCropState.zoom.toFixed(1) + '×';
+  document.getElementById('qrCropClarityPct').textContent = qrCropState.clarity + '%';
+  renderQrCropPreview();
+}
+
+function rotateQrCropImage() {
+  playSound('tap');
+  qrCropState.rotation = (qrCropState.rotation + 90) % 360;
+  renderQrCropPreview();
+}
+
+function resetQrCropPosition() {
+  playSound('tap');
+  qrCropState.zoom = 1.1;
+  qrCropState.offsetX = 0;
+  qrCropState.offsetY = 0;
+  qrCropState.rotation = 0;
+  document.getElementById('qrCropZoom').value = '110';
+  document.getElementById('qrCropZoomPct').textContent = '1.1×';
+  renderQrCropPreview();
+}
+
+function drawEnhancedQrToCanvas(canvas, outSize, addQuietZone) {
+  const img = qrCropState.img;
+  if (!img || !canvas) return;
+  canvas.width = outSize;
+  canvas.height = outSize;
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, outSize, outSize);
+
+  const pad = addQuietZone ? Math.round(outSize * 0.05) : 0;
+  const inner = outSize - pad * 2;
+  const scaleRatio = inner / 280;
+
+  // Base cover scale so the shorter edge fills the square frame at zoom = 1.0
+  const iw = img.naturalWidth || img.width;
+  const ih = img.naturalHeight || img.height;
+  const rotSwap = (qrCropState.rotation % 180) !== 0;
+  const baseScale = inner / Math.min(rotSwap ? ih : iw, rotSwap ? iw : ih);
+  const drawScale = baseScale * qrCropState.zoom;
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(pad, pad, inner, inner);
+  ctx.clip();
+  ctx.translate(outSize / 2 + qrCropState.offsetX * scaleRatio, outSize / 2 + qrCropState.offsetY * scaleRatio);
+  ctx.rotate((qrCropState.rotation * Math.PI) / 180);
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(img, (-iw * drawScale) / 2, (-ih * drawScale) / 2, iw * drawScale, ih * drawScale);
+  ctx.restore();
+
+  // Digital pixel refinement pipeline
+  const mode = qrCropState.mode;
+  const clarityFactor = qrCropState.clarity / 100;
+  const imgData = ctx.getImageData(pad, pad, inner, inner);
+  const d = imgData.data;
+
+  // Estimate bright white point (90th percentile luminance) to neutralize dim photos/shadows
+  let lumHist = new Uint32Array(256);
+  const totalPx = inner * inner;
+  for (let i = 0; i < d.length; i += 4) {
+    const lum = (d[i] * 77 + d[i + 1] * 150 + d[i + 2] * 29) >> 8;
+    lumHist[lum]++;
+  }
+  let acc = 0, whitePt = 240, blackPt = 30;
+  for (let l = 255; l >= 0; l--) {
+    acc += lumHist[l];
+    if (acc >= totalPx * 0.12) { whitePt = Math.max(150, l); break; }
+  }
+  acc = 0;
+  for (let l = 0; l < 256; l++) {
+    acc += lumHist[l];
+    if (acc >= totalPx * 0.08) { blackPt = Math.min(115, l); break; }
+  }
+  const span = Math.max(40, whitePt - blackPt);
+
+  if (mode === 'bw') {
+    // Pure high-contrast digital B&W scan
+    const thresh = blackPt + span * (0.58 - (clarityFactor - 1.25) * 0.25);
+    for (let i = 0; i < d.length; i += 4) {
+      const lum = (d[i] * 77 + d[i + 1] * 150 + d[i + 2] * 29) >> 8;
+      const isDark = lum < thresh;
+      d[i] = isDark ? 15 : 255;
+      d[i + 1] = isDark ? 23 : 255;
+      d[i + 2] = isDark ? 42 : 255;
+      d[i + 3] = 255;
+    }
+  } else if (mode === 'digital') {
+    // Digital Crisp: pure white background, rich dark modules, preserves colored center bank logos!
+    const contrast = 1.28 * clarityFactor;
+    for (let i = 0; i < d.length; i += 4) {
+      const r = d[i], g = d[i + 1], b = d[i + 2];
+      const maxC = Math.max(r, g, b);
+      const minC = Math.min(r, g, b);
+      const sat = maxC - minC;
+      const lum = (r * 77 + g * 150 + b * 29) >> 8;
+
+      if (sat > 42 && lum < whitePt - 15) {
+        // Keep colored center logo vibrant & crisp
+        d[i] = Math.max(0, Math.min(255, Math.round((r - 128) * 1.15 + 132)));
+        d[i + 1] = Math.max(0, Math.min(255, Math.round((g - 128) * 1.15 + 132)));
+        d[i + 2] = Math.max(0, Math.min(255, Math.round((b - 128) * 1.15 + 132)));
+      } else {
+        // Normalize grayscale QR modules & snap background cleanly to pure white
+        let norm = (lum - blackPt) / span;
+        norm = (norm - 0.5) * contrast + 0.5;
+        if (norm > 0.78) {
+          d[i] = 255; d[i + 1] = 255; d[i + 2] = 255;
+        } else if (norm < 0.28) {
+          d[i] = 15; d[i + 1] = 23; d[i + 2] = 42;
+        } else {
+          const v = Math.max(0, Math.min(255, Math.round(norm * 255)));
+          d[i] = v; d[i + 1] = v; d[i + 2] = v;
+        }
+      }
+      d[i + 3] = 255;
+    }
+  } else {
+    // Original Color with gentle brightness/contrast clarity polish
+    const gain = 0.85 + clarityFactor * 0.20;
+    for (let i = 0; i < d.length; i += 4) {
+      d[i] = Math.max(0, Math.min(255, Math.round((d[i] - 128) * gain + 134)));
+      d[i + 1] = Math.max(0, Math.min(255, Math.round((d[i + 1] - 128) * gain + 134)));
+      d[i + 2] = Math.max(0, Math.min(255, Math.round((d[i + 2] - 128) * gain + 134)));
+      d[i + 3] = 255;
+    }
+  }
+  ctx.putImageData(imgData, pad, pad);
+}
+
+function renderQrCropPreview() {
+  const stage = document.getElementById('qrCropStageCanvas');
+  drawEnhancedQrToCanvas(stage, 280, false);
+}
+
+function applyCroppedQrPhoto() {
+  if (!qrCropState.img || !qrCropState.targetAccountId) return;
+  const out = document.createElement('canvas');
+  drawEnhancedQrToCanvas(out, 360, true);
+  const dataUrl = out.toDataURL('image/png');
+  appState.qrCodes[qrCropState.targetAccountId] = dataUrl;
+  closeModal('qrCropModal');
+  renderSettingsPaymentAccounts();
+  if (document.getElementById('billingCardModal').classList.contains('open')) {
+    renderStatementAccountsEditor();
+    document.getElementById('billQrAccountSelect').value = qrCropState.targetAccountId;
+    renderBillingCanvas();
+    maybePersistStatementAccountsToDefaults();
+  }
+  playSound('success');
+  showToast('Digital QR cropped & refined — tap Save All to sync');
+}
+
+// Wire pointer drag panning on QR Crop Stage
+(function bindQrCropDrag() {
+  const stage = document.getElementById('qrCropStageWrap');
+  if (!stage) return;
+  const onDown = (ev) => {
+    qrCropState.dragging = true;
+    const pt = ev.touches ? ev.touches[0] : ev;
+    qrCropState.lastX = pt.clientX;
+    qrCropState.lastY = pt.clientY;
+  };
+  const onMove = (ev) => {
+    if (!qrCropState.dragging) return;
+    if (ev.cancelable) ev.preventDefault();
+    const pt = ev.touches ? ev.touches[0] : ev;
+    qrCropState.offsetX += (pt.clientX - qrCropState.lastX);
+    qrCropState.offsetY += (pt.clientY - qrCropState.lastY);
+    qrCropState.lastX = pt.clientX;
+    qrCropState.lastY = pt.clientY;
+    renderQrCropPreview();
+  };
+  const onUp = () => { qrCropState.dragging = false; };
+  stage.addEventListener('mousedown', onDown);
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
+  stage.addEventListener('touchstart', onDown, { passive: true });
+  stage.addEventListener('touchmove', onMove, { passive: false });
+  stage.addEventListener('touchend', onUp);
+})();
 
 </script>
 </body>
