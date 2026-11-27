@@ -329,7 +329,7 @@
     .sync-dot.pending { display: block; background: var(--amber); }
     .sync-dot.offline { display: block; background: var(--red); }
 
-    /* Lively Counter Clock Banner (v14.9 — adjustable sizes, time-of-day glow, live seconds) */
+    /* Lively Counter Clock Banner (v14.11 — adjustable sizes, time-of-day glow, live seconds) */
     .clock-banner {
       display: none;
       position: relative;
@@ -1782,7 +1782,7 @@
     }
 
     /* =====================================================================
-       v14.9 ARCHITECTURE — NO BOTTOM BAR, SPACIOUS TOP HEADER,
+       v14.11 ARCHITECTURE — NO BOTTOM BAR, SPACIOUS TOP HEADER,
        4 CRISP ROUND BUTTONS, SCROLL-TO-JOIN SEARCH, OPTION A SWITCHER,
        UNIVERSAL SMART SEARCH & READ-ONLY LIVE DAILY MENU
        ===================================================================== */
@@ -2398,7 +2398,7 @@
     }
 
     /* =====================================================================
-       v14.9 — MINIMAL WHITE HIGH-CONTRAST MODE, AUTO-BRIGHT LEDGER,
+       v14.11 — MINIMAL WHITE HIGH-CONTRAST MODE, AUTO-BRIGHT LEDGER,
        SMOOTHER TACTILE TAP MOTION, ANTI-DOUBLE-ENTRY LOCK & QR CROP STUDIO
        ===================================================================== */
 
@@ -2877,6 +2877,773 @@
       border-radius: 10px;
       pointer-events: none;
     }
+
+    /* =====================================================================
+       v14.11 — SAVE DRAFTS, DRAFT NOTIFICATION BESIDE + SUKI & MINI EDIT TAB
+       ===================================================================== */
+    .drafts-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 11px;
+      font-weight: 800;
+    }
+    .drafts-btn.has-drafts {
+      background: var(--accent-soft) !important;
+      border: 1.5px solid rgba(234, 88, 12, 0.55) !important;
+      color: var(--accent-light) !important;
+      box-shadow: 0 3px 10px rgba(234, 88, 12, 0.16);
+    }
+    .drafts-count-badge {
+      position: absolute;
+      top: -7px;
+      right: -6px;
+      min-width: 19px;
+      height: 19px;
+      padding: 0 5px;
+      border-radius: 999px;
+      background: #ea580c;
+      color: #ffffff;
+      font-size: 10.5px;
+      font-weight: 900;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 0 2px var(--bg);
+      line-height: 1;
+    }
+    .drafts-btn.has-drafts .drafts-count-badge {
+      display: inline-flex;
+      animation: popCascade 200ms var(--ease-spring);
+    }
+    html[data-theme="minimal-white"] .drafts-btn.has-drafts,
+    body.ledger-bright-active .drafts-btn.has-drafts {
+      background: #ffedd5 !important;
+      border: 1.5px solid #c2410c !important;
+      color: #9a3412 !important;
+    }
+    html[data-theme="minimal-white"] .drafts-count-badge,
+    body.ledger-bright-active .drafts-count-badge {
+      background: #c2410c;
+      box-shadow: 0 0 0 2px #ffffff;
+    }
+
+    /* Auto-Draft Safety Pill inside Record Utang Modal */
+    .auto-draft-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 11px;
+      border-radius: 12px;
+      background: var(--green-soft);
+      border: 1px solid rgba(16, 185, 129, 0.32);
+      color: #10b981;
+      font-size: 11.5px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    html[data-theme="minimal-white"] .auto-draft-pill,
+    body.ledger-bright-active .auto-draft-pill {
+      background: #ecfdf5;
+      border-color: #6ee7b7;
+      color: #047857;
+    }
+    .auto-draft-pill svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.3;
+      flex-shrink: 0;
+    }
+
+    /* Mini Edit Tab / Saved Drafts Drawer Cards */
+    .draft-card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      transition: border-color 180ms var(--ease-spring), box-shadow 180ms var(--ease-spring);
+    }
+    .draft-card.mini-open {
+      border-color: var(--accent-light);
+      box-shadow: 0 6px 20px rgba(234, 88, 12, 0.14);
+    }
+    .draft-card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .draft-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .mini-edit-panel {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      animation: fadeSlideUp 180ms var(--ease-spring);
+    }
+    .mini-edit-line {
+      display: grid;
+      grid-template-columns: 1.5fr 0.65fr 0.95fr auto;
+      gap: 6px;
+      align-items: center;
+    }
+    .mini-edit-line input {
+      width: 100%;
+      padding: 7px 8px;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      font-size: 12.5px;
+      font-weight: 700;
+      outline: none;
+    }
+    .mini-edit-line input:focus {
+      border-color: var(--accent-light);
+    }
+    .mini-edit-date-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: -2px;
+      margin-bottom: 4px;
+    }
+    .mini-edit-date-row input[type="date"] {
+      padding: 5px 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      font-size: 11.5px;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    /* =====================================================================
+       v14.11 — SEARCHABLE SUKI + CATCHY + NEW SUKI PILL, ENHANCED CLOCK-IN
+       BACK ICON, ONE-CLICK THEME SWITCHER, THEME-MATCHED CLOCK DROPDOWN,
+       SEARCHABLE MANAGER SETTINGS & STREAMLINED QR Ph & E-WALLETS
+       ===================================================================== */
+
+    /* 1. Searchable Customer + Catchy "+ New Suki" Pill & Soft Subtle Hints */
+    .cust-label-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .cust-label-row label {
+      margin-bottom: 0 !important;
+    }
+    .new-suki-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1.5px solid rgba(234, 88, 12, 0.45);
+      background: linear-gradient(135deg, rgba(255, 237, 213, 0.95), rgba(254, 215, 170, 0.72));
+      color: #c2410c;
+      font-size: 11.5px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(234, 88, 12, 0.14);
+      transition: transform 160ms var(--ease-spring), box-shadow 160ms, background 160ms;
+    }
+    html[data-theme="dark"] .new-suki-pill {
+      background: rgba(249, 115, 22, 0.18);
+      color: #ffad4d;
+      border-color: rgba(255, 173, 77, 0.55);
+    }
+    .new-suki-pill:hover { box-shadow: 0 4px 12px rgba(234, 88, 12, 0.22); }
+    .new-suki-pill:active { transform: scale(0.94); }
+    .new-suki-pill svg {
+      width: 13px;
+      height: 13px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.3;
+    }
+
+    .suki-search-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .suki-search-icon {
+      position: absolute;
+      left: 12px;
+      width: 16px;
+      height: 16px;
+      stroke: var(--text-muted);
+      fill: none;
+      stroke-width: 2.1;
+      pointer-events: none;
+    }
+    .suki-search-input {
+      width: 100%;
+      padding: 10px 88px 10px 36px !important;
+      border-radius: 12px !important;
+      border: 1.5px solid var(--border) !important;
+      background: var(--card) !important;
+      font-size: 14px !important;
+      font-weight: 700 !important;
+      transition: border-color 180ms, background-color 180ms, box-shadow 180ms;
+    }
+    .suki-search-input:focus {
+      border-color: #f59e0b !important;
+      background: rgba(254, 249, 195, 0.35) !important;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.14);
+    }
+    html[data-theme="dark"] .suki-search-input:focus {
+      background: rgba(251, 191, 36, 0.10) !important;
+      border-color: #fbbf24 !important;
+    }
+    .suki-search-input.has-selection {
+      border-color: rgba(234, 88, 12, 0.52) !important;
+      background: rgba(255, 247, 237, 0.72) !important;
+    }
+    html[data-theme="dark"] .suki-search-input.has-selection {
+      background: rgba(249, 115, 22, 0.12) !important;
+    }
+    .suki-hint-tag {
+      position: absolute;
+      right: 34px;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .suki-clear-btn {
+      position: absolute;
+      right: 8px;
+      width: 22px;
+      height: 22px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(148, 163, 184, 0.22);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .suki-clear-btn.visible { display: inline-flex; }
+
+    .suki-suggest-menu {
+      position: absolute;
+      top: calc(100% + 5px);
+      left: 0;
+      right: 0;
+      z-index: 95;
+      background: var(--bg-elev);
+      border: 1.5px solid rgba(234, 88, 12, 0.32);
+      border-radius: 14px;
+      padding: 6px;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.24);
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      max-height: 245px;
+      overflow-y: auto;
+    }
+    .suki-suggest-menu.open {
+      display: flex;
+      animation: fadeSlideUp 150ms var(--ease-spring);
+    }
+    .suki-opt-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 9px 10px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+      transition: background-color 140ms, border-color 140ms;
+    }
+    .suki-opt-row:hover {
+      background: rgba(255, 237, 213, 0.55);
+    }
+    html[data-theme="dark"] .suki-opt-row:hover {
+      background: rgba(249, 115, 22, 0.14);
+    }
+    .suki-opt-row.top-hit {
+      background: rgba(255, 237, 213, 0.80);
+      border-color: rgba(251, 146, 60, 0.35);
+    }
+    html[data-theme="dark"] .suki-opt-row.top-hit {
+      background: rgba(249, 115, 22, 0.18);
+      border-color: rgba(255, 173, 77, 0.38);
+    }
+    .suki-opt-name {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .suki-opt-name mark {
+      background: rgba(251, 146, 60, 0.28);
+      color: inherit;
+      border-radius: 4px;
+      padding: 0 2px;
+    }
+    .suki-opt-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+    .suki-opt-bal {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--accent-light);
+      white-space: nowrap;
+    }
+    .suki-opt-bal.settled { color: var(--green); }
+
+    .suki-add-hinter {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 11px;
+      margin-top: 2px;
+      border-radius: 10px;
+      border: 1.5px dashed rgba(234, 88, 12, 0.55);
+      background: rgba(255, 247, 237, 0.85);
+      color: #c2410c;
+      font-size: 12.5px;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: left;
+      transition: background-color 140ms, transform 140ms;
+    }
+    html[data-theme="dark"] .suki-add-hinter {
+      background: rgba(249, 115, 22, 0.16);
+      color: #ffad4d;
+      border-color: rgba(255, 173, 77, 0.55);
+    }
+    .suki-add-hinter:active { transform: scale(0.98); }
+
+    .inline-new-suki-box {
+      display: none;
+      margin-top: 8px;
+      padding: 10px 11px;
+      border-radius: 13px;
+      border: 1.5px dashed rgba(234, 88, 12, 0.55);
+      background: var(--accent-soft);
+      animation: fadeSlideUp 160ms var(--ease-spring);
+    }
+    .inline-new-suki-box.open { display: block; }
+
+    /* 2. Enhanced Branded Clock-In Card + Circular ← Back Icon */
+    .auth-card {
+      position: relative;
+      overflow: hidden;
+      padding: 0 20px 22px !important;
+      border: 1.5px solid rgba(255, 173, 77, 0.30) !important;
+    }
+    .auth-header-band {
+      height: 82px;
+      margin: 0 -20px -36px;
+      background: linear-gradient(180deg, rgba(255, 164, 59, 0.36) 0%, rgba(253, 186, 116, 0.16) 75%, transparent 100%);
+      border-radius: 0 0 50% 50% / 0 0 28px 28px;
+      position: relative;
+    }
+    html[data-theme="dark"] .auth-header-band {
+      background: linear-gradient(180deg, rgba(249, 115, 22, 0.30) 0%, rgba(234, 88, 12, 0.10) 75%, transparent 100%);
+    }
+    .auth-back-btn {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      z-index: 4;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg-elev);
+      color: var(--text);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      transition: transform 160ms var(--ease-spring), border-color 160ms;
+    }
+    .auth-back-btn.visible { display: inline-flex; }
+    .auth-back-btn:hover { border-color: var(--accent-light); color: var(--accent-light); }
+    .auth-back-btn:active { transform: scale(0.90); }
+    .auth-back-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .auth-logo {
+      position: relative;
+      z-index: 2;
+      filter: drop-shadow(0 8px 18px rgba(234, 88, 12, 0.34));
+    }
+    .auth-sub-pill {
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-light);
+      font-size: 12px;
+      font-weight: 700;
+      margin: 6px 0 18px;
+      border: 1px solid rgba(255, 173, 77, 0.28);
+    }
+    .staff-tile.mgr-tile {
+      border-color: rgba(249, 115, 22, 0.45);
+      background: linear-gradient(180deg, rgba(255, 237, 213, 0.48), var(--bg-elev));
+      box-shadow: 0 6px 16px rgba(234, 88, 12, 0.10);
+    }
+    html[data-theme="dark"] .staff-tile.mgr-tile {
+      background: linear-gradient(180deg, rgba(249, 115, 22, 0.16), var(--bg-elev));
+    }
+
+    /* 3. One-Click Theme Switcher Inside Dropdown Menu */
+    .nav-theme-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 10px 6px;
+    }
+    .nav-theme-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .theme-capsule {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 3px;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      background: var(--card);
+    }
+    .theme-cap-btn {
+      width: 28px;
+      height: 28px;
+      border: none;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--text-soft);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 160ms var(--ease-spring), background-color 180ms, color 180ms;
+    }
+    .theme-cap-btn:active { transform: scale(0.88); }
+    .theme-cap-btn.active {
+      background: linear-gradient(135deg, #ffa43b, #ea580c);
+      color: #ffffff;
+      box-shadow: 0 3px 10px rgba(234, 88, 12, 0.38);
+    }
+    .theme-cap-btn svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* 4. Theme-Matched Custom Dropdown for Clock Banner Size */
+    .sk-select-wrap {
+      position: relative;
+    }
+    .sk-select-trigger {
+      width: 100%;
+      padding: 11px 13px;
+      border-radius: 13px;
+      border: 1.5px solid rgba(234, 88, 12, 0.45);
+      background: var(--accent-soft);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      cursor: pointer;
+      text-align: left;
+      transition: border-color 160ms, box-shadow 160ms;
+    }
+    .sk-select-trigger svg {
+      width: 17px;
+      height: 17px;
+      stroke: var(--accent-light);
+      fill: none;
+      stroke-width: 2.4;
+      transition: transform 180ms var(--ease-spring);
+    }
+    .sk-select-wrap.open .sk-select-trigger svg {
+      transform: rotate(180deg);
+    }
+    .sk-select-menu {
+      display: none;
+      margin-top: 6px;
+      padding: 6px;
+      border-radius: 16px;
+      background: var(--bg-elev);
+      border: 1.5px solid var(--border);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+      flex-direction: column;
+      gap: 5px;
+    }
+    .sk-select-wrap.open .sk-select-menu {
+      display: flex;
+      animation: fadeSlideUp 160ms var(--ease-spring);
+    }
+    .sk-select-opt {
+      width: 100%;
+      border: 1.5px solid transparent;
+      background: transparent;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 11px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      transition: background-color 140ms, border-color 140ms;
+    }
+    .sk-select-opt:hover { background: var(--card-hover); }
+    .sk-select-opt.active {
+      background: var(--accent-soft);
+      border-color: var(--accent-light);
+    }
+    .sk-select-opt-left {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+    .sk-select-opt-left svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--text-muted);
+      fill: none;
+      stroke-width: 2.1;
+      flex-shrink: 0;
+    }
+    .sk-default-pill {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #ffa43b, #ea580c);
+      color: #ffffff;
+      font-size: 10.5px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .sk-check-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffa43b, #ea580c);
+      color: #ffffff;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .sk-select-opt.active .sk-check-dot { display: inline-flex; }
+    .sk-check-dot svg {
+      width: 12px;
+      height: 12px;
+      stroke: #ffffff;
+      fill: none;
+      stroke-width: 3;
+    }
+
+    /* 5. Searchable Manager Settings Header + Smart Hints */
+    .settings-hero-card {
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .settings-hero-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .settings-auth-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      margin-top: 4px;
+      border-radius: 999px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-soft);
+    }
+    .settings-auth-pill .ok-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #10b981;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 900;
+    }
+    .settings-search-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 220px;
+    }
+    .settings-search-row .search-input {
+      border: 1.5px solid rgba(234, 88, 12, 0.45) !important;
+      background: var(--card) !important;
+      padding-top: 9px;
+      padding-bottom: 9px;
+      font-size: 13px;
+    }
+    .settings-hints-bar {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .settings-hint-chip {
+      border: 1px solid rgba(234, 88, 12, 0.25);
+      background: var(--accent-soft);
+      color: var(--accent-light);
+      border-radius: 999px;
+      padding: 3px 9px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 140ms, background-color 140ms;
+    }
+    .settings-hint-chip:active { transform: scale(0.93); }
+    .settings-hint-chip.active {
+      background: #ea580c;
+      color: #ffffff;
+      border-color: #ea580c;
+    }
+    .setting-hit-highlight {
+      background: rgba(255, 237, 213, 0.55) !important;
+      border-radius: 10px;
+      padding-left: 8px !important;
+      padding-right: 8px !important;
+    }
+    html[data-theme="dark"] .setting-hit-highlight {
+      background: rgba(249, 115, 22, 0.16) !important;
+    }
+
+    /* 6. Streamlined QR Ph & E-Wallets Payment Setup Card */
+    .qr-pay-builder-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+    }
+    @media (min-width: 640px) {
+      .qr-pay-builder-grid {
+        grid-template-columns: 1.05fr 0.95fr;
+        align-items: stretch;
+      }
+    }
+    .qr-dropzone {
+      border: 2px dashed rgba(148, 163, 184, 0.45);
+      border-radius: 16px;
+      background: var(--card);
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 8px;
+      cursor: pointer;
+      min-height: 158px;
+      transition: border-color 160ms, background-color 160ms;
+    }
+    .qr-dropzone:hover, .qr-dropzone.has-qr {
+      border-color: var(--accent-light);
+      background: var(--accent-soft);
+    }
+    .qr-dropzone-preview {
+      width: 112px;
+      height: 112px;
+      border-radius: 12px;
+      background: #ffffff;
+      padding: 4px;
+      object-fit: contain;
+      border: 1.5px solid var(--accent-light);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
+    }
+    .smart-pay-hint-chip {
+      border: 1.5px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 5px 11px;
+      font-size: 11.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: border-color 140ms, background-color 140ms, transform 140ms;
+    }
+    .smart-pay-hint-chip:active { transform: scale(0.94); }
+    .smart-pay-hint-chip.active, .smart-pay-hint-chip:hover {
+      border-color: var(--accent-light);
+      background: var(--accent-soft);
+      color: var(--accent-light);
+    }
   </style>
 </head>
 <body>
@@ -2911,12 +3678,16 @@
     </div>
   </div>
 
-  <!-- ===================== TAP-A-NAME -> 4-DIGIT PIN LOGIN ===================== -->
+  <!-- ===================== TAP-A-NAME -> 4-DIGIT PIN LOGIN (BRANDED + ← BACK ICON) ===================== -->
   <div id="authOverlay" class="auth-overlay">
     <div class="auth-card">
+      <button type="button" id="btnAuthBack" class="auth-back-btn" onclick="handleAuthBackClick()" aria-label="Back" title="Back">
+        <svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+      </button>
+      <div class="auth-header-band" aria-hidden="true"></div>
       <div id="authLogoSlot" class="auth-logo"></div>
       <h2 id="authStoreTitle" class="auth-store">Nichel Karenderya</h2>
-      <p id="authSubtitle" class="auth-sub">Tap your name to clock in</p>
+      <div id="authSubtitle" class="auth-sub-pill">Tap your name to clock in</div>
 
       <div id="authStaffStep">
         <div id="authStaffGrid" class="staff-grid"></div>
@@ -2932,12 +3703,11 @@
           <span class="pin-dot"></span><span class="pin-dot"></span><span class="pin-dot"></span><span class="pin-dot"></span>
         </div>
         <div class="keypad" id="authKeypad"></div>
-        <button class="btn btn-ghost btn-sm" style="margin-top:14px;" onclick="backToStaffPicker()">Change Cashier</button>
       </div>
     </div>
   </div>
 
-  <!-- ===================== TOP HEADER (v14.9 — SPACIOUS BRAND, SCROLL-TO-JOIN SEARCH, 4 CRISP ROUND BUTTONS) ===================== -->
+  <!-- ===================== TOP HEADER (v14.11 — SPACIOUS BRAND, SCROLL-TO-JOIN SEARCH, 4 CRISP ROUND BUTTONS) ===================== -->
   <header id="topHeader" class="top-header-wrap">
     <div class="top-header-inner">
       <div class="top-brand-left" onclick="scrollToTopPOS()">
@@ -3026,6 +3796,24 @@
         <span>Share Daily Menu</span>
       </span>
     </button>
+    <div class="nav-drop-divider"></div>
+    <div class="nav-theme-row" onclick="event.stopPropagation()">
+      <span class="nav-theme-label">
+        <span class="nav-drop-icon"><svg viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></span>
+        <span>Theme</span>
+      </span>
+      <div class="theme-capsule" role="group" aria-label="Color Theme">
+        <button type="button" id="btnQuickThemeDark" class="theme-cap-btn active" onclick="selectColorTheme('dark', true)" title="Dark Mode" aria-label="Dark Mode">
+          <svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+        <button type="button" id="btnQuickThemeLight" class="theme-cap-btn" onclick="selectColorTheme('light', true)" title="Soft Light Mode" aria-label="Soft Light Mode">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18Z" fill="currentColor"/></svg>
+        </button>
+        <button type="button" id="btnQuickThemeMinimal" class="theme-cap-btn" onclick="selectColorTheme('minimal-white', true)" title="Minimal White Mode" aria-label="Minimal White Mode">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- ===================== READ-ONLY PUBLIC DAILY MENU SHELL (?view=menu) ===================== -->
@@ -3154,7 +3942,11 @@
 
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;">
         <div id="ledgerFilterPills" class="pill-strip" style="margin-bottom:0;flex:1;"></div>
-        <div style="display:flex;gap:6px;flex-shrink:0;">
+        <div style="display:flex;gap:6px;flex-shrink:0;align-items:center;">
+          <button id="btnLedgerDrafts" type="button" class="btn btn-ghost btn-sm drafts-btn" onclick="openUtangDraftsModal()" title="View &amp; Mini Edit saved Utang drafts">
+            <span>Drafts</span>
+            <span id="ledgerDraftsBadge" class="drafts-count-badge">0</span>
+          </button>
           <button class="btn btn-ghost btn-sm" onclick="openCustomerModal(null)">+ Suki</button>
           <button class="btn btn-ghost btn-sm" onclick="exportMasterLedgerCsv()" title="Export store-wide ledger CSV">CSV</button>
         </div>
@@ -3224,58 +4016,98 @@
 
     <!-- TAB 5: SMARTPHONE-FRIENDLY MANAGER SETTINGS (NOW IN BOTTOM BAR) -->
     <section id="view-settings" class="view-panel">
-      <div class="settings-header-bar">
-        <div>
-          <h2 class="settings-title">Manager Settings</h2>
-          <div id="settingsActiveUserMeta" class="settings-sub">Nichel Karenderya • v14.9</div>
+      <div class="settings-hero-card">
+        <div class="settings-hero-top">
+          <div>
+            <h2 class="settings-title">Manager Settings</h2>
+            <div class="settings-auth-pill">
+              <span class="ok-dot">✓</span>
+              <span id="settingsActiveUserMeta">Nichel Karenderya • Authorized: Manager</span>
+            </div>
+          </div>
+          <div class="settings-search-row">
+            <div class="search-box">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input id="settingsSearchInput" class="search-input" type="search" placeholder="Search settings (e.g. QR, PIN, clock)…" oninput="filterSettingsView()" autocomplete="off" />
+              <button id="settingsSearchClear" type="button" class="search-clear-btn" onclick="clearSettingsSearch()" aria-label="Clear settings search">×</button>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="saveAllSettings()">Save All</button>
+          </div>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="saveAllSettings()">Save All</button>
+        <div class="settings-hints-bar">
+          <span>⚡ Smart Hints:</span>
+          <button type="button" class="settings-hint-chip" onclick="applySettingsSmartHint('qr')">QR &amp; Pay</button>
+          <button type="button" class="settings-hint-chip" onclick="applySettingsSmartHint('pin')">PIN &amp; Staff</button>
+          <button type="button" class="settings-hint-chip" onclick="applySettingsSmartHint('reminder')">Reminders</button>
+          <button type="button" class="settings-hint-chip" onclick="applySettingsSmartHint('clock')">Clock</button>
+          <button type="button" class="settings-hint-chip" onclick="applySettingsSmartHint('logo')">Logo</button>
+          <button type="button" class="settings-hint-chip" onclick="applySettingsSmartHint('menu')">Menu</button>
+          <button type="button" class="settings-hint-chip" onclick="applySettingsSmartHint('sync')">Sync</button>
+        </div>
       </div>
 
-      <!-- 1. PAYMENT ACCOUNTS (E-WALLETS & BANKS) -->
-      <div class="acc-card open" id="accPayments">
+      <!-- 1. QR Ph & E-WALLETS (STREAMLINED PRIVACY-FIRST SETUP) -->
+      <div class="acc-card open" id="accPayments" data-keywords="qr ph e-wallet gcash maya bank payment account scan to pay privacy hide name">
         <button type="button" class="acc-head" onclick="toggleAccordion('accPayments')">
           <div>
-            <div class="acc-head-title">Payment Accounts (E-Wallets &amp; Banks)</div>
-            <div class="acc-head-sub">GCash, Maya, BDO, BPI, SeaBank + individual QR codes</div>
+            <div class="acc-head-title">QR Ph &amp; E-Wallets</div>
+            <div class="acc-head-sub">Setup Scan-to-Pay QR codes &amp; smart payment hints</div>
           </div>
           <svg class="acc-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
         </button>
         <div class="acc-body">
+          <div class="setting-row" style="padding-top:0;margin-bottom:10px;">
+            <div>
+              <div class="setting-row-title">Hide Account Holder Names (Privacy Mode)</div>
+              <div class="setting-row-desc">Keeps personal/bank holder names hidden on statements &amp; checkout</div>
+            </div>
+            <label class="switch"><input id="setHideAccountNames" type="checkbox" checked onchange="previewPaymentPrivacy()" /><span class="slider"></span></label>
+          </div>
+
           <div id="settingsPaymentAccountsList" class="list-stack" style="margin-bottom:12px;"></div>
           <input id="qrAccountUploadInput" type="file" accept="image/*" style="display:none;" onchange="handleAccountQrUpload(this)" />
 
-          <div style="background:var(--bg-elev);border:1px solid var(--border);border-radius:12px;padding:10px;">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;">Quick PH Bank / E-Wallet Presets</div>
-            <div id="settingsBankPresets" class="bank-preset-strip"></div>
-            <div class="grid-2">
+          <div class="qr-pay-builder-grid">
+            <div>
+              <div style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;">Smart Hints</div>
+              <div id="settingsBankPresets" class="bank-preset-strip"></div>
               <div class="field" style="margin-bottom:8px;">
                 <label>Type</label>
                 <select id="newPayType">
+                  <option value="E-Wallet">E-Wallet / QR</option>
+                  <option value="QR Ph">QR Ph</option>
                   <option value="Bank">Bank</option>
-                  <option value="E-Wallet">E-Wallet</option>
                 </select>
               </div>
               <div class="field" style="margin-bottom:8px;">
-                <label>Bank / Wallet Name</label>
-                <input id="newPayLabel" type="text" placeholder="e.g., BPI, BDO, GCash" />
+                <label>Bank / Wallet Label</label>
+                <input id="newPayLabel" type="text" placeholder="e.g., GCash, Maya, QR Ph" />
+              </div>
+              <div class="field" style="margin-bottom:0;">
+                <label>Account / Mobile Number</label>
+                <input id="newPayDetails" type="text" placeholder="e.g., 0995-XXX-XXXX or Merchant ID" />
               </div>
             </div>
-            <div class="field" style="margin-bottom:8px;">
-              <label>Account Name (Optional)</label>
-              <input id="newPayAccName" type="text" placeholder="e.g., Nichel Karenderya" />
+
+            <div style="display:flex;flex-direction:column;justify-content:space-between;gap:10px;">
+              <div>
+                <div style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;">Upload QR Code (Scan-to-Pay)</div>
+                <div id="newPayQrDropzone" class="qr-dropzone" onclick="triggerPendingNewAccountQrUpload()">
+                  <div id="newPayQrPreviewSlot">
+                    <div style="font-size:24px;line-height:1;margin-bottom:4px;">📷</div>
+                    <div style="font-size:12.5px;font-weight:800;color:var(--text);">Tap to upload QR Ph or wallet image</div>
+                    <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Auto-opens Digital Crop &amp; Refine Studio</div>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn btn-primary" style="width:100%;" onclick="addPaymentAccount()">+ Save Payment Account &amp; QR</button>
             </div>
-            <div class="field" style="margin-bottom:8px;">
-              <label>Account / Mobile Number</label>
-              <input id="newPayDetails" type="text" placeholder="e.g., 1234-5678-90 or 0995..." />
-            </div>
-            <button type="button" class="btn btn-soft-orange btn-sm" style="width:100%;" onclick="addPaymentAccount()">+ Add Payment Account</button>
           </div>
         </div>
       </div>
 
       <!-- 2. STAFF ROSTER & 4-DIGIT PINS (COMPACT SMARTPHONE CARD) -->
-      <div class="acc-card" id="accStaff">
+      <div class="acc-card" id="accStaff" data-keywords="staff roster cashier pin auto lock security manager">
         <button type="button" class="acc-head" onclick="toggleAccordion('accStaff')">
           <div>
             <div class="acc-head-title">Staff Roster &amp; 4-Digit PINs</div>
@@ -3325,7 +4157,7 @@
       </div>
 
       <!-- 3. FRIENDLY UTANG REMINDERS (RESTORED) -->
-      <div class="acc-card" id="accReminders">
+      <div class="acc-card" id="accReminders" data-keywords="friendly utang reminder due overdue payday alert badge banner template message">
         <button type="button" class="acc-head" onclick="toggleAccordion('accReminders')">
           <div>
             <div class="acc-head-title">Friendly Utang Reminders</div>
@@ -3378,7 +4210,7 @@
       </div>
 
       <!-- 4. BILLING STATEMENT CARD & PAYDAY -->
-      <div class="acc-card" id="accBilling">
+      <div class="acc-card" id="accBilling" data-keywords="billing statement card payday 5th 20th closing message qr footer">
         <button type="button" class="acc-head" onclick="toggleAccordion('accBilling')">
           <div>
             <div class="acc-head-title">Billing Statement Card &amp; Payday</div>
@@ -3403,7 +4235,7 @@
       </div>
 
       <!-- 5. STORE BRANDING & DISPLAY (LIVE PREVIEW: LOGO, SPLASH, THEME, SURFACE, FONTS, SOUNDS) -->
-      <div class="acc-card" id="accBranding">
+      <div class="acc-card" id="accBranding" data-keywords="store branding display canteen name owner logo splash theme bright view ledger glass solid font text bold sound volume credit limit low stock public daily menu clock banner size animation lock price">
         <button type="button" class="acc-head" onclick="toggleAccordion('accBranding')">
           <div>
             <div class="acc-head-title">Store Branding &amp; Display</div>
@@ -3430,15 +4262,7 @@
           </div>
           <div id="logoPickerGrid" class="logo-picker-grid"></div>
 
-          <!-- Instant 3-Way Color Theme (Dark / Soft Light / Minimal White) -->
-          <div class="field" style="margin-bottom:8px;">
-            <label>Color Theme (Instant Preview)</label>
-            <div class="seg-group-3">
-              <button type="button" id="btnThemeDark" class="seg-btn active" onclick="selectColorTheme('dark')">Dark Mode</button>
-              <button type="button" id="btnThemeLight" class="seg-btn" onclick="selectColorTheme('light')">Soft Light</button>
-              <button type="button" id="btnThemeMinimal" class="seg-btn" onclick="selectColorTheme('minimal-white')">Minimal White</button>
-            </div>
-          </div>
+          <!-- Color Theme moved to One-Click Theme Switcher in top menu dropdown -->
 
           <!-- Auto High-Visibility Ledger Brightness Boost -->
           <div class="setting-row">
@@ -3539,11 +4363,36 @@
           </div>
           <div class="field" id="clockSizeFieldWrap" style="margin-top:8px;">
             <label>Clock Banner Size</label>
-            <select id="setClockSize" onchange="previewClockSettings()">
-              <option value="compact">Compact (Small Phone)</option>
-              <option value="balanced">Balanced (Default)</option>
-              <option value="large">Counter Large (Tablet / Stand)</option>
-            </select>
+            <input type="hidden" id="setClockSize" value="balanced" />
+            <div id="clockSizeDropdown" class="sk-select-wrap">
+              <button type="button" class="sk-select-trigger" onclick="toggleClockSizeMenu(event)">
+                <span id="clockSizeSelectedLabel">Balanced (Default)</span>
+                <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="sk-select-menu" role="listbox">
+                <button type="button" class="sk-select-opt" data-val="compact" onclick="pickClockSizeOption('compact')">
+                  <span class="sk-select-opt-left">
+                    <svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+                    <span>Compact (Small Phone)</span>
+                  </span>
+                  <span class="sk-check-dot"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
+                </button>
+                <button type="button" class="sk-select-opt active" data-val="balanced" onclick="pickClockSizeOption('balanced')">
+                  <span class="sk-select-opt-left">
+                    <span class="sk-default-pill">Default</span>
+                    <span>Balanced (Default)</span>
+                  </span>
+                  <span class="sk-check-dot"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
+                </button>
+                <button type="button" class="sk-select-opt" data-val="large" onclick="pickClockSizeOption('large')">
+                  <span class="sk-select-opt-left">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 18v3"/></svg>
+                    <span>Counter Large (Tablet / Stand)</span>
+                  </span>
+                  <span class="sk-check-dot"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
+                </button>
+              </div>
+            </div>
           </div>
           <div class="setting-row">
             <div>
@@ -3562,7 +4411,7 @@
       </div>
 
       <!-- 6. MENU MANAGEMENT (MANAGER-ONLY DELETE) -->
-      <div class="acc-card" id="accMenuDel">
+      <div class="acc-card" id="accMenuDel" data-keywords="menu management delete remove dish product item manager">
         <button type="button" class="acc-head" onclick="toggleAccordion('accMenuDel')">
           <div>
             <div class="acc-head-title">Menu Management (Manager-Only Delete)</div>
@@ -3577,7 +4426,7 @@
       </div>
 
       <!-- 7. CLOUD SYNC & GOOGLE SHEETS -->
-      <div class="acc-card" id="accCloud">
+      <div class="acc-card" id="accCloud" data-keywords="cloud sync google sheets api url secret queue sheet link">
         <button type="button" class="acc-head" onclick="toggleAccordion('accCloud')">
           <div>
             <div class="acc-head-title">Cloud Sync &amp; Google Sheets</div>
@@ -3633,8 +4482,39 @@
       </div>
 
       <div class="field" id="checkoutCustWrap">
-        <label>Customer</label>
-        <select id="checkoutCustomerSelect"></select>
+        <div class="cust-label-row">
+          <label for="chkCustomerSearch">Customer</label>
+          <button type="button" class="new-suki-pill" onclick="toggleInlineNewSukiBox('chk')">
+            <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            <span>+ New Suki</span>
+          </button>
+        </div>
+        <input type="hidden" id="checkoutCustomerSelect" value="WALK-IN" />
+        <div class="suki-search-wrap">
+          <svg class="suki-search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="chkCustomerSearch" class="suki-search-input" type="search" placeholder="Search Name, Nickname, Phone, or Walk-in…" oninput="onSukiSearchInput('chk')" onfocus="openSukiSuggestMenu('chk')" onkeydown="onSukiSearchKeyDown(event, 'chk')" autocomplete="off" />
+          <span id="chkSukiHintTag" class="suki-hint-tag"></span>
+          <button id="chkCustomerClear" type="button" class="suki-clear-btn" onclick="clearSukiSelection('chk')" aria-label="Clear customer">×</button>
+          <div id="chkCustomerSuggestMenu" class="suki-suggest-menu"></div>
+        </div>
+
+        <div id="chkNewSukiBox" class="inline-new-suki-box">
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--accent-light);margin-bottom:6px;">Quick Add New Suki (Direct Sync to Sheet)</div>
+          <div class="grid-2" style="margin-bottom:8px;">
+            <div class="field" style="margin-bottom:0;">
+              <label>Full Name / Nickname</label>
+              <input id="chkNewSukiName" type="text" placeholder="e.g., Kuya Marco" />
+            </div>
+            <div class="field" style="margin-bottom:0;">
+              <label>Mobile # (Optional)</label>
+              <input id="chkNewSukiPhone" type="tel" placeholder="09XX XXX XXXX" />
+            </div>
+          </div>
+          <div class="grid-2">
+            <button type="button" class="btn btn-ghost btn-sm" onclick="toggleInlineNewSukiBox('chk', false)">Cancel</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="saveInlineNewSuki('chk')">Save &amp; Select Suki</button>
+          </div>
+        </div>
       </div>
 
       <div class="grid-2" id="checkoutCreditExtra" style="display:none;">
@@ -3850,17 +4730,14 @@
             <div class="grid-2">
               <div class="field" style="margin-bottom:6px;">
                 <label>Type</label>
-                <select id="stmtNewPayType"><option value="Bank">Bank</option><option value="E-Wallet">E-Wallet</option></select>
+                <select id="stmtNewPayType"><option value="E-Wallet">E-Wallet / QR</option><option value="QR Ph">QR Ph</option><option value="Bank">Bank</option></select>
               </div>
               <div class="field" style="margin-bottom:6px;">
                 <label>Bank / Wallet</label>
                 <input id="stmtNewPayLabel" type="text" placeholder="e.g., BDO, BPI, SeaBank" />
               </div>
             </div>
-            <div class="field" style="margin-bottom:6px;">
-              <label>Account Name (Optional)</label>
-              <input id="stmtNewPayAccName" type="text" placeholder="e.g., Nichel Karenderya" />
-            </div>
+            <input id="stmtNewPayAccName" type="hidden" value="" />
             <div class="field" style="margin-bottom:8px;">
               <label>Account / Mobile Number</label>
               <input id="stmtNewPayDetails" type="text" placeholder="e.g., 0045-8821-19" />
@@ -3895,7 +4772,7 @@
     <div class="modal-card">
       <div class="modal-head">
         <h3 id="pdModalTitle" class="modal-title">Record Utang</h3>
-        <button class="icon-close" onclick="closeModal('pastDebtModal')">×</button>
+        <button class="icon-close" onclick="handleClosePastDebtModal()">×</button>
       </div>
 
       <!-- 2-Way Toggle: Previous Utang vs New Utang -->
@@ -3909,15 +4786,45 @@
       </div>
       <div id="pdSurplusWarn" class="utang-notice-box warn" style="display:none;"></div>
 
-      <div class="grid-2">
-        <div class="field">
-          <label>Customer</label>
-          <select id="pdCustomerSelect" onchange="checkSelectedCustomerSurplus()"></select>
+      <div class="field" style="margin-bottom:10px;">
+        <div class="cust-label-row">
+          <label for="pdCustomerSearch">Customer</label>
+          <button type="button" class="new-suki-pill" onclick="toggleInlineNewSukiBox('pd')">
+            <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            <span>+ New Suki</span>
+          </button>
         </div>
-        <div class="field">
-          <label>Due Date (5th / 20th)</label>
-          <input id="pdDueDate" type="date" />
+        <input type="hidden" id="pdCustomerSelect" value="" />
+        <div class="suki-search-wrap">
+          <svg class="suki-search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="pdCustomerSearch" class="suki-search-input" type="search" placeholder="Search Name, Nickname, Phone, or ID…" oninput="onSukiSearchInput('pd')" onfocus="openSukiSuggestMenu('pd')" onkeydown="onSukiSearchKeyDown(event, 'pd')" autocomplete="off" />
+          <span id="pdSukiHintTag" class="suki-hint-tag"></span>
+          <button id="pdCustomerClear" type="button" class="suki-clear-btn" onclick="clearSukiSelection('pd')" aria-label="Clear customer">×</button>
+          <div id="pdCustomerSuggestMenu" class="suki-suggest-menu"></div>
         </div>
+
+        <div id="pdNewSukiBox" class="inline-new-suki-box">
+          <div style="font-size:11px;font-weight:800;text-transform:uppercase;color:var(--accent-light);margin-bottom:6px;">Quick Add New Suki (Direct Sync to Sheet)</div>
+          <div class="grid-2" style="margin-bottom:8px;">
+            <div class="field" style="margin-bottom:0;">
+              <label>Full Name / Nickname</label>
+              <input id="pdNewSukiName" type="text" placeholder="e.g., Kuya Marco" />
+            </div>
+            <div class="field" style="margin-bottom:0;">
+              <label>Mobile # (Optional)</label>
+              <input id="pdNewSukiPhone" type="tel" placeholder="09XX XXX XXXX" />
+            </div>
+          </div>
+          <div class="grid-2">
+            <button type="button" class="btn btn-ghost btn-sm" onclick="toggleInlineNewSukiBox('pd', false)">Cancel</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="saveInlineNewSuki('pd')">Save &amp; Select Suki</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="field" style="margin-bottom:10px;">
+        <label>Due Date (5th / 20th Payday)</label>
+        <input id="pdDueDate" type="date" />
       </div>
 
       <div class="section-card" style="padding:10px;margin-bottom:8px;">
@@ -3936,11 +4843,37 @@
 
       <div id="pdDraftList" class="past-draft-list"></div>
 
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 4px;font-weight:800;">
+      <div class="auto-draft-pill">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        <span>Auto-draft protected — safe if you close by mistake</span>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 4px 10px;font-weight:800;">
         <span id="pdDraftCount" style="font-size:12px;color:var(--text-muted);">0 items</span>
         <span id="pdDraftTotal" style="font-size:16px;color:var(--accent-light);">₱0.00</span>
       </div>
-      <button id="btnSaveUtangSubmit" type="button" class="btn btn-primary" style="width:100%;" onclick="submitPastDebtBatch()">Save Previous Utang</button>
+      <div class="grid-2">
+        <button id="btnSaveUtangDraft" type="button" class="btn btn-ghost" onclick="saveCurrentUtangAsDraft(false)">Save Draft</button>
+        <button id="btnSaveUtangSubmit" type="button" class="btn btn-primary" onclick="submitPastDebtBatch()">Save to Ledger</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SAVED UTANG DRAFTS & MINI EDIT TAB MODAL ===================== -->
+  <div id="utangDraftsModal" class="modal-backdrop">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <h3 id="utangDraftsTitle" class="modal-title">Saved Utang Drafts (0)</h3>
+          <div style="font-size:11.5px;color:var(--text-muted);">Mini Edit inline or Post straight to Ledger</div>
+        </div>
+        <button class="icon-close" onclick="closeModal('utangDraftsModal')">×</button>
+      </div>
+      <div id="utangDraftsList" class="list-stack" style="max-height:58dvh;overflow-y:auto;margin-bottom:12px;"></div>
+      <div class="grid-2">
+        <button type="button" class="btn btn-ghost" onclick="closeModal('utangDraftsModal'); openPastDebtModal('', 'previous');">+ New Utang</button>
+        <button id="btnPostAllDrafts" type="button" class="btn btn-primary" onclick="postAllUtangDrafts()">Post All Drafts</button>
+      </div>
     </div>
   </div>
 
@@ -4170,7 +5103,7 @@
 
 <script>
 /* ============================================================================
-   SUKITAB POS v14.9 — NICHEL KARENDERYA
+   SUKITAB POS v14.11 — NICHEL KARENDERYA
    - POS retained as-is + Bank Transfer checkout support
    - Multi-account E-Wallets & Banks + Bank-ready minimalist Statement Card
    - Settings moved to 5th camouflaged bottom tab (lighter logo highlight on click)
@@ -4218,6 +5151,7 @@ let appState = {
     publicMenuHideSoldOut: false,
     ledgerAutoBright: true,
     ledgerBrightnessBoost: 108,
+    hideAccountNames: true,
     showNavLabels: true,
     animationsEnabled: true,
     uiStyle: 'glass',
@@ -4269,7 +5203,12 @@ let uiState = {
   isSavingLock: false,
   ledgerBrightOverride: null,
   stmtDraftAccounts: [],
-  stmtSelectedIds: {}
+  stmtSelectedIds: {},
+  editingDraftId: '',
+  miniEditDraftId: '',
+  suspendedUser: null,
+  canBackFromAuth: false,
+  pendingNewPayQr: ''
 };
 
 let activeDetailCustomerId = '';
@@ -4853,6 +5792,11 @@ function hydrateSnapshot(data, persist) {
     if (data.settings.publicMenuHideSoldOut === undefined) appState.settings.publicMenuHideSoldOut = false;
     if (data.settings.ledgerAutoBright === undefined) appState.settings.ledgerAutoBright = true;
     if (data.settings.ledgerBrightnessBoost === undefined) appState.settings.ledgerBrightnessBoost = 108;
+    if (data.settings.hideAccountNames === undefined) appState.settings.hideAccountNames = true;
+    const devTheme = localStorage.getItem('sk14_device_theme');
+    if (devTheme === 'dark' || devTheme === 'light' || devTheme === 'minimal-white') {
+      appState.settings.colorTheme = devTheme;
+    }
     if (data.settings.dueBannerLeadDays === undefined) appState.settings.dueBannerLeadDays = 2;
     if (data.settings.uiStyle === undefined || !data.settings.uiStyle) appState.settings.uiStyle = 'glass';
     if (data.settings.fontStyle === undefined || !data.settings.fontStyle) appState.settings.fontStyle = 'sans';
@@ -4926,6 +5870,7 @@ function applyDisplayPreferences() {
   const storeTitle = (s.canteenName || 'Nichel Karenderya').trim();
   const ownerTitle = (s.ownerName || '').trim();
   document.getElementById('authStoreTitle').textContent = storeTitle;
+  syncThemeSurfaceButtons();
   updateTopHeaderContext();
   resetAutoLockTimer();
 }
@@ -5019,11 +5964,17 @@ function previewDisplaySettings() {
   playSound('tap');
 }
 
-function selectColorTheme(theme) {
-  appState.settings.colorTheme = (theme === 'light' || theme === 'minimal-white') ? theme : 'dark';
+function selectColorTheme(theme, fromQuickBar) {
+  const valid = (theme === 'light' || theme === 'minimal-white') ? theme : 'dark';
+  appState.settings.colorTheme = valid;
+  try { localStorage.setItem('sk14_device_theme', valid); } catch (e) {}
   applyDisplayPreferences();
   syncThemeSurfaceButtons();
   playSound('tap');
+  if (fromQuickBar) {
+    const lbls = { dark: 'Dark Mode', light: 'Soft Light', 'minimal-white': 'Minimal White' };
+    showToast('Theme: ' + (lbls[valid] || valid));
+  }
 }
 
 function selectSurfaceStyle(style) {
@@ -5036,14 +5987,14 @@ function selectSurfaceStyle(style) {
 function syncThemeSurfaceButtons() {
   const th = appState.settings.colorTheme || 'dark';
   const isSolid = appState.settings.uiStyle === 'solid';
-  const bDark = document.getElementById('btnThemeDark');
-  const bLight = document.getElementById('btnThemeLight');
-  const bMin = document.getElementById('btnThemeMinimal');
+  const qDark = document.getElementById('btnQuickThemeDark');
+  const qLight = document.getElementById('btnQuickThemeLight');
+  const qMin = document.getElementById('btnQuickThemeMinimal');
   const bGlass = document.getElementById('btnSurfaceGlass');
   const bSolid = document.getElementById('btnSurfaceSolid');
-  if (bDark) bDark.classList.toggle('active', th === 'dark');
-  if (bLight) bLight.classList.toggle('active', th === 'light');
-  if (bMin) bMin.classList.toggle('active', th === 'minimal-white');
+  if (qDark) qDark.classList.toggle('active', th === 'dark');
+  if (qLight) qLight.classList.toggle('active', th === 'light');
+  if (qMin) qMin.classList.toggle('active', th === 'minimal-white');
   if (bGlass) bGlass.classList.toggle('active', !isSolid);
   if (bSolid) bSolid.classList.toggle('active', isSolid);
 }
@@ -5361,7 +6312,7 @@ function openAuthOverlay() {
   grid.innerHTML = list.map((st, idx) => {
     const initials = st.name.split(/\s+/).map(w => w[0] || '').join('').slice(0, 2).toUpperCase();
     const isMgr = String(st.role || '').toLowerCase() === 'manager';
-    return `<button class="staff-tile" onclick="selectAuthStaff(${idx})">
+    return `<button class="staff-tile ${isMgr ? 'mgr-tile' : ''}" onclick="selectAuthStaff(${idx})">
       <div class="staff-avatar ${isMgr ? '' : 'staff'}">${escHtml(initials)}</div>
       <div class="staff-tile-name">${escHtml(st.name)}</div>
       <div class="staff-tile-role">${escHtml(st.role || 'Staff')}</div>
@@ -5369,6 +6320,7 @@ function openAuthOverlay() {
   }).join('');
 
   buildKeypad('authKeypad', onAuthKey);
+  syncAuthBackButton();
   document.getElementById('authOverlay').classList.add('open');
 }
 
@@ -5392,6 +6344,7 @@ function selectAuthStaff(idx) {
   document.getElementById('authStaffStep').style.display = 'none';
   document.getElementById('authPinStep').style.display = 'block';
   renderPinDots('authPinDots', 0, false);
+  syncAuthBackButton();
 }
 
 function backToStaffPicker() {
@@ -5483,6 +6436,22 @@ function processAuthPin() {
 }
 
 function completeCashierLogin(st) {
+  if (uiState.suspendedUser && uiState.suspendedUser.name && uiState.suspendedUser.name !== st.name) {
+    const outEntry = {
+      id: makeId('LOG', 5),
+      timestamp: nowStamp(),
+      category: 'auth',
+      badge: 'LOGOUT',
+      title: uiState.suspendedUser.name + ' switched shift',
+      details: 'Cashier session switched to ' + st.name + '.',
+      reason: 'Shift Switch',
+      verifiedBy: uiState.suspendedUser.name
+    };
+    appState.auditLogs.push(outEntry);
+    enqueueAndSync('logAuditEvent', [outEntry]);
+  }
+  uiState.suspendedUser = null;
+  uiState.canBackFromAuth = false;
   uiState.activeUser = { name: st.name, role: st.role || 'Staff' };
   sessionStorage.setItem('sukitab_active_user', JSON.stringify(uiState.activeUser));
   document.getElementById('authOverlay').classList.remove('open');
@@ -5509,28 +6478,62 @@ function completeCashierLogin(st) {
   renderHistory();
 }
 
-function lockCashierSession() {
+function syncAuthBackButton() {
+  const btn = document.getElementById('btnAuthBack');
+  if (!btn) return;
+  const pinOpen = document.getElementById('authPinStep').style.display !== 'none';
+  btn.classList.toggle('visible', pinOpen || (uiState.canBackFromAuth && !!uiState.suspendedUser));
+}
+
+function handleAuthBackClick() {
+  playSound('tap');
+  const pinOpen = document.getElementById('authPinStep').style.display !== 'none';
+  if (pinOpen) {
+    backToStaffPicker();
+    return;
+  }
+  if (uiState.canBackFromAuth && uiState.suspendedUser) {
+    uiState.activeUser = uiState.suspendedUser;
+    uiState.suspendedUser = null;
+    uiState.canBackFromAuth = false;
+    sessionStorage.setItem('sukitab_active_user', JSON.stringify(uiState.activeUser));
+    document.getElementById('authOverlay').classList.remove('open');
+    resetAutoLockTimer();
+    showToast('Returned as ' + uiState.activeUser.name);
+  }
+}
+
+function lockCashierSession(isAutoLock) {
   playSound('lock');
   const prev = uiState.activeUser;
-  if (prev && prev.name) {
-    const logEntry = {
-      id: makeId('LOG', 5),
-      timestamp: nowStamp(),
-      category: 'auth',
-      badge: 'LOGOUT',
-      title: prev.name + ' locked / signed out',
-      details: 'Cashier session locked.',
-      reason: 'Shift Lock / Switch',
-      verifiedBy: prev.name
-    };
-    appState.auditLogs.push(logEntry);
-    enqueueAndSync('logAuditEvent', [logEntry]);
+  if (isAutoLock) {
+    uiState.suspendedUser = null;
+    uiState.canBackFromAuth = false;
+    if (prev && prev.name) {
+      const logEntry = {
+        id: makeId('LOG', 5),
+        timestamp: nowStamp(),
+        category: 'auth',
+        badge: 'LOGOUT',
+        title: prev.name + ' auto-locked / signed out',
+        details: 'Idle auto-lock triggered.',
+        reason: 'Idle Auto-Lock',
+        verifiedBy: prev.name
+      };
+      appState.auditLogs.push(logEntry);
+      enqueueAndSync('logAuditEvent', [logEntry]);
+    }
+    uiState.activeUser = null;
+    tempAuthorizedManager = '';
+    sessionStorage.removeItem('sukitab_active_user');
+    applyTabSwitch('pos');
+    openAuthOverlay();
+  } else {
+    // Allow ← Back icon on clock-in card if tapped by mistake
+    uiState.suspendedUser = prev || uiState.suspendedUser || null;
+    uiState.canBackFromAuth = !!uiState.suspendedUser;
+    openAuthOverlay();
   }
-  uiState.activeUser = null;
-  tempAuthorizedManager = '';
-  sessionStorage.removeItem('sukitab_active_user');
-  applyTabSwitch('pos');
-  openAuthOverlay();
 }
 
 function isManagerActive() {
@@ -5548,7 +6551,7 @@ function resetAutoLockTimer() {
     autoLockTimer = setTimeout(() => {
       if (uiState.activeUser) {
         showToast('Session auto-locked for security');
-        lockCashierSession();
+        lockCashierSession(true);
       }
     }, mins * 60 * 1000);
   }
@@ -5871,7 +6874,9 @@ function openCheckoutModal() {
   if (uiState.cart.length === 0) return;
   renderCheckoutCart();
   renderCheckoutMethods();
-  populateCustomerSelect('checkoutCustomerSelect', uiState.checkoutMethod !== 'Credit');
+  toggleInlineNewSukiBox('chk', false);
+  if (uiState.checkoutMethod === 'Credit') clearSukiSelection('chk', true);
+  else setSukiSelection('chk', 'WALK-IN');
   document.getElementById('checkoutDueDate').value = getNextPayday520();
   document.getElementById('checkoutCashTendered').value = '';
   document.getElementById('checkoutCashChange').value = '₱0.00';
@@ -5973,15 +6978,31 @@ function updateCashChange() {
 }
 
 function populateCustomerSelect(selectId, includeWalkIn) {
-  const active = appState.customers.filter(c => String(c.status || 'Active').toLowerCase() !== 'archived')
-    .sort((a, b) => a.name.localeCompare(b.name));
-  const opts = [];
-  if (includeWalkIn) opts.push(`<option value="WALK-IN">Walk-in Customer</option>`);
-  else opts.push(`<option value="">— Select Suki Customer —</option>`);
-  active.forEach(c => {
-    opts.push(`<option value="${escHtml(c.id)}">${escHtml(c.name)} (${c.balance > 0 ? 'Bal ' + fmtPeso(c.balance) : 'Settled'})</option>`);
-  });
-  document.getElementById(selectId).innerHTML = opts.join('');
+  const el = document.getElementById(selectId);
+  if (!el) return;
+  if (el.tagName === 'SELECT') {
+    const active = appState.customers.filter(c => String(c.status || 'Active').toLowerCase() !== 'archived')
+      .sort((a, b) => a.name.localeCompare(b.name));
+    const opts = [];
+    if (includeWalkIn) opts.push(`<option value="WALK-IN">Walk-in Customer</option>`);
+    else opts.push(`<option value="">— Select Suki Customer —</option>`);
+    active.forEach(c => {
+      opts.push(`<option value="${escHtml(c.id)}">${escHtml(c.name)} (${c.balance > 0 ? 'Bal ' + fmtPeso(c.balance) : 'Settled'})</option>`);
+    });
+    el.innerHTML = opts.join('');
+    return;
+  }
+  // Searchable Suki input sync (pd or chk)
+  const scope = selectId === 'checkoutCustomerSelect' ? 'chk' : 'pd';
+  if (scope === 'chk') {
+    if (includeWalkIn) {
+      if (!el.value || el.value === 'WALK-IN') setSukiSelection('chk', 'WALK-IN');
+    } else {
+      if (el.value === 'WALK-IN') clearSukiSelection('chk', true);
+    }
+  } else {
+    if (!el.value) clearSukiSelection('pd', true);
+  }
 }
 
 async function finalizeOrder() {
@@ -6181,6 +7202,7 @@ function renderSettingsMenuDeleteList() {
    LEDGER, CUSTOMER DETAIL, FRIENDLY REMINDERS & MASTER CSV EXPORT
    ============================================================================ */
 function renderLedger() {
+  updateUtangDraftsBadge();
   const activeCusts = appState.customers.filter(c => String(c.status || 'Active').toLowerCase() !== 'archived');
   const totalUtang = activeCusts.reduce((s, c) => s + Number(c.balance || 0), 0);
   const unpaidCnt = activeCusts.filter(c => Number(c.balance || 0) > 0.005).length;
@@ -6659,7 +7681,7 @@ function renderBillingCanvas() {
     ? uiState.stmtDraftAccounts.filter(a => uiState.stmtSelectedIds[a.id] && String(a.details || '').trim() !== '')
     : getActivePaymentAccounts().filter(a => String(a.details || '').trim() !== '');
   const activePayLines = stmtPool.map(a => {
-    const holder = String(a.accountName || '').trim();
+    const holder = appState.settings.hideAccountNames === false ? String(a.accountName || '').trim() : '';
     return {
       primary: `${a.label} • ${a.details}`,
       secondary: holder ? `${a.type || 'Account'} • ${holder}` : ''
@@ -7131,7 +8153,7 @@ function setUtangEntryType(type) {
   document.getElementById('btnUtangTypePrev').classList.toggle('active', isPrev);
   document.getElementById('btnUtangTypeNew').classList.toggle('active', !isPrev);
   document.getElementById('pdModalTitle').textContent = isPrev ? 'Record Previous Utang' : 'Record New Utang';
-  document.getElementById('btnSaveUtangSubmit').textContent = isPrev ? 'Save Previous Utang' : 'Save New Utang';
+  document.getElementById('btnSaveUtangSubmit').textContent = isPrev ? 'Save to Ledger' : 'Save New Utang';
   document.getElementById('pdStatusNotice').innerHTML = isPrev
     ? 'Tagged strictly as <strong>Unpaid (Previous Utang)</strong> — older payments will never auto-mark this Paid.'
     : 'Tagged strictly as <strong>Unpaid (New Utang)</strong> — logged straight into Ledger with anti-duplicate protection.';
@@ -7169,9 +8191,11 @@ function updatePastDraftSummary() {
 function openPastDebtModal(preselectCustId, initialType) {
   uiState.pastDraftItems = [];
   uiState.pastEditIndex = -1;
+  uiState.editingDraftId = '';
   uiState.utangEntryType = initialType === 'new' ? 'new' : 'previous';
-  populateCustomerSelect('pdCustomerSelect', false);
-  if (preselectCustId) document.getElementById('pdCustomerSelect').value = preselectCustId;
+  toggleInlineNewSukiBox('pd', false);
+  if (preselectCustId) setSukiSelection('pd', preselectCustId);
+  else clearSukiSelection('pd', true);
   document.getElementById('pdDueDate').value = getNextPayday520();
   document.getElementById('pdItemDate').value = todayYMD();
   document.getElementById('pdItemName').value = '';
@@ -7333,6 +8357,12 @@ async function submitPastDebtBatch() {
     items: itemsPayload
   }], 8500);
 
+  if (uiState.editingDraftId) {
+    removeUtangDraftById(uiState.editingDraftId, true);
+    uiState.editingDraftId = '';
+  }
+  uiState.pastDraftItems = [];
+  uiState.pastEditIndex = -1;
   hideSavingLock('btnSaveUtangSubmit');
   closeModal('pastDebtModal');
   renderLedger();
@@ -7585,8 +8615,13 @@ function promptVoidOrder(orderId) {
 function populateSettingsUI() {
   ensurePaymentAccountsNormalized();
   const s = appState.settings;
+  const authWho = isManagerActive() ? activeOperatorName() : (tempAuthorizedManager || 'Manager');
   document.getElementById('settingsActiveUserMeta').textContent =
-    `${s.canteenName || 'Nichel Karenderya'} • Authorized: ${isManagerActive() ? activeOperatorName() : (tempAuthorizedManager || 'Manager')}`;
+    `${s.canteenName || 'Nichel Karenderya'} • Authorized: 🔑 ${authWho}`;
+  const hideAccEl = document.getElementById('setHideAccountNames');
+  if (hideAccEl) hideAccEl.checked = s.hideAccountNames !== false;
+  syncClockSizeCustomUI(s.clockSize || 'balanced');
+  renderPendingNewPayQrDropzone();
   document.getElementById('syncStatusSummary').innerHTML =
     `Sheet: <strong>${escHtml(appState.sheetName || 'Connected')}</strong> • Pending queue: <strong>${appState.syncQueue.length}</strong>`;
   document.getElementById('setApiUrl').value = getApiUrl();
@@ -7656,7 +8691,7 @@ function renderSettingsPaymentAccounts() {
           </div>
           <div style="font-size:12px;color:var(--text-soft);margin-top:3px;">
             ${a.details ? escHtml(a.details) : '<span style="color:var(--text-muted);">No account number yet</span>'}
-            ${a.accountName ? ' • ' + escHtml(a.accountName) : ''}
+            ${(a.accountName && appState.settings.hideAccountNames === false) ? ' • ' + escHtml(a.accountName) : ''}
           </div>
         </div>
         ${qrSrc ? `<img src="${qrSrc}" alt="QR" class="qr-mini-thumb" />` : ''}
@@ -7672,27 +8707,36 @@ function renderSettingsPaymentAccounts() {
 }
 
 function addPaymentAccount() {
-  const type = document.getElementById('newPayType').value || 'Bank';
+  const type = document.getElementById('newPayType').value || 'E-Wallet';
   const label = document.getElementById('newPayLabel').value.trim();
-  const accountName = document.getElementById('newPayAccName').value.trim();
   const details = document.getElementById('newPayDetails').value.trim();
-  if (!label || !details) {
-    showToast('Enter Bank/Wallet Name and Account Number');
+  if (!label && !uiState.pendingNewPayQr) {
+    showToast('Pick a Smart Hint / Label or upload a QR photo');
     return;
   }
+  if (!details && !uiState.pendingNewPayQr) {
+    showToast('Enter an Account / Mobile Number or upload a QR code');
+    return;
+  }
+  const accId = 'PAYACC-' + Date.now();
   const acc = {
-    id: 'PAYACC-' + Date.now(),
+    id: accId,
     type: type,
-    label: label,
-    accountName: accountName,
+    label: label || (type === 'QR Ph' ? 'QR Ph' : 'Scan to Pay'),
+    accountName: '',
     details: details
   };
   appState.settings.paymentAccounts.push(acc);
+  if (uiState.pendingNewPayQr) {
+    appState.qrCodes[accId] = uiState.pendingNewPayQr;
+    uiState.pendingNewPayQr = '';
+  }
   document.getElementById('newPayLabel').value = '';
-  document.getElementById('newPayAccName').value = '';
   document.getElementById('newPayDetails').value = '';
+  renderPendingNewPayQrDropzone();
   renderSettingsPaymentAccounts();
-  showToast(`Added ${label} — tap Save All to sync`);
+  playSound('success');
+  showToast(`Added ${acc.label} — tap Save All to sync`);
 }
 
 function editPaymentAccountPrompt(idx) {
@@ -7700,7 +8744,9 @@ function editPaymentAccountPrompt(idx) {
   if (!acc) return;
   const newLabel = prompt('Bank or E-Wallet Name:', acc.label || '');
   if (newLabel === null) return;
-  const newAccName = prompt('Account Holder Name (optional):', acc.accountName || '');
+  const newAccName = appState.settings.hideAccountNames === false
+    ? prompt('Account Holder Name (optional):', acc.accountName || '')
+    : (acc.accountName || '');
   if (newAccName === null) return;
   const newDetails = prompt('Account / Mobile Number:', acc.details || '');
   if (newDetails === null) return;
@@ -7831,6 +8877,8 @@ function saveAllSettings() {
   s.lockPriceEdits = document.getElementById('setLockPrice').checked;
   s.ledgerAutoBright = document.getElementById('setLedgerAutoBright').checked;
   s.ledgerBrightnessBoost = Number(document.getElementById('setLedgerBrightBoost').value || 108);
+  const hideAccSave = document.getElementById('setHideAccountNames');
+  s.hideAccountNames = hideAccSave ? hideAccSave.checked : true;
 
   // Keep legacy epayAccount synced with first active payment account
   const firstActive = getActivePaymentAccounts()[0];
@@ -7892,7 +8940,13 @@ function closeModal(id) {
 
 document.querySelectorAll('.modal-backdrop').forEach(bd => {
   bd.addEventListener('click', ev => {
-    if (ev.target === bd && bd.id !== 'mgrPinModal') bd.classList.remove('open');
+    if (ev.target === bd && bd.id !== 'mgrPinModal') {
+      if (bd.id === 'pastDebtModal') {
+        handleClosePastDebtModal();
+      } else {
+        bd.classList.remove('open');
+      }
+    }
   });
 });
 
@@ -7920,7 +8974,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ============================================================================
-   v14.9 UNIVERSAL OFFLINE SMART SEARCH RECOMMENDATIONS + HEADER SYNC
+   v14.11 UNIVERSAL OFFLINE SMART SEARCH RECOMMENDATIONS + HEADER SYNC
    ============================================================================ */
 function closeAllSuggestMenus() {
   ['posSuggestMenu', 'ledgerSuggestMenu', 'historySuggestMenu', 'headerSuggestMenu', 'expSuggestMenu', 'pdSuggestMenu'].forEach(id => {
@@ -9548,7 +10602,7 @@ function renderPublicMenuView() {
 
 
 /* ============================================================================
-   v14.9 AUTO HIGH-VISIBILITY LEDGER BRIGHTNESS & CONTRAST BOOST
+   v14.11 AUTO HIGH-VISIBILITY LEDGER BRIGHTNESS & CONTRAST BOOST
    ============================================================================ */
 function applyLedgerBrightMode() {
   const isLedger = uiState.tab === 'ledger';
@@ -9591,25 +10645,18 @@ function previewLedgerBrightSettings() {
    PH BANK & E-WALLET PRESETS + EDITABLE MULTI-BANK STATEMENT BUILDER
    ============================================================================ */
 const PH_PAYMENT_PRESETS = [
-  { label: 'GCash', type: 'E-Wallet' },
-  { label: 'Maya', type: 'E-Wallet' },
-  { label: 'BPI', type: 'Bank' },
-  { label: 'BDO', type: 'Bank' },
-  { label: 'Metrobank', type: 'Bank' },
-  { label: 'UnionBank', type: 'Bank' },
-  { label: 'LandBank', type: 'Bank' },
-  { label: 'SeaBank', type: 'Bank' },
-  { label: 'GoTyme', type: 'Bank' },
-  { label: 'Security Bank', type: 'Bank' },
-  { label: 'PNB', type: 'Bank' },
-  { label: 'Chinabank', type: 'Bank' }
+  { label: 'GCash', icon: '⚡', type: 'E-Wallet' },
+  { label: 'Maya', icon: '✦', type: 'E-Wallet' },
+  { label: 'QR Ph', icon: '❖', type: 'QR Ph' },
+  { label: 'Bank', icon: '⇆', type: 'Bank' }
 ];
 
 function renderSettingsBankPresetChips() {
   const el = document.getElementById('settingsBankPresets');
   if (!el) return;
+  const cur = (document.getElementById('newPayLabel') || {}).value || '';
   el.innerHTML = PH_PAYMENT_PRESETS.map(p =>
-    `<button type="button" class="bank-preset-chip" onclick="pickBankPreset('settings', '${escHtml(p.label)}', '${escHtml(p.type)}')">${escHtml(p.label)}</button>`
+    `<button type="button" class="smart-pay-hint-chip ${cur === p.label ? 'active' : ''}" onclick="pickBankPreset('settings', '${escHtml(p.label)}', '${escHtml(p.type)}')"><span>${escHtml(p.label)}</span><span>${p.icon}</span></button>`
   ).join('');
 }
 
@@ -9617,7 +10664,7 @@ function renderStmtBankPresetChips() {
   const el = document.getElementById('stmtBankPresets');
   if (!el) return;
   el.innerHTML = PH_PAYMENT_PRESETS.map(p =>
-    `<button type="button" class="bank-preset-chip" onclick="pickBankPreset('stmt', '${escHtml(p.label)}', '${escHtml(p.type)}')">${escHtml(p.label)}</button>`
+    `<button type="button" class="smart-pay-hint-chip" onclick="pickBankPreset('stmt', '${escHtml(p.label)}', '${escHtml(p.type)}')"><span>${escHtml(p.label)}</span><span>${p.icon}</span></button>`
   ).join('');
 }
 
@@ -9630,6 +10677,7 @@ function pickBankPreset(scope, label, type) {
   } else {
     document.getElementById('newPayType').value = type;
     document.getElementById('newPayLabel').value = label;
+    renderSettingsBankPresetChips();
     document.getElementById('newPayDetails').focus();
   }
 }
@@ -9648,7 +10696,7 @@ function renderStatementAccountsEditor() {
         <input type="checkbox" class="stmt-acc-chk" ${checked ? 'checked' : ''} onchange="toggleStmtAccountCheck('${escHtml(a.id)}', this.checked)" />
         <div class="stmt-acc-info" onclick="toggleStmtAccountCheck('${escHtml(a.id)}', ${!checked})">
           <div class="stmt-acc-primary">${escHtml(a.label || 'Account')} • ${escHtml(a.details || 'No number')}</div>
-          <div class="stmt-acc-secondary">${escHtml(a.type || 'Bank')}${a.accountName ? ' • ' + escHtml(a.accountName) : ''}${hasQr ? ' • QR Ready' : ''}</div>
+          <div class="stmt-acc-secondary">${escHtml(a.type || 'Bank')}${(a.accountName && appState.settings.hideAccountNames === false) ? ' • ' + escHtml(a.accountName) : ''}${hasQr ? ' • QR Ready' : ''}</div>
         </div>
         <button type="button" class="mini-icon-btn" onclick="editStmtAccountInline(${idx})" title="Edit account details">
           <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>
@@ -9712,7 +10760,9 @@ function editStmtAccountInline(idx) {
   if (!acc) return;
   const newLabel = prompt('Bank or E-Wallet Name:', acc.label || '');
   if (newLabel === null) return;
-  const newAccName = prompt('Account Holder Name (optional):', acc.accountName || '');
+  const newAccName = appState.settings.hideAccountNames === false
+    ? prompt('Account Holder Name (optional):', acc.accountName || '')
+    : (acc.accountName || '');
   if (newAccName === null) return;
   const newDetails = prompt('Account / Mobile Number:', acc.details || '');
   if (newDetails === null) return;
@@ -9947,6 +10997,14 @@ function applyCroppedQrPhoto() {
   const out = document.createElement('canvas');
   drawEnhancedQrToCanvas(out, 360, true);
   const dataUrl = out.toDataURL('image/png');
+  if (qrCropState.targetAccountId === '__NEW_PENDING__') {
+    uiState.pendingNewPayQr = dataUrl;
+    closeModal('qrCropModal');
+    renderPendingNewPayQrDropzone();
+    playSound('success');
+    showToast('QR cropped & ready — tap Save Payment Account & QR');
+    return;
+  }
   appState.qrCodes[qrCropState.targetAccountId] = dataUrl;
   closeModal('qrCropModal');
   renderSettingsPaymentAccounts();
@@ -9988,6 +11046,843 @@ function applyCroppedQrPhoto() {
   stage.addEventListener('touchmove', onMove, { passive: false });
   stage.addEventListener('touchend', onUp);
 })();
+
+
+/* ============================================================================
+   v14.11 SAVE DRAFTS, AUTO-SAVE PROTECTION & MINI EDIT TAB FOR UTANG LEDGER
+   ============================================================================ */
+const UTANG_DRAFTS_KEY = 'sk14_utang_drafts_v1';
+
+function loadUtangDrafts() {
+  try {
+    const arr = JSON.parse(localStorage.getItem(UTANG_DRAFTS_KEY) || '[]');
+    return Array.isArray(arr) ? arr : [];
+  } catch (e) { return []; }
+}
+
+function persistUtangDrafts(drafts) {
+  try {
+    localStorage.setItem(UTANG_DRAFTS_KEY, JSON.stringify(drafts || []));
+  } catch (e) {}
+  updateUtangDraftsBadge();
+}
+
+function updateUtangDraftsBadge() {
+  const drafts = loadUtangDrafts();
+  const cnt = drafts.length;
+  const btn = document.getElementById('btnLedgerDrafts');
+  const badge = document.getElementById('ledgerDraftsBadge');
+  if (btn && badge) {
+    btn.classList.toggle('has-drafts', cnt > 0);
+    badge.textContent = cnt > 99 ? '99+' : String(cnt);
+  }
+}
+
+function collectCurrentPastDebtModalDraft() {
+  const cid = (document.getElementById('pdCustomerSelect').value || '').trim();
+  const dueDate = document.getElementById('pdDueDate').value || getNextPayday520();
+  const entryType = uiState.utangEntryType === 'new' ? 'new' : 'previous';
+
+  const items = uiState.pastDraftItems.map(it => Object.assign({}, it));
+  const pendingName = (document.getElementById('pdItemName').value || '').trim();
+  const pendingQty = Math.max(1, Number(document.getElementById('pdItemQty').value || 1));
+  const pendingPrice = Number(document.getElementById('pdItemPrice').value || 0);
+  const pendingDate = document.getElementById('pdItemDate').value || todayYMD();
+
+  if (pendingName) {
+    const lineTotal = Math.round((pendingQty * Math.max(0, pendingPrice) + Number.EPSILON) * 100) / 100;
+    const itemObj = { name: pendingName, qty: pendingQty, unitPrice: Math.max(0, pendingPrice), lineTotal, date: pendingDate };
+    if (uiState.pastEditIndex >= 0 && items[uiState.pastEditIndex]) {
+      items[uiState.pastEditIndex] = itemObj;
+    } else {
+      items.push(itemObj);
+    }
+  }
+
+  if (items.length === 0) return null;
+
+  const cust = appState.customers.find(c => c.id === cid);
+  return {
+    id: uiState.editingDraftId || makeId('DRF', 5),
+    customerId: cid,
+    customerName: cust ? cust.name : (cid || 'Unassigned Customer'),
+    entryType: entryType,
+    dueDate: dueDate,
+    items: items,
+    savedAt: nowStamp()
+  };
+}
+
+function saveCurrentUtangAsDraft(isAuto) {
+  const draft = collectCurrentPastDebtModalDraft();
+  if (!draft) {
+    if (!isAuto) showToast('Type an item first to save as a draft');
+    return false;
+  }
+
+  const drafts = loadUtangDrafts();
+  const idx = drafts.findIndex(d => d.id === draft.id);
+  if (idx >= 0) drafts[idx] = draft;
+  else drafts.unshift(draft);
+  persistUtangDrafts(drafts);
+
+  uiState.pastDraftItems = [];
+  uiState.pastEditIndex = -1;
+  uiState.editingDraftId = '';
+  document.getElementById('pdItemName').value = '';
+  document.getElementById('pdItemPrice').value = '';
+  closeModal('pastDebtModal');
+  playSound('tap');
+  showToast(isAuto
+    ? `Auto-saved to Drafts (${draft.customerName}) — safe to edit anytime!`
+    : `Saved draft for ${draft.customerName}`);
+  return true;
+}
+
+function handleClosePastDebtModal() {
+  const draft = collectCurrentPastDebtModalDraft();
+  if (draft) {
+    saveCurrentUtangAsDraft(true);
+  } else {
+    uiState.editingDraftId = '';
+    closeModal('pastDebtModal');
+  }
+}
+
+// Safety catch: auto-park unfinished Record Utang entry if page reloads or closes accidentally
+window.addEventListener('beforeunload', () => {
+  const modal = document.getElementById('pastDebtModal');
+  if (modal && modal.classList.contains('open')) {
+    const draft = collectCurrentPastDebtModalDraft();
+    if (draft) {
+      const drafts = loadUtangDrafts();
+      const idx = drafts.findIndex(d => d.id === draft.id);
+      if (idx >= 0) drafts[idx] = draft;
+      else drafts.unshift(draft);
+      try { localStorage.setItem(UTANG_DRAFTS_KEY, JSON.stringify(drafts)); } catch (e) {}
+    }
+  }
+});
+
+function openUtangDraftsModal() {
+  playSound('tap');
+  uiState.miniEditDraftId = '';
+  renderUtangDraftsModal();
+  openModal('utangDraftsModal');
+}
+
+function toggleMiniEditDraft(draftId) {
+  playSound('tap');
+  uiState.miniEditDraftId = (uiState.miniEditDraftId === draftId) ? '' : draftId;
+  renderUtangDraftsModal();
+}
+
+function removeUtangDraftById(draftId, silent) {
+  let drafts = loadUtangDrafts();
+  drafts = drafts.filter(d => d.id !== draftId);
+  persistUtangDrafts(drafts);
+  if (uiState.miniEditDraftId === draftId) uiState.miniEditDraftId = '';
+  if (!silent) {
+    playSound('tap');
+    renderUtangDraftsModal();
+    showToast('Draft deleted');
+  }
+}
+
+function deleteUtangDraftConfirm(draftId) {
+  if (!confirm('Delete this saved Utang draft?')) return;
+  removeUtangDraftById(draftId, false);
+}
+
+function renderUtangDraftsModal() {
+  const drafts = loadUtangDrafts();
+  updateUtangDraftsBadge();
+
+  document.getElementById('utangDraftsTitle').textContent = `Saved Utang Drafts (${drafts.length})`;
+  const postAllBtn = document.getElementById('btnPostAllDrafts');
+  if (postAllBtn) {
+    postAllBtn.style.display = drafts.length > 0 ? 'inline-flex' : 'none';
+    postAllBtn.textContent = drafts.length > 1 ? `Post All (${drafts.length})` : 'Post Draft';
+  }
+
+  const listEl = document.getElementById('utangDraftsList');
+  if (drafts.length === 0) {
+    listEl.innerHTML = `<div class="empty-state" style="padding:26px 12px;">No saved drafts right now.<br/>Any unfinished <strong>Record Utang</strong> entry automatically saves here so nothing gets lost.</div>`;
+    return;
+  }
+
+  const activeCusts = appState.customers
+    .filter(c => String(c.status || 'Active').toLowerCase() !== 'archived')
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  listEl.innerHTML = drafts.map(d => {
+    const isPrev = d.entryType !== 'new';
+    const isMiniOpen = uiState.miniEditDraftId === d.id;
+    const total = (d.items || []).reduce((s, x) => s + Number(x.lineTotal || (Number(x.qty || 1) * Number(x.unitPrice || 0))), 0);
+    const itemsSummary = (d.items || []).map(x => `${x.name}${Number(x.qty || 1) > 1 ? ' ×' + x.qty : ''}`).join(', ');
+    const badgeHtml = isPrev
+      ? '<span class="badge badge-prev-utang">PREVIOUS UTANG</span>'
+      : '<span class="badge badge-new-utang">NEW UTANG</span>';
+
+    if (!isMiniOpen) {
+      return `<div class="draft-card">
+        <div class="draft-card-head">
+          <div style="min-width:0;flex:1;">
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <strong style="font-size:14.5px;">${escHtml(d.customerName || 'Select Customer')}</strong>
+              ${badgeHtml}
+            </div>
+            <div style="font-size:12px;color:var(--text-soft);margin-top:3px;">${escHtml(itemsSummary || 'No items')}</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Due ${fmtShortDate(d.dueDate)} • Saved ${escHtml(d.savedAt || '')}</div>
+          </div>
+          <div class="amount-main unpaid">${fmtPeso(total)}</div>
+        </div>
+        <div class="draft-card-actions">
+          <button type="button" class="btn btn-ghost btn-sm" onclick="toggleMiniEditDraft('${escHtml(d.id)}')">✎ Mini Edit</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="postUtangDraftToLedger('${escHtml(d.id)}')">Post</button>
+          <button type="button" class="btn btn-danger btn-sm" style="margin-left:auto;" onclick="deleteUtangDraftConfirm('${escHtml(d.id)}')">Delete</button>
+        </div>
+      </div>`;
+    }
+
+    // Expanded Inline Mini Edit Tab
+    const custOpts = ['<option value="">— Select Suki —</option>'].concat(activeCusts.map(c =>
+      `<option value="${escHtml(c.id)}" ${c.id === d.customerId ? 'selected' : ''}>${escHtml(c.name)}</option>`
+    )).join('');
+
+    const lineRowsHtml = (d.items || []).map((it, idx) => `
+      <div>
+        <div class="mini-edit-line">
+          <input type="text" value="${escHtml(it.name || '')}" placeholder="Item name" oninput="updateMiniDraftLine('${escHtml(d.id)}', ${idx}, 'name', this.value)" />
+          <input type="number" min="1" step="1" value="${Number(it.qty || 1)}" placeholder="Qty" oninput="updateMiniDraftLine('${escHtml(d.id)}', ${idx}, 'qty', this.value)" />
+          <input type="number" min="0" step="0.01" value="${Number(it.unitPrice || 0)}" placeholder="₱" oninput="updateMiniDraftLine('${escHtml(d.id)}', ${idx}, 'unitPrice', this.value)" />
+          <button type="button" class="mini-icon-btn del" onclick="removeMiniDraftLine('${escHtml(d.id)}', ${idx})" title="Remove line">×</button>
+        </div>
+        <div class="mini-edit-date-row">
+          <span style="font-size:10.5px;font-weight:700;color:var(--text-muted);">Date:</span>
+          <input type="date" value="${escHtml(it.date || todayYMD())}" onchange="updateMiniDraftLine('${escHtml(d.id)}', ${idx}, 'date', this.value)" />
+          <span id="miniLineTotal_${escHtml(d.id)}_${idx}" style="font-size:12px;font-weight:800;color:var(--accent-light);min-width:62px;text-align:right;">${fmtPeso(it.lineTotal)}</span>
+        </div>
+      </div>
+    `).join('');
+
+    return `<div class="draft-card mini-open">
+      <div class="draft-card-head">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <strong style="font-size:14.5px;">${escHtml(d.customerName || 'Select Customer')}</strong>
+          ${badgeHtml}
+        </div>
+        <div id="miniDraftTotal_${escHtml(d.id)}" class="amount-main unpaid">${fmtPeso(total)}</div>
+      </div>
+
+      <div class="mini-edit-panel">
+        <div class="seg-group" style="margin-bottom:2px;">
+          <button type="button" class="seg-btn ${isPrev ? 'active' : ''}" style="padding:7px 6px;font-size:11.5px;" onclick="updateMiniDraftField('${escHtml(d.id)}', 'entryType', 'previous')">Previous Utang</button>
+          <button type="button" class="seg-btn ${!isPrev ? 'active' : ''}" style="padding:7px 6px;font-size:11.5px;" onclick="updateMiniDraftField('${escHtml(d.id)}', 'entryType', 'new')">New Utang</button>
+        </div>
+
+        <div class="grid-2" style="gap:6px;">
+          <div class="field" style="margin-bottom:0;">
+            <label>Customer</label>
+            <select style="padding:7px 8px;font-size:12.5px;" onchange="updateMiniDraftField('${escHtml(d.id)}', 'customerId', this.value)">${custOpts}</select>
+          </div>
+          <div class="field" style="margin-bottom:0;">
+            <label>Due Date</label>
+            <input type="date" style="padding:7px 8px;font-size:12.5px;" value="${escHtml(d.dueDate || getNextPayday520())}" onchange="updateMiniDraftField('${escHtml(d.id)}', 'dueDate', this.value)" />
+          </div>
+        </div>
+
+        <div style="font-size:10.5px;font-weight:800;text-transform:uppercase;color:var(--text-muted);margin-top:2px;">Items (Item • Qty • Unit ₱)</div>
+        ${lineRowsHtml}
+
+        <button type="button" class="btn btn-soft-orange btn-sm" style="width:100%;" onclick="addMiniDraftLine('${escHtml(d.id)}')">+ Add Line</button>
+      </div>
+
+      <div class="draft-card-actions">
+        <button type="button" class="btn btn-primary btn-sm" style="flex:1;" onclick="postUtangDraftToLedger('${escHtml(d.id)}')">Post to Ledger</button>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="toggleMiniEditDraft('${escHtml(d.id)}')">Done</button>
+        <button type="button" class="btn btn-danger btn-sm" onclick="deleteUtangDraftConfirm('${escHtml(d.id)}')">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateMiniDraftField(draftId, field, value) {
+  const drafts = loadUtangDrafts();
+  const d = drafts.find(x => x.id === draftId);
+  if (!d) return;
+  if (field === 'customerId') {
+    d.customerId = value;
+    const c = appState.customers.find(x => x.id === value);
+    d.customerName = c ? c.name : 'Unassigned Customer';
+  } else {
+    d[field] = value;
+  }
+  d.savedAt = nowStamp();
+  persistUtangDrafts(drafts);
+  renderUtangDraftsModal();
+}
+
+function updateMiniDraftLine(draftId, idx, field, value) {
+  const drafts = loadUtangDrafts();
+  const d = drafts.find(x => x.id === draftId);
+  if (!d || !d.items || !d.items[idx]) return;
+  const it = d.items[idx];
+  if (field === 'qty') it.qty = Math.max(1, Number(value || 1));
+  else if (field === 'unitPrice') it.unitPrice = Math.max(0, Number(value || 0));
+  else it[field] = value;
+  it.lineTotal = Math.round((Number(it.qty || 1) * Number(it.unitPrice || 0) + Number.EPSILON) * 100) / 100;
+  d.savedAt = nowStamp();
+  persistUtangDrafts(drafts);
+
+  // Live update line & card totals without breaking input focus!
+  const lineEl = document.getElementById(`miniLineTotal_${draftId}_${idx}`);
+  if (lineEl) lineEl.textContent = fmtPeso(it.lineTotal);
+  const totEl = document.getElementById(`miniDraftTotal_${draftId}`);
+  if (totEl) {
+    const tot = d.items.reduce((s, x) => s + Number(x.lineTotal || 0), 0);
+    totEl.textContent = fmtPeso(tot);
+  }
+}
+
+function addMiniDraftLine(draftId) {
+  playSound('tap');
+  const drafts = loadUtangDrafts();
+  const d = drafts.find(x => x.id === draftId);
+  if (!d) return;
+  d.items = d.items || [];
+  d.items.push({ name: '', qty: 1, unitPrice: 0, lineTotal: 0, date: todayYMD() });
+  d.savedAt = nowStamp();
+  persistUtangDrafts(drafts);
+  renderUtangDraftsModal();
+}
+
+function removeMiniDraftLine(draftId, idx) {
+  playSound('tap');
+  const drafts = loadUtangDrafts();
+  const d = drafts.find(x => x.id === draftId);
+  if (!d || !d.items) return;
+  d.items.splice(idx, 1);
+  if (d.items.length === 0) {
+    removeUtangDraftById(draftId, false);
+    return;
+  }
+  d.savedAt = nowStamp();
+  persistUtangDrafts(drafts);
+  renderUtangDraftsModal();
+}
+
+async function postUtangDraftToLedger(draftId) {
+  if (uiState.isSavingLock) return;
+  const drafts = loadUtangDrafts();
+  const d = drafts.find(x => x.id === draftId);
+  if (!d) return;
+
+  if (!d.customerId) {
+    uiState.miniEditDraftId = d.id;
+    renderUtangDraftsModal();
+    showToast('Select a Suki customer in Mini Edit first');
+    return;
+  }
+  const validItems = (d.items || []).filter(it => String(it.name || '').trim() && Number(it.unitPrice || 0) > 0);
+  if (validItems.length === 0) {
+    uiState.miniEditDraftId = d.id;
+    renderUtangDraftsModal();
+    showToast('Enter an item name and unit price > ₱0 in Mini Edit');
+    return;
+  }
+
+  const cust = appState.customers.find(c => c.id === d.customerId);
+  const cname = cust ? cust.name : (d.customerName || d.customerId);
+  const dueDate = d.dueDate || getNextPayday520();
+  const op = activeOperatorName();
+  const entryType = d.entryType === 'new' ? 'new' : 'previous';
+  const tagLabel = entryType === 'previous' ? 'Previous Utang' : 'New Utang';
+  const grandTotal = validItems.reduce((s, x) => s + Math.round((Number(x.qty || 1) * Number(x.unitPrice || 0) + Number.EPSILON) * 100) / 100, 0);
+
+  showSavingLock('SAVING & SYNCING… PLEASE WAIT', `Posting ${tagLabel} (${fmtPeso(grandTotal)}) for ${cname}`);
+
+  const itemsPayload = validItems.map(it => {
+    const q = Math.max(1, Number(it.qty || 1));
+    const p = Number(it.unitPrice || 0);
+    const lt = Math.round((q * p + Number.EPSILON) * 100) / 100;
+    return {
+      orderId: makeId('UTG', 5),
+      detailId: makeId('DET', 5),
+      name: String(it.name).trim(),
+      qty: q,
+      unitPrice: p,
+      lineTotal: lt,
+      date: it.date || todayYMD()
+    };
+  });
+
+  itemsPayload.forEach(it => {
+    appState.orders.push({
+      id: it.orderId, date: it.date, customerId: d.customerId, customerName: cname,
+      total: it.lineTotal, method: 'Credit', status: 'Unpaid', dueDate: dueDate,
+      operator: op, voidInfo: '', paymentRef: tagLabel
+    });
+    appState.orderDetails.push({
+      id: it.detailId, orderId: it.orderId, productId: (entryType === 'previous' ? 'PAST: ' : 'UTANG: ') + it.name, qty: it.qty, lineTotal: it.lineTotal
+    });
+  });
+
+  recomputeCustomerBalancesLocally();
+  const res = await enqueueAndAwaitSync('recordExistingDebt', [{
+    customerId: d.customerId,
+    customerName: cname,
+    dueDate: dueDate,
+    operator: op,
+    entryType: entryType,
+    items: itemsPayload
+  }], 8500);
+
+  removeUtangDraftById(d.id, true);
+  hideSavingLock();
+  renderLedger();
+  renderPosDueBanner();
+  renderUtangDraftsModal();
+  if (loadUtangDrafts().length === 0) closeModal('utangDraftsModal');
+  playSound('success');
+  showToast(res.synced
+    ? `Draft posted & synced for ${cname} (${fmtPeso(grandTotal)})`
+    : `Draft posted locally for ${cname} — will auto-sync`);
+}
+
+async function postAllUtangDrafts() {
+  if (uiState.isSavingLock) return;
+  const drafts = loadUtangDrafts();
+  if (!drafts.length) return;
+  for (const d of drafts) {
+    if (!d.customerId || !(d.items || []).some(it => String(it.name || '').trim() && Number(it.unitPrice || 0) > 0)) {
+      uiState.miniEditDraftId = d.id;
+      renderUtangDraftsModal();
+      showToast(`Complete customer & price for "${d.customerName || 'Draft'}" first`);
+      return;
+    }
+  }
+  for (const d of drafts) {
+    await postUtangDraftToLedger(d.id);
+  }
+}
+
+
+/* ============================================================================
+   v14.11 SEARCHABLE SUKI CUSTOMER + CATCHY "+ NEW SUKI" DIRECT SYNC ENGINE
+   ============================================================================ */
+function getSukiIds(scope) {
+  if (scope === 'chk') {
+    return {
+      hidden: 'checkoutCustomerSelect',
+      input: 'chkCustomerSearch',
+      hint: 'chkSukiHintTag',
+      clear: 'chkCustomerClear',
+      menu: 'chkCustomerSuggestMenu',
+      box: 'chkNewSukiBox',
+      newName: 'chkNewSukiName',
+      newPhone: 'chkNewSukiPhone',
+      allowWalkIn: uiState.checkoutMethod !== 'Credit'
+    };
+  }
+  return {
+    hidden: 'pdCustomerSelect',
+    input: 'pdCustomerSearch',
+    hint: 'pdSukiHintTag',
+    clear: 'pdCustomerClear',
+    menu: 'pdCustomerSuggestMenu',
+    box: 'pdNewSukiBox',
+    newName: 'pdNewSukiName',
+    newPhone: 'pdNewSukiPhone',
+    allowWalkIn: false
+  };
+}
+
+function highlightMatchHtml(text, query) {
+  const safe = escHtml(text || '');
+  const q = String(query || '').trim();
+  if (!q) return safe;
+  const escapedQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  try {
+    return safe.replace(new RegExp('(' + escapedQ + ')', 'ig'), '<mark>$1</mark>');
+  } catch (e) { return safe; }
+}
+
+function setSukiSelection(scope, custId) {
+  const ids = getSukiIds(scope);
+  const hid = document.getElementById(ids.hidden);
+  const inp = document.getElementById(ids.input);
+  const hint = document.getElementById(ids.hint);
+  const clr = document.getElementById(ids.clear);
+  const menu = document.getElementById(ids.menu);
+  if (!hid || !inp) return;
+
+  hid.value = custId || '';
+  if (custId === 'WALK-IN') {
+    inp.value = 'Walk-in Customer';
+    inp.classList.add('has-selection');
+    if (hint) hint.textContent = 'Walk-in';
+    if (clr) clr.classList.add('visible');
+  } else {
+    const c = appState.customers.find(x => x.id === custId);
+    if (c) {
+      inp.value = c.name;
+      inp.classList.add('has-selection');
+      if (hint) hint.textContent = c.balance > 0 ? fmtPeso(c.balance) : 'Settled';
+      if (clr) clr.classList.add('visible');
+    } else {
+      inp.value = '';
+      inp.classList.remove('has-selection');
+      if (hint) hint.textContent = '';
+      if (clr) clr.classList.remove('visible');
+    }
+  }
+  if (menu) menu.classList.remove('open');
+  if (scope === 'pd') checkSelectedCustomerSurplus();
+}
+
+function clearSukiSelection(scope, silent) {
+  const ids = getSukiIds(scope);
+  const hid = document.getElementById(ids.hidden);
+  const inp = document.getElementById(ids.input);
+  const hint = document.getElementById(ids.hint);
+  const clr = document.getElementById(ids.clear);
+  const menu = document.getElementById(ids.menu);
+  if (hid) hid.value = '';
+  if (inp) { inp.value = ''; inp.classList.remove('has-selection'); }
+  if (hint) hint.textContent = '';
+  if (clr) clr.classList.remove('visible');
+  if (menu) menu.classList.remove('open');
+  if (scope === 'pd') checkSelectedCustomerSurplus();
+  if (!silent && inp) {
+    playSound('tap');
+    inp.focus();
+    renderSukiSuggestMenu(scope);
+  }
+}
+
+function openSukiSuggestMenu(scope) {
+  renderSukiSuggestMenu(scope);
+}
+
+function onSukiSearchInput(scope) {
+  const ids = getSukiIds(scope);
+  const hid = document.getElementById(ids.hidden);
+  const inp = document.getElementById(ids.input);
+  const hint = document.getElementById(ids.hint);
+  const clr = document.getElementById(ids.clear);
+  const q = (inp.value || '').trim();
+
+  // Clear previously locked ID when typing a new search
+  if (hid) hid.value = '';
+  inp.classList.remove('has-selection');
+  if (clr) clr.classList.toggle('visible', !!q);
+  if (hint) hint.textContent = q ? 'Matching Suki…' : '';
+  if (scope === 'pd') checkSelectedCustomerSurplus();
+  renderSukiSuggestMenu(scope);
+}
+
+function renderSukiSuggestMenu(scope) {
+  const ids = getSukiIds(scope);
+  const menu = document.getElementById(ids.menu);
+  const inp = document.getElementById(ids.input);
+  if (!menu || !inp) return;
+
+  const qRaw = (inp.value || '').trim();
+  const q = qRaw.toLowerCase();
+  const tokens = q ? q.split(/\s+/).filter(Boolean) : [];
+
+  const active = appState.customers
+    .filter(c => String(c.status || 'Active').toLowerCase() !== 'archived')
+    .sort((a, b) => (b.balance - a.balance) || a.name.localeCompare(b.name));
+
+  let matches = active.filter(c => {
+    if (!tokens.length) return true;
+    const hay = `${c.name} ${c.id} ${c.phone || ''}`.toLowerCase();
+    return tokens.every(t => hay.includes(t));
+  });
+
+  // Prioritize prefix matches on name
+  if (q) {
+    matches.sort((a, b) => {
+      const aPre = a.name.toLowerCase().startsWith(q) ? 0 : 1;
+      const bPre = b.name.toLowerCase().startsWith(q) ? 0 : 1;
+      return (aPre - bPre) || a.name.localeCompare(b.name);
+    });
+  }
+
+  const topMatches = matches.slice(0, 6);
+  const exactHit = q && active.some(c => c.name.toLowerCase() === q);
+
+  let htmlRows = '';
+  if (ids.allowWalkIn && (!q || 'walk-in customer'.includes(q))) {
+    htmlRows += `<button type="button" class="suki-opt-row ${!q ? 'top-hit' : ''}" onclick="pickSukiFromMenu('${scope}', 'WALK-IN')">
+      <div>
+        <div class="suki-opt-name">Walk-in Customer</div>
+        <div class="suki-opt-meta">Standard counter sale</div>
+      </div>
+      <span class="suki-opt-bal settled">Walk-in</span>
+    </button>`;
+  }
+
+  topMatches.forEach((c, idx) => {
+    const isTop = idx === 0 && (!!q || !ids.allowWalkIn);
+    const balTxt = c.balance > 0 ? fmtPeso(c.balance) : 'Settled';
+    htmlRows += `<button type="button" class="suki-opt-row ${isTop ? 'top-hit' : ''}" onclick="pickSukiFromMenu('${scope}', '${escHtml(c.id)}')">
+      <div style="min-width:0;flex:1;">
+        <div class="suki-opt-name">${highlightMatchHtml(c.name, qRaw)}</div>
+        <div class="suki-opt-meta">${highlightMatchHtml(c.id, qRaw)}${c.phone ? ' • ' + highlightMatchHtml(c.phone, qRaw) : ''}</div>
+      </div>
+      <span class="suki-opt-bal ${c.balance <= 0 ? 'settled' : ''}">${balTxt}</span>
+    </button>`;
+  });
+
+  if (qRaw && !exactHit && q !== 'walk-in customer') {
+    htmlRows += `<button type="button" class="suki-add-hinter" onclick="openInlineNewSukiPrefilled('${scope}', '${escHtml(qRaw)}')">
+      <span>+ Add "${escHtml(qRaw)}" as New Suki</span>
+    </button>`;
+  } else if (!topMatches.length && !htmlRows) {
+    htmlRows = `<div style="padding:10px;text-align:center;font-size:12px;color:var(--text-muted);">No matching Suki yet — tap <strong>+ New Suki</strong> above.</div>`;
+  }
+
+  menu.innerHTML = htmlRows;
+  menu.classList.add('open');
+}
+
+function pickSukiFromMenu(scope, custId) {
+  playSound('tap');
+  setSukiSelection(scope, custId);
+}
+
+function onSukiSearchKeyDown(ev, scope) {
+  const ids = getSukiIds(scope);
+  const menu = document.getElementById(ids.menu);
+  if (ev.key === 'Escape') {
+    if (menu) menu.classList.remove('open');
+    return;
+  }
+  if (ev.key === 'Enter' && menu && menu.classList.contains('open')) {
+    const first = menu.querySelector('.suki-opt-row, .suki-add-hinter');
+    if (first) {
+      ev.preventDefault();
+      first.click();
+    }
+  }
+}
+
+function toggleInlineNewSukiBox(scope, forceState) {
+  const ids = getSukiIds(scope);
+  const box = document.getElementById(ids.box);
+  const menu = document.getElementById(ids.menu);
+  if (!box) return;
+  const nextShow = typeof forceState === 'boolean' ? forceState : !box.classList.contains('open');
+  box.classList.toggle('open', nextShow);
+  if (menu) menu.classList.remove('open');
+  if (nextShow) {
+    playSound('tap');
+    const typed = (document.getElementById(ids.input).value || '').trim();
+    const nameEl = document.getElementById(ids.newName);
+    const phoneEl = document.getElementById(ids.newPhone);
+    if (nameEl) {
+      if (typed && typed !== 'Walk-in Customer' && !document.getElementById(ids.hidden).value) {
+        nameEl.value = typed;
+      } else {
+        nameEl.value = '';
+      }
+      setTimeout(() => nameEl.focus(), 40);
+    }
+    if (phoneEl) phoneEl.value = '';
+  }
+}
+
+function openInlineNewSukiPrefilled(scope, prefillName) {
+  const ids = getSukiIds(scope);
+  toggleInlineNewSukiBox(scope, true);
+  const nameEl = document.getElementById(ids.newName);
+  if (nameEl) {
+    nameEl.value = prefillName || '';
+    nameEl.focus();
+  }
+}
+
+function saveInlineNewSuki(scope) {
+  const ids = getSukiIds(scope);
+  const name = (document.getElementById(ids.newName).value || '').trim();
+  const phone = (document.getElementById(ids.newPhone).value || '').trim();
+  if (!name) {
+    showToast('Enter the new Suki name');
+    return;
+  }
+
+  // Prevent accidental duplicate name if exact match already exists
+  const existing = appState.customers.find(c =>
+    String(c.status || 'Active').toLowerCase() !== 'archived' &&
+    c.name.trim().toLowerCase() === name.toLowerCase()
+  );
+  if (existing) {
+    toggleInlineNewSukiBox(scope, false);
+    setSukiSelection(scope, existing.id);
+    showToast(`Selected existing Suki: ${existing.name}`);
+    return;
+  }
+
+  const newCust = {
+    id: makeId('CUST', 3),
+    name: name,
+    phone: phone,
+    totalCredit: 0,
+    totalPaid: 0,
+    balance: 0,
+    status: 'Active',
+    archivedInfo: ''
+  };
+  appState.customers.push(newCust);
+  toggleInlineNewSukiBox(scope, false);
+  setSukiSelection(scope, newCust.id);
+  renderLedger();
+  playSound('success');
+  showToast(`Added "${name}" (${newCust.id}) — syncing to Sheet`);
+  // Queues saveCustomer strictly BEFORE any subsequent recordExistingDebt / submitOrder
+  enqueueAndSync('saveCustomer', [{ id: newCust.id, name, phone }]);
+}
+
+// Close Suki suggestion menus & custom clock dropdown on outside click
+document.addEventListener('click', ev => {
+  if (!ev.target.closest('.suki-search-wrap')) {
+    ['pdCustomerSuggestMenu', 'chkCustomerSuggestMenu'].forEach(id => {
+      const m = document.getElementById(id);
+      if (m) m.classList.remove('open');
+    });
+  }
+  if (!ev.target.closest('#clockSizeDropdown')) {
+    const cd = document.getElementById('clockSizeDropdown');
+    if (cd) cd.classList.remove('open');
+  }
+});
+
+/* ============================================================================
+   v14.11 THEME-MATCHED CUSTOM CLOCK BANNER SIZE DROPDOWN
+   ============================================================================ */
+const CLOCK_SIZE_LABELS = {
+  compact: 'Compact (Small Phone)',
+  balanced: 'Balanced (Default)',
+  large: 'Counter Large (Tablet / Stand)'
+};
+
+function syncClockSizeCustomUI(val) {
+  const v = CLOCK_SIZE_LABELS[val] ? val : 'balanced';
+  const hidden = document.getElementById('setClockSize');
+  const lbl = document.getElementById('clockSizeSelectedLabel');
+  if (hidden) hidden.value = v;
+  if (lbl) lbl.textContent = CLOCK_SIZE_LABELS[v];
+  document.querySelectorAll('#clockSizeDropdown .sk-select-opt').forEach(opt => {
+    opt.classList.toggle('active', opt.getAttribute('data-val') === v);
+  });
+}
+
+function toggleClockSizeMenu(ev) {
+  if (ev) ev.stopPropagation();
+  playSound('tap');
+  const wrap = document.getElementById('clockSizeDropdown');
+  if (wrap) wrap.classList.toggle('open');
+}
+
+function pickClockSizeOption(val) {
+  playSound('tap');
+  syncClockSizeCustomUI(val);
+  const wrap = document.getElementById('clockSizeDropdown');
+  if (wrap) wrap.classList.remove('open');
+  previewClockSettings();
+}
+
+/* ============================================================================
+   v14.11 SEARCHABLE MANAGER SETTINGS + SMART HINT WORDS
+   ============================================================================ */
+function filterSettingsView() {
+  const inp = document.getElementById('settingsSearchInput');
+  const clr = document.getElementById('settingsSearchClear');
+  if (!inp) return;
+  const q = (inp.value || '').trim().toLowerCase();
+  if (clr) clr.classList.toggle('visible', !!q);
+
+  // Sync hint chips active state
+  document.querySelectorAll('.settings-hint-chip').forEach(ch => {
+    const txt = ch.textContent.toLowerCase();
+    ch.classList.toggle('active', !!q && txt.includes(q));
+  });
+
+  const cards = document.querySelectorAll('#view-settings .acc-card');
+  cards.forEach(card => {
+    // Clear previous highlights
+    card.querySelectorAll('.setting-hit-highlight').forEach(el => el.classList.remove('setting-hit-highlight'));
+    if (!q) {
+      card.style.display = '';
+      return;
+    }
+    const kw = (card.getAttribute('data-keywords') || '').toLowerCase();
+    const txt = (card.textContent || '').toLowerCase();
+    const hit = kw.includes(q) || txt.includes(q);
+    card.style.display = hit ? '' : 'none';
+    if (hit) {
+      card.classList.add('open');
+      card.querySelectorAll('.setting-row, .field').forEach(row => {
+        if ((row.textContent || '').toLowerCase().includes(q)) {
+          row.classList.add('setting-hit-highlight');
+        }
+      });
+    }
+  });
+}
+
+function applySettingsSmartHint(keyword) {
+  playSound('tap');
+  const inp = document.getElementById('settingsSearchInput');
+  if (!inp) return;
+  if ((inp.value || '').trim().toLowerCase() === keyword.toLowerCase()) {
+    clearSettingsSearch();
+    return;
+  }
+  inp.value = keyword;
+  filterSettingsView();
+}
+
+function clearSettingsSearch() {
+  playSound('tap');
+  const inp = document.getElementById('settingsSearchInput');
+  if (inp) inp.value = '';
+  filterSettingsView();
+}
+
+/* ============================================================================
+   v14.11 STREAMLINED QR Ph & E-WALLETS DROPZONE + PRIVACY TOGGLE
+   ============================================================================ */
+function triggerPendingNewAccountQrUpload() {
+  playSound('tap');
+  triggerAccountQrUpload('__NEW_PENDING__');
+}
+
+function renderPendingNewPayQrDropzone() {
+  const dz = document.getElementById('newPayQrDropzone');
+  const slot = document.getElementById('newPayQrPreviewSlot');
+  if (!dz || !slot) return;
+  if (uiState.pendingNewPayQr) {
+    dz.classList.add('has-qr');
+    slot.innerHTML = `<img src="${uiState.pendingNewPayQr}" alt="Cropped QR preview" class="qr-dropzone-preview" />
+      <div style="font-size:11.5px;font-weight:800;color:var(--accent-light);margin-top:4px;">Digital QR Ready ✓ (Tap to change)</div>`;
+  } else {
+    dz.classList.remove('has-qr');
+    slot.innerHTML = `<div style="font-size:24px;line-height:1;margin-bottom:4px;">📷</div>
+      <div style="font-size:12.5px;font-weight:800;color:var(--text);">Tap to upload QR Ph or wallet image</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">Auto-opens Digital Crop &amp; Refine Studio</div>`;
+  }
+}
+
+function previewPaymentPrivacy() {
+  playSound('tap');
+  appState.settings.hideAccountNames = document.getElementById('setHideAccountNames').checked;
+  renderSettingsPaymentAccounts();
+  showToast(appState.settings.hideAccountNames ? 'Account holder names hidden for privacy' : 'Account holder names visible');
+}
 
 </script>
 </body>

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sukitab-pos-v14.9';
+const CACHE_NAME = 'sukitab-pos-v14.11';
 const CORE_ASSETS = [
   './',
   './index.html',
